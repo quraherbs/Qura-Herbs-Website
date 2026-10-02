@@ -25,21 +25,33 @@ def get_upload_dirs():
     return backend_uploads, frontend_uploads
 
 
+def get_supabase_credentials():
+    url = (settings.SUPABASE_URL or settings.NEXT_PUBLIC_SUPABASE_URL or "").rstrip('/')
+    key = (
+        settings.SUPABASE_SERVICE_ROLE_KEY or
+        settings.SUPABASE_ANON_KEY or
+        settings.SUPABASE_PUBLISHABLE_KEY or
+        settings.NEXT_PUBLIC_SUPABASE_ANON_KEY or
+        ""
+    )
+    return url, key
+
+
 def upload_to_supabase(content: bytes, filename: str, content_type: str = "image/jpeg") -> str:
     """
     Upload file bytes to Supabase Storage bucket.
     Returns public URL on success, or raises Exception on failure.
     """
-    if not settings.SUPABASE_URL or not settings.SUPABASE_SERVICE_ROLE_KEY:
+    supabase_url, supabase_key = get_supabase_credentials()
+    if not supabase_url or not supabase_key:
         raise ValueError("Supabase credentials not configured")
 
-    supabase_url = settings.SUPABASE_URL.rstrip('/')
     bucket = settings.SUPABASE_STORAGE_BUCKET or "product-images"
     endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{filename}"
 
     headers = {
-        "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
-        "apiKey": settings.SUPABASE_SERVICE_ROLE_KEY,
+        "Authorization": f"Bearer {supabase_key}",
+        "apiKey": supabase_key,
         "Content-Type": content_type,
         "x-upsert": "true"
     }
@@ -50,8 +62,8 @@ def upload_to_supabase(content: bytes, filename: str, content_type: str = "image
         # Attempt bucket creation if missing
         create_bucket_url = f"{supabase_url}/storage/v1/bucket"
         create_headers = {
-            "Authorization": f"Bearer {settings.SUPABASE_SERVICE_ROLE_KEY}",
-            "apiKey": settings.SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {supabase_key}",
+            "apiKey": supabase_key,
             "Content-Type": "application/json"
         }
         requests.post(create_bucket_url, json={"id": bucket, "name": bucket, "public": True}, headers=create_headers)
@@ -100,7 +112,8 @@ def upload_file(file: UploadFile = File(...)):
         save_locally(content, unique_filename)
         
         # Try Supabase if configured
-        if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_ROLE_KEY:
+        s_url, s_key = get_supabase_credentials()
+        if s_url and s_key:
             try:
                 public_url = upload_to_supabase(content, unique_filename, content_type)
                 return {"url": public_url, "storage": "supabase"}
@@ -150,7 +163,8 @@ def import_drive_url(payload: dict = Body(...)):
         # Save locally as backup
         save_locally(data, unique_filename)
 
-        if settings.SUPABASE_URL and settings.SUPABASE_SERVICE_ROLE_KEY:
+        s_url, s_key = get_supabase_credentials()
+        if s_url and s_key:
             try:
                 public_url = upload_to_supabase(data, unique_filename, "image/jpeg")
                 return {"url": public_url, "storage": "supabase", "original_url": raw_url}

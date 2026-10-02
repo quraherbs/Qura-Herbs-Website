@@ -52,7 +52,11 @@ class Settings(BaseSettings):
     # Supabase Storage (product images)
     SUPABASE_URL: str = ""
     SUPABASE_SERVICE_ROLE_KEY: str = ""
+    SUPABASE_ANON_KEY: str = ""
+    SUPABASE_PUBLISHABLE_KEY: str = ""
     SUPABASE_STORAGE_BUCKET: str = "product-images"
+    NEXT_PUBLIC_SUPABASE_URL: str = ""
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: str = ""
 
     # CORS
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000/api/v1"
