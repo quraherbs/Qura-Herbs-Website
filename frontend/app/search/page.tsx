@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getApiUrl } from "@/lib/api";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
 import CartDrawer from "../../components/CartDrawer";
@@ -32,7 +33,7 @@ export default function SearchPage() {
 
     setLoading(true);
     const delayDebounce = setTimeout(() => {
-      fetch(`http://localhost:8000/api/v1/products/?search=${encodeURIComponent(query)}`)
+      fetch(getApiUrl(`/api/v1/products/?search=${encodeURIComponent(query)}`))
         .then((res) => res.json())
         .then((data) => {
           if (Array.isArray(data)) {

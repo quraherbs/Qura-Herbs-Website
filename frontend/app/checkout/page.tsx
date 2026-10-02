@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { getApiUrl } from "@/lib/api";
 import { useCart } from "../../context/CartContext";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
@@ -135,7 +136,7 @@ export default function CheckoutPage() {
 
   // Load active offers
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/offers/?active_only=true")
+    fetch(getApiUrl("/api/v1/offers/?active_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
@@ -156,7 +157,7 @@ export default function CheckoutPage() {
     setVoucherError("");
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/offers/validate", {
+      const res = await fetch(getApiUrl("/api/v1/offers/validate"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -245,7 +246,7 @@ export default function CheckoutPage() {
       }
 
       // 1. Create or update customer profile
-      const customerRes = await fetch("http://localhost:8000/api/v1/customers/", {
+      const customerRes = await fetch(getApiUrl("/api/v1/customers/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -298,7 +299,7 @@ export default function CheckoutPage() {
         })),
       };
 
-      const orderRes = await fetch("http://localhost:8000/api/v1/orders/", {
+      const orderRes = await fetch(getApiUrl("/api/v1/orders/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderPayload),

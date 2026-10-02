@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getApiUrl } from "@/lib/api";
 
 export default function BrandStory() {
   const [content, setContent] = useState({
@@ -15,7 +16,7 @@ export default function BrandStory() {
 
   useEffect(() => {
     // 1. Fetch founder story from CMS endpoint
-    fetch("http://localhost:8000/api/v1/content/founder")
+    fetch(getApiUrl("/api/v1/content/founder"))
       .then((res) => res.json())
       .then((data) => {
         if (data) {
@@ -31,7 +32,7 @@ export default function BrandStory() {
       })
       .catch((err) => {
         // Fallback to settings endpoint if founder endpoint is empty
-        fetch("http://localhost:8000/api/v1/admin/settings/homepage")
+        fetch(getApiUrl("/api/v1/admin/settings/homepage"))
           .then((res) => res.json())
           .then((data) => {
             if (data && data.value && data.value.founder_quote) {

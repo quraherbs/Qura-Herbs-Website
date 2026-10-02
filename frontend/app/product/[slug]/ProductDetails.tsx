@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getApiUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
 import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -52,7 +53,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/v1/products/slug/${slug}`)
+    fetch(getApiUrl(`/api/v1/products/slug/${slug}`))
       .then((res) => {
         if (!res.ok) throw new Error("Product not found");
         return res.json();
@@ -66,7 +67,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setSelectedVariant(defaultVar);
         }
         // Fetch reviews
-        return fetch(`http://localhost:8000/api/v1/reviews/product/${data.id}`);
+        return fetch(getApiUrl(`/api/v1/reviews/product/${data.id}`));
       })
       .then((res) => res.json())
       .then((reviewData: Review[]) => {

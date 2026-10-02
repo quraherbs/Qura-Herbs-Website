@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
+import { getApiUrl } from "@/lib/api";
 import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, ShieldCheck, Leaf, ChevronUp } from "lucide-react";
 
 interface Banner {
@@ -38,7 +39,7 @@ export default function HeroSection() {
   const buttonOpacity = useTransform(dragY, [0, -100], [1, 0.5]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/content/hero-banners?active_only=true")
+    fetch(getApiUrl("/api/v1/content/hero-banners?active_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getApiUrl } from "@/lib/api";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
 import CartDrawer from "../../components/CartDrawer";
@@ -56,7 +57,7 @@ export default function ResultsPage() {
   ]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/content/real-results?active_only=true")
+    fetch(getApiUrl("/api/v1/content/real-results?active_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {

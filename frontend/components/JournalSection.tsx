@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen } from "lucide-react";
+import { getApiUrl } from "@/lib/api";
 
 interface Blog {
   id: number;
@@ -20,7 +21,7 @@ export default function JournalSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/blogs/?published_only=true")
+    fetch(getApiUrl("/api/v1/blogs/?published_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

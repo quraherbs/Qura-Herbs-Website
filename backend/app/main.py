@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
+from backend.app.models import models
 from backend.app.api.v1 import health, products, categories, orders, reviews, blogs, offers, admin, media, customers, content
 
 

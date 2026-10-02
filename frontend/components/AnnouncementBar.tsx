@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getApiUrl } from "@/lib/api";
 
 export default function AnnouncementBar() {
   const [announcement, setAnnouncement] = useState("✨ DISCOVER YOUR SKIN RITUAL | FREE SHIPPING ABOVE ₹1999");
 
   useEffect(() => {
     // Dynamic fetch from backend setting
-    fetch("http://localhost:8000/api/v1/admin/settings/homepage")
+    fetch(getApiUrl("/api/v1/admin/settings/homepage"))
       .then((res) => res.json())
       .then((data) => {
         if (data && data.value && data.value.announcement_bar) {

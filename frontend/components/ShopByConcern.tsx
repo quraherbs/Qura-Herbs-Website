@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { getApiUrl } from "@/lib/api";
 
 interface Category {
   id: number;
@@ -17,7 +18,7 @@ export default function ShopByConcern() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/categories/")
+    fetch(getApiUrl("/api/v1/categories/"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

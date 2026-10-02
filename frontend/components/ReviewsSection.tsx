@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Star, CheckCircle2, Sparkles } from "lucide-react";
+import { getApiUrl } from "@/lib/api";
 
 interface ReviewItem {
   id: number;
@@ -68,7 +69,7 @@ export default function ReviewsSection() {
   const [ratingFilter, setRatingFilter] = useState<number>(0);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/reviews/")
+    fetch(getApiUrl("/api/v1/reviews/"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {

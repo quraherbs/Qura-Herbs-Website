@@ -13,6 +13,8 @@ import CartDrawer from "../components/CartDrawer";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 
+import { getApiUrl } from "@/lib/api";
+
 import { ShoppingBag, Eye, Heart, Star } from "lucide-react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -37,7 +39,7 @@ export default function Home() {
 
   useEffect(() => {
     // Fetch featured products for bestsellers
-    fetch("http://localhost:8000/api/v1/products/?featured=true")
+    fetch(getApiUrl("/api/v1/products/?featured=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

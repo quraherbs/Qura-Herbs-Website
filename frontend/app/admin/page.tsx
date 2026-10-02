@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { getApiV1Base } from "@/lib/api";
 import { 
   BarChart3, Box, Folders, ShoppingBag, Star, 
   BookOpen, AlertCircle, Settings, 
@@ -1623,7 +1624,7 @@ export default function AdminPage() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+      const apiBase = getApiV1Base();
       const res = await fetch(`${apiBase}/media/upload`, {
         method: "POST",
         body: formData,
@@ -1662,7 +1663,7 @@ export default function AdminPage() {
     if (cleanUrl.includes("drive.google.com") || cleanUrl.includes("googleusercontent.com") || cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://")) {
       try {
         setIsUploading(true);
-        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+        const apiBase = getApiV1Base();
         const res = await fetch(`${apiBase}/media/import-drive-url`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
