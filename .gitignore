@@ -1,0 +1,83 @@
+# ============================
+# Dependencies
+# ============================
+node_modules/
+.npm_cache/
+
+# ============================
+# Environment / Secrets
+# ============================
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+*.key
+*.pem
+
+# ============================
+# Database files
+# ============================
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# ============================
+# Python
+# ============================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+venv/
+.venv/
+env/
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# ============================
+# Next.js
+# ============================
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# ============================
+# TypeScript build info
+# ============================
+*.tsbuildinfo
+frontend/next-env.d.ts
+
+# ============================
+# IDE / Editor
+# ============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================
+# OS files
+# ============================
+.DS_Store
+Thumbs.db
+
+# ============================
+# Logs
+# ============================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ============================
+# Misc
+# ============================
+.vercel
+coverage/
+lint_results.json

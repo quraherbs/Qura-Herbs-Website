@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: qura_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: qura_secure_db_password_2026
+      POSTGRES_DB: qura_herbs
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: qura_backend
+    restart: always
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:qura_secure_db_password_2026@db:5432/qura_herbs
+      - JWT_SECRET=qura_herbs_local_dev_jwt_secret_token_123456
+      - ADMIN_EMAILS=admin@quraherbs.in,nandavelv@gmail.com
+    depends_on:
+      - db
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/backend/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: qura_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:
+  backend_uploads:
