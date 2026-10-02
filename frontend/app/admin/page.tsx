@@ -1623,7 +1623,8 @@ export default function AdminPage() {
     const formData = new FormData();
     formData.append("file", file);
     try {
-      const res = await fetch("http://localhost:8000/api/v1/media/upload", {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+      const res = await fetch(`${apiBase}/media/upload`, {
         method: "POST",
         body: formData,
       });
@@ -1661,7 +1662,8 @@ export default function AdminPage() {
     if (cleanUrl.includes("drive.google.com") || cleanUrl.includes("googleusercontent.com") || cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://")) {
       try {
         setIsUploading(true);
-        const res = await fetch("http://localhost:8000/api/v1/media/import-drive-url", {
+        const apiBase = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+        const res = await fetch(`${apiBase}/media/import-drive-url`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ url: cleanUrl }),

@@ -49,6 +49,11 @@ class Settings(BaseSettings):
     CLOUDINARY_API_KEY: str = ""
     CLOUDINARY_API_SECRET: str = ""
 
+    # Supabase Storage (product images)
+    SUPABASE_URL: str = ""
+    SUPABASE_SERVICE_ROLE_KEY: str = ""
+    SUPABASE_STORAGE_BUCKET: str = "product-images"
+
     # CORS
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000/api/v1"
     NEXT_PUBLIC_SITE_URL: str = "http://localhost:3000"
