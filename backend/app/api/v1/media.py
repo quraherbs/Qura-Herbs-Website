@@ -37,15 +37,14 @@ def get_upload_dirs():
 
 
 def get_supabase_credentials():
-    url = (
+    raw_url = (
         settings.SUPABASE_URL or
         settings.NEXT_PUBLIC_SUPABASE_URL or
         os.environ.get("SUPABASE_URL") or
         os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or
         ""
-    ).rstrip('/')
-    
-    key = (
+    )
+    raw_key = (
         settings.SUPABASE_SERVICE_ROLE_KEY or
         os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or
         settings.SUPABASE_ANON_KEY or
@@ -53,6 +52,8 @@ def get_supabase_credentials():
         settings.NEXT_PUBLIC_SUPABASE_ANON_KEY or
         ""
     )
+    url = str(raw_url).strip().rstrip('/')
+    key = str(raw_key).strip()
     return url, key
 
 
@@ -65,7 +66,7 @@ def upload_to_supabase(content: bytes, object_path: str, content_type: str = "im
     if not supabase_url or not supabase_key:
         raise ValueError("Supabase Storage credentials (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) are not configured.")
 
-    bucket = settings.SUPABASE_STORAGE_BUCKET or "product-images"
+    bucket = (settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
     endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
 
     headers = {
