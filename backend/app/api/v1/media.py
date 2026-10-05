@@ -15,13 +15,23 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 def get_upload_dirs():
-    # backend/app/api/v1/media.py -> 4 levels up is backend root directory
+    if os.environ.get("VERCEL"):
+        tmp_dir = "/tmp/uploads"
+        os.makedirs(tmp_dir, exist_ok=True)
+        return tmp_dir, tmp_dir
+
     base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     backend_uploads = os.path.join(base_dir, "uploads")
     frontend_uploads = os.path.join(os.path.dirname(base_dir), "frontend", "public", "uploads")
     
-    os.makedirs(backend_uploads, exist_ok=True)
-    os.makedirs(frontend_uploads, exist_ok=True)
+    try:
+        os.makedirs(backend_uploads, exist_ok=True)
+    except Exception:
+        pass
+    try:
+        os.makedirs(frontend_uploads, exist_ok=True)
+    except Exception:
+        pass
     return backend_uploads, frontend_uploads
 
 
@@ -82,13 +92,19 @@ def save_locally(content: bytes, filename: str) -> str:
     backend_file_path = os.path.join(backend_uploads, filename)
     frontend_file_path = os.path.join(frontend_uploads, filename)
 
-    with open(backend_file_path, "wb") as f1:
-        f1.write(content)
     try:
-        with open(frontend_file_path, "wb") as f2:
-            f2.write(content)
-    except Exception:
-        pass
+        with open(backend_file_path, "wb") as f1:
+            f1.write(content)
+    except Exception as e:
+        logger.warning(f"Could not save to backend_uploads: {e}")
+
+    if backend_uploads != frontend_uploads:
+        try:
+            with open(frontend_file_path, "wb") as f2:
+                f2.write(content)
+        except Exception:
+            pass
+
     return f"/uploads/{filename}"
 
 
@@ -108,9 +124,6 @@ def upload_file(file: UploadFile = File(...)):
     try:
         content = file.file.read()
         
-        # Save locally as backup
-        save_locally(content, unique_filename)
-        
         # Try Supabase if configured
         s_url, s_key = get_supabase_credentials()
         if s_url and s_key:
@@ -120,7 +133,9 @@ def upload_file(file: UploadFile = File(...)):
             except Exception as se:
                 logger.warning(f"Supabase upload failed, falling back to local: {se}")
 
-        return {"url": f"/uploads/{unique_filename}", "storage": "local"}
+        # Fallback to local / tmp storage
+        url = save_locally(content, unique_filename)
+        return {"url": url, "storage": "local"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
 
