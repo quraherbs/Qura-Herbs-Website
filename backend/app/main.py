@@ -1,7 +1,6 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
 from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
 from backend.app.models import models
@@ -156,11 +155,21 @@ app.add_middleware(
 )
 
 # Setup local upload storage directories
-UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+# On Vercel, use /tmp/uploads (writable); locally use backend/uploads
+if os.environ.get("VERCEL"):
+    UPLOAD_DIR = "/tmp/uploads"
+else:
+    UPLOAD_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 # Mount local upload directory for static serving
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
+# Wrapped in try/except so a missing uploads dir never crashes the app on cold start
+try:
+    from fastapi.staticfiles import StaticFiles as _SF
+    app.mount("/uploads", _SF(directory=UPLOAD_DIR), name="uploads")
+except Exception as _mount_err:
+    print(f"[WARN] Could not mount /uploads static dir: {_mount_err}")
 
 # Include v1 API routers
 app.include_router(health.router, prefix="/api/v1", tags=["Health"])
