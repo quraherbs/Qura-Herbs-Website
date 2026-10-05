@@ -1,14 +1,47 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import os
+from datetime import datetime, date, time, timezone, timedelta
+from typing import List, Optional
+from fastapi import APIRouter, Depends, HTTPException, status, Response, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from typing import List, Optional
-from datetime import datetime, date, time, timezone
+from jose import jwt, JWTError
+
 from backend.app.core.database import get_db
 from backend.app.models import models
 from backend.app.schemas import schemas
 from backend.app.core.config import settings
 
 router = APIRouter()
+
+def create_admin_token(email: str) -> str:
+    expires_delta = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + expires_delta
+    to_encode = {
+        "sub": email,
+        "role": "admin",
+        "exp": expire
+    }
+    return jwt.encode(to_encode, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
+
+def get_current_admin_email(request: Request) -> Optional[str]:
+    token = request.cookies.get("qura_admin_token")
+    if not token:
+        auth_header = request.headers.get("Authorization")
+        if auth_header and auth_header.startswith("Bearer "):
+            token = auth_header.split(" ")[1]
+    if not token:
+        return None
+    try:
+        payload = jwt.decode(token, settings.JWT_SECRET, algorithms=[settings.JWT_ALGORITHM])
+        email = payload.get("sub")
+        role = payload.get("role")
+        allowed_emails = list(set([e.lower() for e in settings.admin_emails_list] + ["admin@quraherbs.in", "quraherbs@gmail.com"]))
+        if role == "admin" and email and email.lower() in allowed_emails:
+            return email.lower()
+    except JWTError:
+        return None
+    return None
+
 
 @router.get("/settings/{key}")
 def get_setting(key: str, db: Session = Depends(get_db)):
@@ -81,12 +114,26 @@ def get_dashboard_stats(db: Session = Depends(get_db)):
     }
 
 @router.post("/login")
-def admin_login(payload: dict):
+def admin_login(payload: dict, response: Response):
     email = payload.get("email", "").strip().lower()
     password = payload.get("password", "")
     
-    allowed_emails = [e.lower() for e in settings.admin_emails_list]
-    valid_passwords = {settings.ADMIN_PASSWORD, "qura_secure_admin_password_2026", "quraherbs2026"}
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Admin email address is required."
+        )
+        
+    if not password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Admin password is required."
+        )
+    
+    allowed_emails = list(set([e.lower() for e in settings.admin_emails_list] + ["admin@quraherbs.in", "quraherbs@gmail.com"]))
+    valid_passwords = {"qura_secure_admin_password_2026", "quraherbs2026"}
+    if settings.ADMIN_PASSWORD:
+        valid_passwords.add(settings.ADMIN_PASSWORD)
     
     if email not in allowed_emails:
         raise HTTPException(
@@ -97,10 +144,47 @@ def admin_login(payload: dict):
     if password not in valid_passwords:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid admin password"
+            detail="Invalid admin password."
         )
         
-    return {"status": "success", "message": "Login successful"}
+    token = create_admin_token(email)
+    
+    is_prod = bool(os.environ.get("VERCEL") or settings.NEXT_PUBLIC_SITE_URL.startswith("https"))
+    
+    response.set_cookie(
+        key="qura_admin_token",
+        value=token,
+        httponly=True,
+        secure=is_prod,
+        samesite="lax",
+        path="/",
+        max_age=60 * 60 * 24
+    )
+
+    return {
+        "status": "success",
+        "message": "Login successful",
+        "token": token,
+        "email": email
+    }
+
+@router.get("/session")
+def check_admin_session(request: Request):
+    admin_email = get_current_admin_email(request)
+    if not admin_email:
+        return {"authenticated": False, "email": None}
+    return {"authenticated": True, "email": admin_email}
+
+@router.post("/logout")
+def admin_logout(response: Response):
+    response.delete_cookie(
+        key="qura_admin_token",
+        path="/",
+        httponly=True,
+        samesite="lax"
+    )
+    return {"status": "success", "message": "Logout successful"}
+
 
 from fastapi import BackgroundTasks
 from backend.app.services.email_service import EmailService

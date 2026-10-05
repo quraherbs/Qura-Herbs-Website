@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 day
     
     # Admin Emails & Password
-    ADMIN_EMAILS: str = "admin@quraherbs.in,nandavelv@gmail.com"
+    ADMIN_EMAILS: str = "admin@quraherbs.in,quraherbs@gmail.com"
     ADMIN_PASSWORD: str = "quraherbs2026"
     
     # OAuth
@@ -64,6 +64,6 @@ class Settings(BaseSettings):
 
     @property
     def admin_emails_list(self) -> List[str]:
-        return [email.strip() for email in self.ADMIN_EMAILS.split(",") if email.strip()]
+        return [email.strip().lower() for email in self.ADMIN_EMAILS.split(",") if email.strip()]
 
 settings = Settings()

@@ -7,8 +7,17 @@ from backend.app.models import models
 from backend.app.api.v1 import health, products, categories, orders, reviews, blogs, offers, admin, media, customers, content
 
 
-# Create database tables automatically (for SQLite/Development)
-Base.metadata.create_all(bind=engine)
+# Print safe configuration status (without secrets)
+print(f"[AUTH CONFIG] ADMIN_EMAILS configured: {bool(settings.ADMIN_EMAILS)}")
+print(f"[AUTH CONFIG] ADMIN_PASSWORD configured: {bool(settings.ADMIN_PASSWORD)}")
+print(f"[AUTH CONFIG] JWT_SECRET configured: {bool(settings.JWT_SECRET)}")
+print(f"[AUTH CONFIG] DATABASE_URL configured: {bool(settings.DATABASE_URL)}")
+
+# Create database tables automatically (for SQLite/Development) safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as _db_err:
+    print("[WARN] Table auto-creation skipped or deferred:", _db_err)
 
 from backend.app.core.database import SessionLocal
 from backend.app.seed import seed_db
@@ -17,7 +26,7 @@ from backend.app.seed import seed_db
 try:
     seed_db()
 except Exception as err:
-    print("Catalog seed error:", err)
+    print("[WARN] Catalog seed error:", err)
 
 def seed_initial_content():
     db = SessionLocal()
@@ -126,7 +135,10 @@ def seed_initial_content():
     finally:
         db.close()
 
-seed_initial_content()
+try:
+    seed_initial_content()
+except Exception as _seed_err:
+    print("[WARN] Seed initial content skipped or failed:", _seed_err)
 
 
 

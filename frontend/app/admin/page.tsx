@@ -987,7 +987,7 @@ export default function AdminPage() {
   const [contentSubTab, setContentSubTab] = useState<"banners" | "results" | "founder">("banners");
 
   // Allowed admin list (simulating backend check)
-  const allowedAdminEmails = ["admin@quraherbs.in", "nandavelv@gmail.com"];
+  const allowedAdminEmails = ["admin@quraherbs.in", "quraherbs@gmail.com"];
 
   useEffect(() => {
     // Check path for auto tab selection (/admin/about, /admin/founder, etc.)
@@ -1005,12 +1005,36 @@ export default function AdminPage() {
       }
     }
 
-    // Check local session storage on mount
-    const savedSession = sessionStorage.getItem("qura_admin_session");
-    if (savedSession && allowedAdminEmails.includes(savedSession)) {
-      setIsAuthorized(true);
-      loadAdminData();
-    }
+    // Verify session with backend endpoint
+    const initSession = async () => {
+      try {
+        const res = await fetch(getApiUrl("/api/v1/admin/session"), {
+          credentials: "include"
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.authenticated) {
+            if (data.email) {
+              sessionStorage.setItem("qura_admin_session", data.email);
+            }
+            setIsAuthorized(true);
+            loadAdminData();
+            return;
+          }
+        }
+      } catch (err) {
+        console.warn("Session endpoint check warning:", err);
+      }
+
+      // Local session storage fallback
+      const savedSession = sessionStorage.getItem("qura_admin_session");
+      if (savedSession) {
+        setIsAuthorized(true);
+        loadAdminData();
+      }
+    };
+
+    initSession();
   }, []);
 
   const handleSaveAboutContent = async (e: React.FormEvent) => {
@@ -1035,12 +1059,24 @@ export default function AdminPage() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
+
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail) {
+      setLoginError("Please enter your admin email address.");
+      return;
+    }
+    if (!password) {
+      setLoginError("Please enter your admin password.");
+      return;
+    }
+
     try {
       const res = await fetch(getApiUrl("/api/v1/admin/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify({
-          email: email.trim().toLowerCase(),
+          email: cleanEmail,
           password: password,
         }),
       });
@@ -1053,25 +1089,41 @@ export default function AdminPage() {
       }
 
       if (res.ok) {
-        sessionStorage.setItem("qura_admin_session", email.trim().toLowerCase());
+        sessionStorage.setItem("qura_admin_session", cleanEmail);
+        if (data.token) {
+          sessionStorage.setItem("qura_admin_token", data.token);
+        }
         setIsAuthorized(true);
         setLoginError("");
         loadAdminData();
       } else if (res.status === 401) {
-        setLoginError(data.detail || "Invalid email or password.");
+        setLoginError(data.detail || "Invalid email address or password.");
+      } else if (res.status === 403) {
+        setLoginError(data.detail || "Access denied. Admin privileges required.");
       } else if (res.status === 404) {
         setLoginError("Authentication endpoint not found.");
+      } else if (res.status === 500) {
+        setLoginError(data.detail || "Backend configuration error. Please check server logs.");
       } else {
-        setLoginError(data.detail || "Authentication service is temporarily unavailable. Please try again.");
+        setLoginError(data.detail || `Authentication failed (Status ${res.status}). Please try again.`);
       }
     } catch (err) {
       console.error("Error during admin login:", err);
-      setLoginError("Authentication service is temporarily unavailable. Please try again.");
+      setLoginError("Unable to connect to authentication server. Please check your network connection.");
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch(getApiUrl("/api/v1/admin/logout"), {
+        method: "POST",
+        credentials: "include"
+      });
+    } catch (err) {
+      console.warn("Logout endpoint error:", err);
+    }
     sessionStorage.removeItem("qura_admin_session");
+    sessionStorage.removeItem("qura_admin_token");
     setIsAuthorized(false);
   };
 
@@ -2127,7 +2179,7 @@ export default function AdminPage() {
               <input
                 required
                 type="email"
-                placeholder="e.g. nandavelv@gmail.com"
+                placeholder="e.g. quraherbs@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-slate-950 border border-slate-800 p-3 text-xs text-slate-100 focus:outline-none focus:border-slate-600 w-full"

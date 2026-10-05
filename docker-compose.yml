@@ -26,7 +26,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://postgres:qura_secure_db_password_2026@db:5432/qura_herbs
       - JWT_SECRET=qura_herbs_local_dev_jwt_secret_token_123456
-      - ADMIN_EMAILS=admin@quraherbs.in,nandavelv@gmail.com
+      - ADMIN_EMAILS=admin@quraherbs.in,quraherbs@gmail.com
     depends_on:
       - db
     volumes:
