@@ -2,8 +2,14 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import declarative_base, sessionmaker
 from backend.app.core.config import settings
 
+import os
+
+db_url = settings.DATABASE_URL
+if os.environ.get("VERCEL") and db_url.startswith("sqlite:///./"):
+    db_url = "sqlite:////tmp/qura_herbs.db"
+
 # Determine database type and configure connect_args
-is_sqlite = settings.DATABASE_URL.startswith("sqlite")
+is_sqlite = db_url.startswith("sqlite")
 
 connect_args = {}
 if is_sqlite:
@@ -13,7 +19,7 @@ if is_sqlite:
 
 # Create database engine
 engine = create_engine(
-    settings.DATABASE_URL,
+    db_url,
     connect_args=connect_args,
     pool_pre_ping=True
 )
@@ -23,8 +29,14 @@ if is_sqlite:
     @event.listens_for(engine, "connect")
     def set_sqlite_pragma(dbapi_connection, connection_record):
         cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA journal_mode=WAL;")
-        cursor.execute("PRAGMA foreign_keys=ON;")
+        try:
+            cursor.execute("PRAGMA journal_mode=WAL;")
+        except Exception:
+            pass
+        try:
+            cursor.execute("PRAGMA foreign_keys=ON;")
+        except Exception:
+            pass
         cursor.close()
 
 # Create thread-local session factory

@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState } from "react";
 import { useCart } from "../../../context/CartContext";
 import { ShoppingBag, Star } from "lucide-react";
@@ -33,7 +35,7 @@ export default function CategoryProductList({ slug }: { slug: string }) {
 
   useEffect(() => {
     // 1. Fetch category by slug
-    fetch(`http://localhost:8000/api/v1/categories/slug/${slug}`)
+    fetch(getApiUrl(`/api/v1/categories/slug/${slug}`))
       .then((res) => {
         if (!res.ok) throw new Error("Category not found");
         return res.json();
@@ -41,7 +43,7 @@ export default function CategoryProductList({ slug }: { slug: string }) {
       .then((catData: Category) => {
         setCategory(catData);
         // 2. Fetch products by category ID
-        return fetch(`http://localhost:8000/api/v1/products/?category_id=${catData.id}`);
+        return fetch(getApiUrl(`/api/v1/products/?category_id=${catData.id}`));
       })
       .then((res) => res.json())
       .then((prodData: Product[]) => {

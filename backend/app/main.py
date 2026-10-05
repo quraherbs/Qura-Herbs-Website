@@ -12,6 +12,13 @@ from backend.app.api.v1 import health, products, categories, orders, reviews, bl
 Base.metadata.create_all(bind=engine)
 
 from backend.app.core.database import SessionLocal
+from backend.app.seed import seed_db
+
+# Run full catalog seed if database is missing categories/products
+try:
+    seed_db()
+except Exception as err:
+    print("Catalog seed error:", err)
 
 def seed_initial_content():
     db = SessionLocal()
@@ -142,6 +149,7 @@ origins = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

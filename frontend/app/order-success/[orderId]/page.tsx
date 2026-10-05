@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import React, { useEffect, useState, use } from "react";
 import AnnouncementBar from "../../../components/AnnouncementBar";
 import Navbar from "../../../components/Navbar";
@@ -66,7 +68,7 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
       try {
         setLoading(true);
         // Fetch order by order number
-        const orderRes = await fetch(`http://localhost:8000/api/v1/orders/number/${orderId}`);
+        const orderRes = await fetch(getApiUrl(`/api/v1/orders/number/${orderId}`));
         if (!orderRes.ok) {
           throw new Error("Order not found");
         }
@@ -76,7 +78,7 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
         // Fetch customer details
         if (data.customer_id) {
           try {
-            const custRes = await fetch(`http://localhost:8000/api/v1/customers/${data.customer_id}`);
+            const custRes = await fetch(getApiUrl(`/api/v1/customers/${data.customer_id}`));
             if (custRes.ok) {
               const custData = await custRes.json();
               setCustomer(custData);
@@ -90,7 +92,7 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
         const prodMap: ProductDetails = {};
         for (const item of data.items || []) {
           try {
-            const prodRes = await fetch(`http://localhost:8000/api/v1/products/${item.product_id}`);
+            const prodRes = await fetch(getApiUrl(`/api/v1/products/${item.product_id}`));
             if (prodRes.ok) {
               const prodData = await prodRes.json();
               prodMap[item.product_id] = {

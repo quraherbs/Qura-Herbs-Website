@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState } from "react";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
@@ -21,7 +23,7 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/blogs/?published_only=true")
+    fetch(getApiUrl("/api/v1/blogs/?published_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {

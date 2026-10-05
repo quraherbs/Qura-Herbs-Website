@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -20,7 +22,7 @@ export default function ArticleContent({ slug }: { slug: string }) {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/api/v1/blogs/slug/${slug}`)
+    fetch(getApiUrl(`/api/v1/blogs/slug/${slug}`))
       .then((res) => {
         if (!res.ok) throw new Error("Article not found");
         return res.json();

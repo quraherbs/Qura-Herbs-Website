@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, Sparkles, CheckCircle2, Eye } from "lucide-react";
@@ -53,7 +55,7 @@ export default function ResultsGallery() {
   const [scrollIndex, setScrollIndex] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/v1/content/botanical-journeys?active_only=true")
+    fetch(getApiUrl("/api/v1/content/botanical-journeys?active_only=true"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
@@ -65,7 +67,7 @@ export default function ResultsGallery() {
           }));
           setItems(mapped);
         } else {
-          fetch("http://localhost:8000/api/v1/content/results-gallery?active_only=true")
+          fetch(getApiUrl("/api/v1/content/results-gallery?active_only=true"))
             .then((r) => r.json())
             .then((resData) => {
               if (Array.isArray(resData) && resData.length > 0) setItems(resData);

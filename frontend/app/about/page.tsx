@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AnnouncementBar from "../../components/AnnouncementBar";
@@ -69,7 +71,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
 
   useEffect(() => {
     // Fetch About Page Content
-    fetch("http://localhost:8000/api/v1/content/about")
+    fetch(getApiUrl("/api/v1/content/about"))
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
@@ -79,7 +81,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
       .catch((err) => console.log("Failed to load about data:", err));
 
     // Fetch Founder Content
-    fetch("http://localhost:8000/api/v1/content/founder")
+    fetch(getApiUrl("/api/v1/content/founder"))
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
@@ -89,7 +91,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
       .catch((err) => console.log("Failed to load founder data:", err));
 
     // Fetch CEO Content
-    fetch("http://localhost:8000/api/v1/content/ceo")
+    fetch(getApiUrl("/api/v1/content/ceo"))
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {

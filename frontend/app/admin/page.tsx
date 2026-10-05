@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getApiV1Base } from "@/lib/api";
+import { getApiV1Base, getApiUrl } from "@/lib/api";
 import { 
   BarChart3, Box, Folders, ShoppingBag, Star, 
   BookOpen, AlertCircle, Settings, 
@@ -413,7 +413,7 @@ function SmartDescriptionParserBox({
     setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/parse-description", {
+      const res = await fetch(getApiUrl("/api/v1/admin/parse-description"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ raw_text: rawText }),
@@ -1016,7 +1016,7 @@ export default function AdminPage() {
   const handleSaveAboutContent = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/v1/content/about", {
+      const res = await fetch(getApiUrl("/api/v1/content/about"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(aboutContent),
@@ -1036,7 +1036,7 @@ export default function AdminPage() {
     e.preventDefault();
     setLoginError("");
     try {
-      const res = await fetch("http://localhost:8000/api/v1/admin/login", {
+      const res = await fetch(getApiUrl("/api/v1/admin/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1066,13 +1066,13 @@ export default function AdminPage() {
 
   const loadAdminData = () => {
     // 1. Fetch dashboard statistics
-    fetch("http://localhost:8000/api/v1/admin/dashboard")
+    fetch(getApiUrl("/api/v1/admin/dashboard"))
       .then((res) => res.json())
       .then((data) => setStats(data))
       .catch((err) => console.log("Failed to load dashboard stats:", err));
 
     // 2. Fetch products
-    fetch("http://localhost:8000/api/v1/products/")
+    fetch(getApiUrl("/api/v1/products/"))
       .then((res) => res.json())
       .then((data) => {
         setProducts(data);
@@ -1083,7 +1083,7 @@ export default function AdminPage() {
       .catch((err) => console.log("Failed to load products:", err));
 
     // 3. Fetch categories
-    fetch("http://localhost:8000/api/v1/categories/")
+    fetch(getApiUrl("/api/v1/categories/"))
       .then((res) => res.json())
       .then((data) => {
         setCategories(data);
@@ -1094,31 +1094,31 @@ export default function AdminPage() {
       .catch((err) => console.log("Failed to load categories:", err));
 
     // 4. Fetch reviews
-    fetch("http://localhost:8000/api/v1/reviews/")
+    fetch(getApiUrl("/api/v1/reviews/"))
       .then((res) => res.json())
       .then((data) => setReviews(data))
       .catch((err) => console.log("Failed to load reviews:", err));
 
     // 5. Fetch blogs
-    fetch("http://localhost:8000/api/v1/blogs/?published_only=false")
+    fetch(getApiUrl("/api/v1/blogs/?published_only=false"))
       .then((res) => res.json())
       .then((data) => setBlogs(data))
       .catch((err) => console.log("Failed to load blogs:", err));
 
     // 6. Fetch orders
-    fetch("http://localhost:8000/api/v1/orders/")
+    fetch(getApiUrl("/api/v1/orders/"))
       .then((res) => res.json())
       .then((data) => setOrders(data))
       .catch((err) => console.log("Failed to load orders:", err));
 
     // 7. Fetch offers
-    fetch("http://localhost:8000/api/v1/offers/?active_only=false")
+    fetch(getApiUrl("/api/v1/offers/?active_only=false"))
       .then((res) => res.json())
       .then((data) => setOffers(data))
       .catch((err) => console.log("Failed to load offers:", err));
 
     // 8. Fetch shipping analytics
-    fetch("http://localhost:8000/api/v1/orders/analytics/shipping")
+    fetch(getApiUrl("/api/v1/orders/analytics/shipping"))
       .then((res) => res.json())
       .then((data) => {
         if (data && data.total_orders !== undefined) {
@@ -1128,13 +1128,13 @@ export default function AdminPage() {
       .catch((err) => console.log("Failed to load shipping analytics:", err));
 
     // 8. Fetch offer analytics
-    fetch("http://localhost:8000/api/v1/offers/analytics")
+    fetch(getApiUrl("/api/v1/offers/analytics"))
       .then((res) => res.json())
       .then((data) => setOfferAnalytics(data))
       .catch((err) => console.log("Failed to load offer analytics:", err));
 
     // 8.5. Fetch AI Analytics
-    fetch("http://localhost:8000/api/v1/ai/analytics")
+    fetch(getApiUrl("/api/v1/ai/analytics"))
       .then((res) => res.json())
       .then((data) => {
         if (data && data.total_analyses !== undefined) {
@@ -1145,43 +1145,43 @@ export default function AdminPage() {
 
 
     // 9. Fetch Hero Banners
-    fetch("http://localhost:8000/api/v1/content/hero-banners?active_only=false")
+    fetch(getApiUrl("/api/v1/content/hero-banners?active_only=false"))
       .then((res) => res.json())
       .then((data) => { if (Array.isArray(data)) setHeroBanners(data); })
       .catch((err) => console.log("Failed to load hero banners:", err));
 
     // 10. Fetch Result Gallery
-    fetch("http://localhost:8000/api/v1/content/results-gallery?active_only=false")
+    fetch(getApiUrl("/api/v1/content/results-gallery?active_only=false"))
       .then((res) => res.json())
       .then((data) => { if (Array.isArray(data)) setResultGalleryItems(data); })
       .catch((err) => console.log("Failed to load result gallery:", err));
 
     // 11. Fetch Founder Story
-    fetch("http://localhost:8000/api/v1/content/founder")
+    fetch(getApiUrl("/api/v1/content/founder"))
       .then((res) => res.json())
       .then((data) => { if (data) setFounderStory(data); })
       .catch((err) => console.log("Failed to load founder story:", err));
 
     // 12. Fetch CEO Story
-    fetch("http://localhost:8000/api/v1/content/ceo")
+    fetch(getApiUrl("/api/v1/content/ceo"))
       .then((res) => res.json())
       .then((data) => { if (data) setCeoStory(data); })
       .catch((err) => console.log("Failed to load ceo story:", err));
 
     // 13. Fetch About Page Content
-    fetch("http://localhost:8000/api/v1/content/about")
+    fetch(getApiUrl("/api/v1/content/about"))
       .then((res) => res.json())
       .then((data) => { if (data && data.title) setAboutContent(data); })
       .catch((err) => console.log("Failed to load about page content:", err));
 
     // 14. Fetch Real Results
-    fetch("http://localhost:8000/api/v1/content/real-results?active_only=false")
+    fetch(getApiUrl("/api/v1/content/real-results?active_only=false"))
       .then((res) => res.json())
       .then((data) => { if (Array.isArray(data)) setRealResults(data); })
       .catch((err) => console.log("Failed to load real results:", err));
 
     // 15. Fetch Botanical Journeys
-    fetch("http://localhost:8000/api/v1/content/botanical-journeys?active_only=false")
+    fetch(getApiUrl("/api/v1/content/botanical-journeys?active_only=false"))
       .then((res) => res.json())
       .then((data) => { if (Array.isArray(data)) setBotanicalJourneys(data); })
       .catch((err) => console.log("Failed to load botanical journeys:", err));
@@ -1192,8 +1192,8 @@ export default function AdminPage() {
     e.preventDefault();
     try {
       const url = editingRealResult
-        ? `http://localhost:8000/api/v1/content/real-results/${editingRealResult.id}`
-        : "http://localhost:8000/api/v1/content/real-results";
+        ? getApiUrl(`/api/v1/content/real-results/${editingRealResult.id}`)
+        : getApiUrl("/api/v1/content/real-results");
       const method = editingRealResult ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -1217,7 +1217,7 @@ export default function AdminPage() {
 
   const handleToggleRealResult = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/real-results/${id}/toggle`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/real-results/${id}/toggle`), {
         method: "PATCH",
       });
       if (res.ok) loadAdminData();
@@ -1228,7 +1228,7 @@ export default function AdminPage() {
 
   const handleDeleteRealResult = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/real-results/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/real-results/${id}`), {
         method: "DELETE",
       });
       if (res.ok) {
@@ -1245,8 +1245,8 @@ export default function AdminPage() {
     e.preventDefault();
     try {
       const url = editingBotanicalJourney
-        ? `http://localhost:8000/api/v1/content/botanical-journeys/${editingBotanicalJourney.id}`
-        : "http://localhost:8000/api/v1/content/botanical-journeys";
+        ? getApiUrl(`/api/v1/content/botanical-journeys/${editingBotanicalJourney.id}`)
+        : getApiUrl("/api/v1/content/botanical-journeys");
       const method = editingBotanicalJourney ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -1270,7 +1270,7 @@ export default function AdminPage() {
 
   const handleToggleBotanicalJourney = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/botanical-journeys/${id}/toggle`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/botanical-journeys/${id}/toggle`), {
         method: "PATCH",
       });
       if (res.ok) loadAdminData();
@@ -1281,7 +1281,7 @@ export default function AdminPage() {
 
   const handleDeleteBotanicalJourney = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/botanical-journeys/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/botanical-journeys/${id}`), {
         method: "DELETE",
       });
       if (res.ok) {
@@ -1296,7 +1296,7 @@ export default function AdminPage() {
   // --- RICH ORDER DETAILS & STATUS ACTIONS ---
   const fetchRichOrderDetails = async (orderId: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderId}/details`);
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderId}/details`));
       if (res.ok) {
         const data = await res.json();
         setRichOrderDetails(data);
@@ -1309,7 +1309,7 @@ export default function AdminPage() {
 
   const handleUpdateOrderStatus = async (orderNumber: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderNumber}/update-status`, {
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderNumber}/update-status`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1332,7 +1332,7 @@ export default function AdminPage() {
   const handleAddAdminNote = async (orderNumber: string) => {
     if (!newAdminNoteText.trim()) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderNumber}/add-note`, {
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderNumber}/add-note`), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1355,8 +1355,8 @@ export default function AdminPage() {
     try {
       const isEditing = !!editingOffer;
       const url = isEditing
-        ? `http://localhost:8000/api/v1/offers/${editingOffer.id}`
-        : "http://localhost:8000/api/v1/offers/";
+        ? getApiUrl(`/api/v1/offers/${editingOffer.id}`)
+        : getApiUrl("/api/v1/offers/");
       const method = isEditing ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -1389,7 +1389,7 @@ export default function AdminPage() {
   const handleDeleteOffer = async (offerId: number) => {
     if (!confirm("Are you sure you want to delete this offer?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/offers/${offerId}`, {
+      const res = await fetch(getApiUrl(`/api/v1/offers/${offerId}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1403,7 +1403,7 @@ export default function AdminPage() {
 
   const handleToggleOfferActive = async (offer: any) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/offers/${offer.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/offers/${offer.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...offer, active: !offer.active })
@@ -1430,7 +1430,7 @@ export default function AdminPage() {
     if (!orderToConfirm) return;
     setIsConfirmingPayment(true);
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderToConfirm.order_number}/confirm-payment`, {
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderToConfirm.order_number}/confirm-payment`), {
         method: "POST"
       });
       const data = await res.json();
@@ -1457,7 +1457,7 @@ export default function AdminPage() {
   const handleRejectPayment = async (orderNumber: string) => {
     if (!confirm("Are you sure you want to REJECT this payment and cancel the order?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderNumber}/reject-payment`, {
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderNumber}/reject-payment`), {
         method: "POST"
       });
       if (res.ok) {
@@ -1471,7 +1471,7 @@ export default function AdminPage() {
 
   const fetchEmailLogs = async (orderNumber: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderNumber}/email-logs`);
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderNumber}/email-logs`));
       if (res.ok) {
         const logs = await res.json();
         setEmailLogs(logs);
@@ -1483,7 +1483,7 @@ export default function AdminPage() {
 
   const handleResendConfirmation = async (orderNumber: string) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/admin/orders/${orderNumber}/resend-confirmation`, {
+      const res = await fetch(getApiUrl(`/api/v1/admin/orders/${orderNumber}/resend-confirmation`), {
         method: "POST"
       });
       if (res.ok) {
@@ -1500,8 +1500,8 @@ export default function AdminPage() {
     e.preventDefault();
     try {
       const url = editingBanner
-        ? `http://localhost:8000/api/v1/content/hero-banners/${editingBanner.id}`
-        : "http://localhost:8000/api/v1/content/hero-banners";
+        ? getApiUrl(`/api/v1/content/hero-banners/${editingBanner.id}`)
+        : getApiUrl("/api/v1/content/hero-banners");
       const method = editingBanner ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -1526,7 +1526,7 @@ export default function AdminPage() {
   const handleDeleteHeroBanner = async (id: number) => {
     if (!confirm("Are you sure you want to delete this hero banner?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/hero-banners/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/hero-banners/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1541,8 +1541,8 @@ export default function AdminPage() {
     e.preventDefault();
     try {
       const url = editingResult
-        ? `http://localhost:8000/api/v1/content/results-gallery/${editingResult.id}`
-        : "http://localhost:8000/api/v1/content/results-gallery";
+        ? getApiUrl(`/api/v1/content/results-gallery/${editingResult.id}`)
+        : getApiUrl("/api/v1/content/results-gallery");
       const method = editingResult ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -1567,7 +1567,7 @@ export default function AdminPage() {
   const handleDeleteResultItem = async (id: number) => {
     if (!confirm("Are you sure you want to delete this result item?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/content/results-gallery/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/content/results-gallery/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1581,7 +1581,7 @@ export default function AdminPage() {
   const handleSaveFounderStory = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/v1/content/founder", {
+      const res = await fetch(getApiUrl("/api/v1/content/founder"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(founderStory),
@@ -1601,7 +1601,7 @@ export default function AdminPage() {
   const handleSaveCeoStory = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:8000/api/v1/content/ceo", {
+      const res = await fetch(getApiUrl("/api/v1/content/ceo"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(ceoStory),
@@ -1695,7 +1695,7 @@ export default function AdminPage() {
         ? newProduct.category_ids
         : [Number(newProduct.category_id || 1)];
 
-      const res = await fetch("http://localhost:8000/api/v1/products/", {
+      const res = await fetch(getApiUrl("/api/v1/products/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1739,7 +1739,7 @@ export default function AdminPage() {
         ? editingProduct.category_ids
         : (editingProduct.category_id ? [Number(editingProduct.category_id)] : []);
 
-      const res = await fetch(`http://localhost:8000/api/v1/products/${editingProduct.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/products/${editingProduct.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1767,7 +1767,7 @@ export default function AdminPage() {
   const deleteProduct = async (id: number) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/products/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/products/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1786,7 +1786,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/api/v1/categories/", {
+      const res = await fetch(getApiUrl("/api/v1/categories/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newCategory),
@@ -1809,7 +1809,7 @@ export default function AdminPage() {
     e.preventDefault();
     if (!editingCategory) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/categories/${editingCategory.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/categories/${editingCategory.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editingCategory),
@@ -1830,7 +1830,7 @@ export default function AdminPage() {
   const deleteCategory = async (id: number) => {
     if (!confirm("Are you sure you want to delete this category? All related items might be affected.")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/categories/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/categories/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1846,7 +1846,7 @@ export default function AdminPage() {
   // --- REVIEWS CRUD ACTIONS ---
   const approveReview = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/reviews/${id}/approve`, {
+      const res = await fetch(getApiUrl(`/api/v1/reviews/${id}/approve`), {
         method: "PUT"
       });
       if (res.ok) {
@@ -1864,7 +1864,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/api/v1/reviews/", {
+      const res = await fetch(getApiUrl("/api/v1/reviews/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1898,7 +1898,7 @@ export default function AdminPage() {
     e.preventDefault();
     if (!editingReview) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/reviews/${editingReview.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/reviews/${editingReview.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1927,7 +1927,7 @@ export default function AdminPage() {
   const deleteReview = async (id: number) => {
     if (!confirm("Are you sure you want to delete this review?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/reviews/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/reviews/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {
@@ -1940,7 +1940,7 @@ export default function AdminPage() {
 
   const toggleReviewFeatured = async (review: Review) => {
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/reviews/${review.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/reviews/${review.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1969,7 +1969,7 @@ export default function AdminPage() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/api/v1/blogs/", {
+      const res = await fetch(getApiUrl("/api/v1/blogs/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newBlog),
@@ -1995,7 +1995,7 @@ export default function AdminPage() {
     e.preventDefault();
     if (!editingBlog) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/blogs/${editingBlog.id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/blogs/${editingBlog.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editingBlog),
@@ -2016,7 +2016,7 @@ export default function AdminPage() {
   const deleteBlog = async (id: number) => {
     if (!confirm("Are you sure you want to delete this blog post?")) return;
     try {
-      const res = await fetch(`http://localhost:8000/api/v1/blogs/${id}`, {
+      const res = await fetch(getApiUrl(`/api/v1/blogs/${id}`), {
         method: "DELETE"
       });
       if (res.ok) {

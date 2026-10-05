@@ -1,5 +1,7 @@
 "use client";
 
+import { getApiUrl } from "@/lib/api";
+
 import { useEffect, useState } from "react";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
@@ -38,7 +40,7 @@ export default function ShopPage() {
 
   useEffect(() => {
     // Fetch categories
-    fetch("http://localhost:8000/api/v1/categories/")
+    fetch(getApiUrl("/api/v1/categories/"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setCategories(data);
@@ -46,7 +48,7 @@ export default function ShopPage() {
       .catch((err) => console.log("Failed to load categories:", err));
 
     // Fetch products
-    fetch("http://localhost:8000/api/v1/products/")
+    fetch(getApiUrl("/api/v1/products/"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) setProducts(data);

@@ -84,7 +84,7 @@ def seed_db():
                 "benefits": "Reduces dark spots, provides an instant glass-skin glow, balances tone, and deeply moisturizes.",
                 "how_to_use": "Apply 3-4 drops to cleansed face and neck in the morning and evening. Gently press into skin until fully absorbed.",
                 "skin_type": "Oily & Dull Skin",
-                "product_images": ['/Users/nandavelv/Downloads/glow radiant 01.jpg', "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=600&auto=format&fit=crop"],
+                "product_images": ["https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=600&auto=format&fit=crop"],
                 "thumbnail": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=600&auto=format&fit=crop",
                 "featured": True,
                 "active": True
@@ -291,6 +291,20 @@ def seed_db():
             active=True
         )
         db.add(db_coupon)
+
+        # 6. Create Initial Blog Post
+        initial_blog = models.Blog(
+            title="How to Use Our Avocado Night Cream for Maximum Hydration",
+            slug="how-to-use-our-night-cream",
+            excerpt="Minimal care rituals to refine and deeply nourish dry to mature skin barriers overnight.",
+            content="Using a wonderful texture of cold-pressed Avocado Butter and Ashwagandha extract, our Avocado Night Cream restores your skin's elasticity while you sleep.",
+            featured_image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+            author="Pranavi",
+            published=True,
+            published_at=datetime.utcnow(),
+            meta_description="Learn how to incorporate Avocado Night Cream into your evening botanical ritual."
+        )
+        db.add(initial_blog)
 
         db.commit()
         print("Database successfully seeded with Qura Herbs brand catalog!")
