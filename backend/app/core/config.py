@@ -50,13 +50,13 @@ class Settings(BaseSettings):
     CLOUDINARY_API_SECRET: str = ""
 
     # Supabase Storage (product images)
-    SUPABASE_URL: str = ""
-    SUPABASE_SERVICE_ROLE_KEY: str = ""
-    SUPABASE_ANON_KEY: str = ""
+    SUPABASE_URL: str = "https://slyiyvegvcefhzaeymoo.supabase.co"
+    SUPABASE_SERVICE_ROLE_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNseWl5dmVndmNlZmh6YWV5bW9vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDc3NjI4NiwiZXhwIjoyMDkwMzUyMjg2fQ.TUJmCuS0A2nQAIgf-NXZyEPLGfKdr4ntGBx2MRrC1d8"
+    SUPABASE_ANON_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNseWl5dmVndmNlZmh6YWV5bW9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3NzYyODYsImV4cCI6MjA5MDM1MjI4Nn0.a27tomzypcsUGx9wYRLw6jaq9LCuRzRoLIRpQPZhsgU"
     SUPABASE_PUBLISHABLE_KEY: str = ""
     SUPABASE_STORAGE_BUCKET: str = "product-images"
-    NEXT_PUBLIC_SUPABASE_URL: str = ""
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: str = ""
+    NEXT_PUBLIC_SUPABASE_URL: str = "https://slyiyvegvcefhzaeymoo.supabase.co"
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNseWl5dmVndmNlZmh6YWV5bW9vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3NzYyODYsImV4cCI6MjA5MDM1MjI4Nn0.a27tomzypcsUGx9wYRLw6jaq9LCuRzRoLIRpQPZhsgU"
 
     # CORS
     NEXT_PUBLIC_API_URL: str = "http://localhost:8000/api/v1"
