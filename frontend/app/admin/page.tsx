@@ -1044,18 +1044,29 @@ export default function AdminPage() {
           password: password,
         }),
       });
+
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        console.error("Non-JSON response from admin login endpoint:", jsonErr);
+      }
+
       if (res.ok) {
         sessionStorage.setItem("qura_admin_session", email.trim().toLowerCase());
         setIsAuthorized(true);
         setLoginError("");
         loadAdminData();
-      } else {
-        const data = await res.json();
+      } else if (res.status === 401) {
         setLoginError(data.detail || "Invalid email or password.");
+      } else if (res.status === 404) {
+        setLoginError("Authentication endpoint not found.");
+      } else {
+        setLoginError(data.detail || "Authentication service is temporarily unavailable. Please try again.");
       }
     } catch (err) {
-      console.error(err);
-      setLoginError("Failed to connect to authentication server.");
+      console.error("Error during admin login:", err);
+      setLoginError("Authentication service is temporarily unavailable. Please try again.");
     }
   };
 

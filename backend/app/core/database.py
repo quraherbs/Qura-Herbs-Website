@@ -5,8 +5,19 @@ from backend.app.core.config import settings
 import os
 
 db_url = settings.DATABASE_URL
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
 if os.environ.get("VERCEL") and db_url.startswith("sqlite:///./"):
-    db_url = "sqlite:////tmp/qura_herbs.db"
+    tmp_db_path = "/tmp/qura_herbs.db"
+    repo_db_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), "qura_herbs.db")
+    if not os.path.exists(tmp_db_path) and os.path.exists(repo_db_path):
+        import shutil
+        try:
+            shutil.copyfile(repo_db_path, tmp_db_path)
+        except Exception as e:
+            print(f"[WARN] Could not copy initial DB to /tmp: {e}")
+    db_url = f"sqlite:///{tmp_db_path}"
 
 # Determine database type and configure connect_args
 is_sqlite = db_url.startswith("sqlite")
