@@ -45,6 +45,7 @@ build/
 frontend/.next/
 frontend/out/
 frontend/build/
+frontend/frontend/.next/
 
 # ============================
 # TypeScript build info
