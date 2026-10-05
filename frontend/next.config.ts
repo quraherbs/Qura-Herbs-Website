@@ -1,19 +1,22 @@
 import type { NextConfig } from "next";
-import path from "path";
-
-const backendUrl =
-  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
 
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: path.resolve(__dirname),
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**.supabase.co" },
+      { protocol: "https", hostname: "images.unsplash.com" },
+      { protocol: "https", hostname: "lh3.googleusercontent.com" },
+      { protocol: "https", hostname: "drive.google.com" },
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "http", hostname: "localhost" },
+      { protocol: "http", hostname: "127.0.0.1" },
+    ],
   },
-
   async rewrites() {
     return [
       {
         source: "/uploads/:path*",
-        destination: `${backendUrl}/uploads/:path*`,
+        destination: process.env.NODE_ENV === "production" ? "/api/index.py" : "http://localhost:8000/uploads/:path*",
       },
     ];
   },

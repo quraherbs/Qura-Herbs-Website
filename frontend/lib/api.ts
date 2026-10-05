@@ -16,3 +16,22 @@ export function getApiV1Base(): string {
   }
   return "http://localhost:8000/api/v1";
 }
+
+export function getImageUrl(url: string | null | undefined): string {
+  if (!url) return "/uploads/product_placeholder.jpg";
+  if (url.startsWith("http://localhost:8000")) {
+    const relativePath = url.replace("http://localhost:8000", "");
+    return getApiUrl(relativePath);
+  }
+  if (url.startsWith("http://127.0.0.1:8000")) {
+    const relativePath = url.replace("http://127.0.0.1:8000", "");
+    return getApiUrl(relativePath);
+  }
+  if (url.startsWith("http://") || url.startsWith("https://")) {
+    return url;
+  }
+  if (url.startsWith("/uploads/")) {
+    return getApiUrl(url);
+  }
+  return url;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
 import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -153,11 +153,12 @@ export default function ProductDetails({ slug }: { slug: string }) {
     ? product.sale_price!
     : basePrice;
 
-  const allImages = Array.from(
-    new Set([product.thumbnail, ...(product.product_images || [])].filter(Boolean))
-  );
+  const rawImages = [product.thumbnail, ...(product.product_images || [])].filter(Boolean);
+  const allImages = Array.from(new Set(rawImages.map((img) => getImageUrl(img))));
 
-  const currentImgIndex = allImages.indexOf(selectedImage) >= 0 ? allImages.indexOf(selectedImage) + 1 : 1;
+  const currentImgIndex = allImages.indexOf(getImageUrl(selectedImage)) >= 0 
+    ? allImages.indexOf(getImageUrl(selectedImage)) + 1 
+    : 1;
 
   return (
     <div className="space-y-16">
@@ -173,7 +174,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
                 key={idx}
                 onClick={() => setSelectedImage(img)}
                 className={`w-full aspect-square border overflow-hidden bg-brand-light flex items-center justify-center p-1 transition-all rounded-sm ${
-                  selectedImage === img ? "border-brand-accent scale-95 shadow-sm" : "border-brand-sand/30"
+                  getImageUrl(selectedImage) === img ? "border-brand-accent scale-95 shadow-sm" : "border-brand-sand/30"
                 }`}
               >
                 <img src={img} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
@@ -183,7 +184,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
           
           {/* Featured Large Viewer */}
           <div className="col-span-10 aspect-square w-full bg-brand-light border border-brand-sand/20 overflow-hidden relative rounded-sm group">
-            <img src={selectedImage || product.thumbnail} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+            <img src={getImageUrl(selectedImage || product.thumbnail)} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             
             {/* Image Counter Badge */}
             <div className="absolute bottom-3 right-3 bg-brand-dark/80 text-brand-cream text-[10px] font-sans font-bold px-2.5 py-1 uppercase tracking-widest rounded-full backdrop-blur-sm">
