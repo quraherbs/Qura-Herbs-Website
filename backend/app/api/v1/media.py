@@ -175,9 +175,6 @@ def import_drive_url(payload: dict = Body(...)):
         with urllib.request.urlopen(req, context=ctx) as resp:
             data = resp.read()
 
-        # Save locally as backup
-        save_locally(data, unique_filename)
-
         s_url, s_key = get_supabase_credentials()
         if s_url and s_key:
             try:
@@ -186,6 +183,8 @@ def import_drive_url(payload: dict = Body(...)):
             except Exception as se:
                 logger.warning(f"Supabase upload for drive import failed: {se}")
 
+        # Fallback to local storage if Supabase is not configured
+        save_locally(data, unique_filename)
         return {"url": f"/uploads/{unique_filename}", "storage": "local", "original_url": raw_url}
     except Exception as e:
         return {"url": raw_url, "storage": "external", "warning": str(e)}
