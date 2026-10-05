@@ -37,7 +37,7 @@ TABLE_MODELS = [
     ("real_results", models.RealResult),
     ("botanical_routine_journeys", models.BotanicalJourney),
     ("settings", models.Setting),
-    ("ai_analysis_logs", models.AIAnalysisLog),
+    ("ai_analysis_logs", None),  # Direct table
     ("users", models.User),
 ]
 

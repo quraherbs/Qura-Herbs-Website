@@ -23,6 +23,7 @@ node_modules/
 *.db-wal
 *.sqlite
 *.sqlite3
+*.backup
 qura_herbs_export.json
 
 # ============================
