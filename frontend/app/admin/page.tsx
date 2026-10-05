@@ -1682,40 +1682,37 @@ export default function AdminPage() {
   };
 
   // --- FILE UPLOAD HELPER ---
-  const handleFileUpload = async (file: File): Promise<string> => {
+  const handleFileUpload = async (file: File, folderName?: string): Promise<string> => {
     setIsUploading(true);
     const formData = new FormData();
     formData.append("file", file);
+    if (folderName) {
+      formData.append("folder", folderName);
+    }
     try {
       const apiBase = getApiV1Base();
       const res = await fetch(`${apiBase}/media/upload`, {
         method: "POST",
         body: formData,
       });
-      if (res.ok) {
-        const data = await res.json();
-        const url = data.url;
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.url) {
         setIsUploading(false);
-        return url;
+        return data.url;
       }
-    } catch (e) {
-      console.warn("Backend upload endpoint unavailable, using local client preview:", e);
+      setIsUploading(false);
+      const errMsg = data.detail || `Upload failed (Status ${res.status})`;
+      alert(`Media upload failed: ${errMsg}`);
+      throw new Error(errMsg);
+    } catch (e: any) {
+      setIsUploading(false);
+      console.error("Backend upload error:", e);
+      if (e.message && e.message.includes("Media upload failed")) {
+        throw e;
+      }
+      alert(`Media upload error: ${e.message || "Failed to reach backend server"}`);
+      throw e;
     }
-
-    // Client-side fallback: Convert file to Data URL if backend is offline or returned an error
-    return new Promise<string>((resolve) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setIsUploading(false);
-        resolve((reader.result as string) || "");
-      };
-      reader.onerror = () => {
-        setIsUploading(false);
-        alert("Error reading file");
-        resolve("");
-      };
-      reader.readAsDataURL(file);
-    });
   };
 
   // --- GOOGLE DRIVE & WEB URL IMPORT HELPER ---
@@ -3370,7 +3367,7 @@ export default function AdminPage() {
                                   className="hidden"
                                   onChange={async (e) => {
                                     if (e.target.files?.[0]) {
-                                      const url = await handleFileUpload(e.target.files[0]);
+                                      const url = await handleFileUpload(e.target.files[0], "banners");
                                       setNewBanner({ ...newBanner, desktop_image: url });
                                     }
                                   }}
@@ -3583,7 +3580,7 @@ export default function AdminPage() {
                                   className="hidden"
                                   onChange={async (e) => {
                                     if (e.target.files?.[0]) {
-                                      const url = await handleFileUpload(e.target.files[0]);
+                                      const url = await handleFileUpload(e.target.files[0], "banners");
                                       setNewResult({ ...newResult, image: url });
                                     }
                                   }}
@@ -3755,7 +3752,7 @@ export default function AdminPage() {
                             className="hidden"
                             onChange={async (e) => {
                               if (e.target.files?.[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "results");
                                 setFounderStory({ ...founderStory, image: url });
                               }
                             }}
@@ -4082,7 +4079,7 @@ export default function AdminPage() {
                                 className="hidden"
                                 onChange={async (e) => {
                                   if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0]);
+                                    const url = await handleFileUpload(e.target.files[0], "results");
                                     setRealResultForm({ ...realResultForm, before_image: url });
                                   }
                                 }}
@@ -4121,7 +4118,7 @@ export default function AdminPage() {
                                 className="hidden"
                                 onChange={async (e) => {
                                   if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0]);
+                                    const url = await handleFileUpload(e.target.files[0], "results");
                                     setRealResultForm({ ...realResultForm, after_image: url });
                                   }
                                 }}
@@ -4569,7 +4566,7 @@ export default function AdminPage() {
                                 className="hidden"
                                 onChange={async (e) => {
                                   if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0]);
+                                    const url = await handleFileUpload(e.target.files[0], "founder");
                                     setBotanicalJourneyForm({ ...botanicalJourneyForm, final_image: url });
                                   }
                                 }}
@@ -4608,7 +4605,7 @@ export default function AdminPage() {
                                 className="hidden"
                                 onChange={async (e) => {
                                   if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0]);
+                                    const url = await handleFileUpload(e.target.files[0], "founder");
                                     setBotanicalJourneyForm({ ...botanicalJourneyForm, before_image: url });
                                   }
                                 }}
@@ -4814,7 +4811,7 @@ export default function AdminPage() {
                               className="hidden"
                               onChange={async (e) => {
                                 if (e.target.files?.[0]) {
-                                  const url = await handleFileUpload(e.target.files[0]);
+                                  const url = await handleFileUpload(e.target.files[0], "products");
                                   setAboutContent({ ...aboutContent, hero_image: url });
                                 }
                               }}
@@ -4978,7 +4975,7 @@ export default function AdminPage() {
                             className="hidden"
                             onChange={async (e) => {
                               if (e.target.files?.[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "products");
                                 setFounderStory({ ...founderStory, image: url });
                               }
                             }}
@@ -5062,7 +5059,7 @@ export default function AdminPage() {
                               className="hidden"
                               onChange={async (e) => {
                                 if (e.target.files?.[0]) {
-                                  const url = await handleFileUpload(e.target.files[0]);
+                                  const url = await handleFileUpload(e.target.files[0], "products");
                                   setCeoStory({ ...ceoStory, image: url, ceo_image: url });
                                 }
                               }}
@@ -5322,7 +5319,7 @@ export default function AdminPage() {
                                       className="hidden"
                                       onChange={async (e) => {
                                         if (e.target.files?.[0]) {
-                                          const url = await handleFileUpload(e.target.files[0]);
+                                          const url = await handleFileUpload(e.target.files[0], "categories");
                                           if (url) {
                                             if (isPrimary) {
                                               setNewProduct({ ...newProduct, thumbnail: url });
@@ -5548,7 +5545,7 @@ export default function AdminPage() {
                                       className="hidden"
                                       onChange={async (e) => {
                                         if (e.target.files?.[0]) {
-                                          const url = await handleFileUpload(e.target.files[0]);
+                                          const url = await handleFileUpload(e.target.files[0], "categories");
                                           if (url) {
                                             if (isPrimary) {
                                               setEditingProduct({ ...editingProduct, thumbnail: url });
@@ -5699,7 +5696,7 @@ export default function AdminPage() {
                             <span>Upload</span>
                             <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                               if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "reviews");
                                 if (url) setNewCategory({ ...newCategory, image: url });
                               }
                             }} />
@@ -5756,7 +5753,7 @@ export default function AdminPage() {
                             <span>Upload</span>
                             <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                               if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "reviews");
                                 if (url) setEditingCategory({ ...editingCategory, image: url });
                               }
                             }} />
@@ -5908,7 +5905,7 @@ export default function AdminPage() {
                             <span>Upload</span>
                             <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                               if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "blogs");
                                 if (url) setNewReview({ ...newReview, image: url });
                               }
                             }} />
@@ -6000,7 +5997,7 @@ export default function AdminPage() {
                             <span>Upload</span>
                             <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                               if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0]);
+                                const url = await handleFileUpload(e.target.files[0], "blogs");
                                 if (url) setEditingReview({ ...editingReview, image: url });
                               }
                             }} />
@@ -6160,7 +6157,7 @@ export default function AdminPage() {
                               <span>Upload</span>
                               <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                                 if (e.target.files && e.target.files[0]) {
-                                  const url = await handleFileUpload(e.target.files[0]);
+                                  const url = await handleFileUpload(e.target.files[0], "general");
                                   if (url) setNewBlog({ ...newBlog, featured_image: url });
                                 }
                               }} />
@@ -6292,7 +6289,7 @@ export default function AdminPage() {
                               <span>Upload</span>
                               <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                                 if (e.target.files && e.target.files[0]) {
-                                  const url = await handleFileUpload(e.target.files[0]);
+                                  const url = await handleFileUpload(e.target.files[0], "general");
                                   if (url) setEditingBlog({ ...editingBlog, featured_image: url });
                                 }
                               }} />

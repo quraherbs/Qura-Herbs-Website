@@ -84,3 +84,4 @@ yarn-error.log*
 .vercel
 coverage/
 lint_results.json
+.env*.local

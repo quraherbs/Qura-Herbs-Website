@@ -7,7 +7,8 @@ import ssl
 import mimetypes
 import logging
 import requests
-from fastapi import APIRouter, UploadFile, File, HTTPException, Body
+from typing import Optional
+from fastapi import APIRouter, UploadFile, File, HTTPException, Body, Form
 from backend.app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -36,28 +37,36 @@ def get_upload_dirs():
 
 
 def get_supabase_credentials():
-    url = (settings.SUPABASE_URL or settings.NEXT_PUBLIC_SUPABASE_URL or "").rstrip('/')
+    url = (
+        settings.SUPABASE_URL or
+        settings.NEXT_PUBLIC_SUPABASE_URL or
+        os.environ.get("SUPABASE_URL") or
+        os.environ.get("NEXT_PUBLIC_SUPABASE_URL") or
+        ""
+    ).rstrip('/')
+    
     key = (
         settings.SUPABASE_SERVICE_ROLE_KEY or
+        os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or
         settings.SUPABASE_ANON_KEY or
-        settings.SUPABASE_PUBLISHABLE_KEY or
+        os.environ.get("SUPABASE_ANON_KEY") or
         settings.NEXT_PUBLIC_SUPABASE_ANON_KEY or
         ""
     )
     return url, key
 
 
-def upload_to_supabase(content: bytes, filename: str, content_type: str = "image/jpeg") -> str:
+def upload_to_supabase(content: bytes, object_path: str, content_type: str = "image/jpeg") -> str:
     """
     Upload file bytes to Supabase Storage bucket.
-    Returns public URL on success, or raises Exception on failure.
+    Returns permanent public CDN URL on success.
     """
     supabase_url, supabase_key = get_supabase_credentials()
     if not supabase_url or not supabase_key:
-        raise ValueError("Supabase credentials not configured")
+        raise ValueError("Supabase Storage credentials (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) are not configured.")
 
     bucket = settings.SUPABASE_STORAGE_BUCKET or "product-images"
-    endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{filename}"
+    endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
 
     headers = {
         "Authorization": f"Bearer {supabase_key}",
@@ -83,8 +92,31 @@ def upload_to_supabase(content: bytes, filename: str, content_type: str = "image
     if res.status_code not in (200, 201):
         raise Exception(f"Supabase upload failed ({res.status_code}): {res.text}")
 
-    public_url = f"{supabase_url}/storage/v1/object/public/{bucket}/{filename}"
+    public_url = f"{supabase_url}/storage/v1/object/public/{bucket}/{object_path}"
     return public_url
+
+
+def delete_from_supabase(public_url: str) -> bool:
+    """
+    Safely delete object from Supabase Storage if it belongs to the configured bucket.
+    """
+    supabase_url, supabase_key = get_supabase_credentials()
+    if not supabase_url or not supabase_key or not public_url:
+        return False
+
+    bucket = settings.SUPABASE_STORAGE_BUCKET or "product-images"
+    prefix = f"{supabase_url}/storage/v1/object/public/{bucket}/"
+    if not public_url.startswith(prefix):
+        return False
+
+    object_path = public_url.replace(prefix, "")
+    endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
+    headers = {
+        "Authorization": f"Bearer {supabase_key}",
+        "apiKey": supabase_key
+    }
+    res = requests.delete(endpoint, headers=headers)
+    return res.status_code in (200, 204)
 
 
 def save_locally(content: bytes, filename: str) -> str:
@@ -109,47 +141,67 @@ def save_locally(content: bytes, filename: str) -> str:
 
 
 @router.post("/upload")
-def upload_file(file: UploadFile = File(...)):
-    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
-    filename = file.filename or "image.jpg"
-    _, ext = os.path.splitext(filename)
+def upload_file(
+    file: UploadFile = File(...),
+    folder: Optional[str] = Form(None)
+):
+    allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif"}
+    original_filename = file.filename or "image.jpg"
+    _, ext = os.path.splitext(original_filename)
     ext = ext.lower()
     
     if ext not in allowed_extensions:
-        ext = ".jpg"  # Default fallback if mime extension missing
+        ext = ".jpg"
         
-    unique_filename = f"{uuid.uuid4().hex}{ext}"
-    content_type = file.content_type or mimetypes.guess_type(unique_filename)[0] or "image/jpeg"
+    unique_name = f"{uuid.uuid4().hex}{ext}"
+    clean_folder = re.sub(r'[^a-zA-Z0-9_-]', '', folder).strip('/') if folder else ""
+    object_path = f"{clean_folder}/{unique_name}" if clean_folder else unique_name
+    
+    content_type = file.content_type or mimetypes.guess_type(unique_name)[0] or "image/jpeg"
     
     try:
         content = file.file.read()
+        if len(content) > 15 * 1024 * 1024:
+            raise HTTPException(status_code=400, detail="File size exceeds maximum limit of 15 MB.")
         
-        # Try Supabase if configured
         s_url, s_key = get_supabase_credentials()
+        is_production = bool(os.environ.get("VERCEL") or (s_url and s_key))
+        
         if s_url and s_key:
             try:
-                public_url = upload_to_supabase(content, unique_filename, content_type)
-                return {"url": public_url, "storage": "supabase"}
+                public_url = upload_to_supabase(content, object_path, content_type)
+                return {"url": public_url, "storage": "supabase", "path": object_path}
             except Exception as se:
-                logger.warning(f"Supabase upload failed, falling back to local: {se}")
+                logger.error(f"Supabase Storage upload error: {se}")
+                if is_production:
+                    raise HTTPException(
+                        status_code=500,
+                        detail=f"Production media upload failed: Could not store file in Supabase Storage ({str(se)})"
+                    )
 
-        # Fallback to local / tmp storage
-        url = save_locally(content, unique_filename)
-        return {"url": url, "storage": "local"}
+        # Local development fallback
+        if not is_production:
+            url = save_locally(content, unique_name)
+            return {"url": url, "storage": "local"}
+        else:
+            raise HTTPException(status_code=500, detail="Supabase Storage credentials missing in production environment.")
+    except HTTPException:
+        raise
     except Exception as e:
+        logger.error(f"Failed to process uploaded file: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
 
 
 @router.post("/import-drive-url")
 def import_drive_url(payload: dict = Body(...)):
     raw_url = payload.get("url", "").strip()
+    folder = payload.get("folder", "")
     if not raw_url:
         raise HTTPException(status_code=400, detail="URL is required")
 
-    if raw_url.startswith("/uploads/") or raw_url.startswith("http://localhost"):
-        return {"url": raw_url, "storage": "local"}
+    if raw_url.startswith("https://") and "supabase.co" in raw_url:
+        return {"url": raw_url, "storage": "supabase"}
 
-    # Extract Google Drive file ID if Google Drive link
     gdrive_id = None
     m = re.search(r'/file/d/([a-zA-Z0-9_-]+)', raw_url)
     if m:
@@ -164,7 +216,9 @@ def import_drive_url(payload: dict = Body(...)):
                 gdrive_id = m.group(1)
 
     download_url = f"https://lh3.googleusercontent.com/d/{gdrive_id}" if gdrive_id else raw_url
-    unique_filename = f"gdrive_{uuid.uuid4().hex[:12]}.jpg"
+    clean_folder = re.sub(r'[^a-zA-Z0-9_-]', '', folder).strip('/') if folder else "imported"
+    unique_name = f"gdrive_{uuid.uuid4().hex[:12]}.jpg"
+    object_path = f"{clean_folder}/{unique_name}"
 
     ctx = ssl.create_default_context()
     ctx.check_hostname = False
@@ -178,13 +232,27 @@ def import_drive_url(payload: dict = Body(...)):
         s_url, s_key = get_supabase_credentials()
         if s_url and s_key:
             try:
-                public_url = upload_to_supabase(data, unique_filename, "image/jpeg")
+                public_url = upload_to_supabase(data, object_path, "image/jpeg")
                 return {"url": public_url, "storage": "supabase", "original_url": raw_url}
             except Exception as se:
-                logger.warning(f"Supabase upload for drive import failed: {se}")
+                logger.error(f"Supabase upload for drive import failed: {se}")
 
-        # Fallback to local storage if Supabase is not configured
-        save_locally(data, unique_filename)
-        return {"url": f"/uploads/{unique_filename}", "storage": "local", "original_url": raw_url}
+        if not os.environ.get("VERCEL"):
+            save_locally(data, unique_name)
+            return {"url": f"/uploads/{unique_name}", "storage": "local", "original_url": raw_url}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to import image to Supabase Storage in production.")
+    except HTTPException:
+        raise
     except Exception as e:
         return {"url": raw_url, "storage": "external", "warning": str(e)}
+
+
+@router.delete("/delete")
+def delete_media_file(payload: dict = Body(...)):
+    url = payload.get("url", "").strip()
+    if not url:
+        raise HTTPException(status_code=400, detail="Image URL is required for deletion.")
+
+    deleted = delete_from_supabase(url)
+    return {"success": deleted, "url": url}
