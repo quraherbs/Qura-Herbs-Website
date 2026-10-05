@@ -1,6 +1,26 @@
-# Exclude local media uploads from Vercel serverless function bundle
+# Python virtual environments
+backend/venv/
+venv/
+.venv/
+
+# Uploads & media files
 backend/uploads/
+uploads/
 frontend/public/uploads/
+
+# Database files & backups
 *.db
+*.db-backup
 *.db-shm
 *.db-wal
+qura_herbs.db
+qura_herbs.db.backup
+qura_herbs_export.json
+
+# Node modules & build outputs
+node_modules/
+frontend/node_modules/
+frontend/.next/
+.next/
+.npm_cache/
+scratch/
