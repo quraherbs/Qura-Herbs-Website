@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -89,7 +89,7 @@ export default function ArticleContent({ slug }: { slug: string }) {
       {/* Featured image */}
       {blog.featured_image && (
         <div className="w-full aspect-[16/9] overflow-hidden bg-brand-sand/15 border border-brand-sand/20">
-          <img src={blog.featured_image} alt={blog.title} className="w-full h-full object-cover" />
+          <img src={getImageUrl(blog.featured_image)} alt={blog.title} className="w-full h-full object-cover" />
         </div>
       )}
 

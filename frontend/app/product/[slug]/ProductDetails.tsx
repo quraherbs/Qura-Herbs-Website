@@ -174,10 +174,10 @@ export default function ProductDetails({ slug }: { slug: string }) {
                 key={idx}
                 onClick={() => setSelectedImage(img)}
                 className={`w-full aspect-square border overflow-hidden bg-brand-light flex items-center justify-center p-1 transition-all rounded-sm ${
-                  getImageUrl(selectedImage) === img ? "border-brand-accent scale-95 shadow-sm" : "border-brand-sand/30"
+                  selectedImage === img ? "border-brand-accent scale-95 shadow-sm" : "border-brand-sand/30"
                 }`}
               >
-                <img src={img} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
+                <img src={getImageUrl(img)} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
               </button>
             ))}
           </div>

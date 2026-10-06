@@ -13,7 +13,7 @@ import CartDrawer from "../components/CartDrawer";
 import Footer from "../components/Footer";
 import { useCart } from "../context/CartContext";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { ShoppingBag, Eye, Heart, Star } from "lucide-react";
 import Link from "next/link";
@@ -133,7 +133,7 @@ export default function Home() {
                         className="relative block aspect-square w-full overflow-hidden bg-brand-light border border-brand-sand/10"
                       >
                         <img
-                          src={prod.thumbnail}
+                          src={getImageUrl(prod.thumbnail)}
                           alt={prod.name}
                           className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                         />

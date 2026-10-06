@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../context/CartContext";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
@@ -414,7 +414,7 @@ export default function CheckoutPage() {
               {cart.map((item) => (
                 <div key={`${item.id}-${item.variant}`} className="flex items-center space-x-3 text-xs">
                   <div className="w-12 h-12 bg-[#F7F3E9] border border-[#EFE8D8] rounded overflow-hidden flex-shrink-0">
-                    <img src={item.thumbnail || "/uploads/product_placeholder.jpg"} alt={item.name} className="w-full h-full object-cover" />
+                    <img src={getImageUrl(item.thumbnail || "/uploads/product_placeholder.jpg")} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
                     <p className="font-medium text-[#2C1A14]">{item.name}</p>
@@ -766,7 +766,7 @@ export default function CheckoutPage() {
                   <div key={`${item.id}-${item.variant}`} className="flex items-center space-x-3 text-xs">
                     <div className="w-14 h-14 bg-[#F7F3E9] border border-[#EFE8D8] rounded overflow-hidden flex-shrink-0">
                       <img
-                        src={item.thumbnail || "/uploads/product_placeholder.jpg"}
+                        src={getImageUrl(item.thumbnail || "/uploads/product_placeholder.jpg")}
                         alt={item.name}
                         className="w-full h-full object-cover"
                       />

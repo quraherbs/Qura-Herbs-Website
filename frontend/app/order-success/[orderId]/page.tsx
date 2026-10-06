@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import React, { useEffect, useState, use } from "react";
 import AnnouncementBar from "../../../components/AnnouncementBar";
@@ -201,7 +201,7 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
                       <div key={item.id} className="flex items-center justify-between text-xs font-sans border-b border-[#F7F3E9] pb-2">
                         <div className="flex items-center space-x-3">
                           {info?.thumbnail && (
-                            <img src={info.thumbnail} alt={info.name} className="w-10 h-10 object-cover rounded bg-[#F7F3E9] border border-[#EFE8D8]" />
+                            <img src={getImageUrl(info.thumbnail)} alt={info.name} className="w-10 h-10 object-cover rounded bg-[#F7F3E9] border border-[#EFE8D8]" />
                           )}
                           <div>
                             <p className="font-medium text-[#2C1A14]">{info?.name || `Product #${item.product_id}`}</p>

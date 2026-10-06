@@ -95,95 +95,104 @@ def compute_order_amounts(db: Session, order_in: schemas.OrderCreate, customer: 
         "pincode": order_in.pincode or customer.pincode
     }
 
-@router.post("/", response_model=schemas.OrderResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.OrderResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.OrderResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_order(order_in: schemas.OrderCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
-    # Verify customer exists
-    customer = db.query(models.Customer).filter(models.Customer.id == order_in.customer_id).first()
-    if not customer:
-        raise HTTPException(status_code=404, detail="Customer not found")
+    try:
+        # Verify customer exists
+        customer = db.query(models.Customer).filter(models.Customer.id == order_in.customer_id).first()
+        if not customer:
+            raise HTTPException(status_code=404, detail="Customer not found")
+            
+        order_number = generate_order_number()
+        calc = compute_order_amounts(db, order_in, customer)
         
-    order_number = generate_order_number()
-    calc = compute_order_amounts(db, order_in, customer)
-    
-    db_order = models.Order(
-        order_number=order_number,
-        customer_id=order_in.customer_id,
-        subtotal=calc["subtotal"],
-        discount=calc["discount"],
-        shipping=calc["shipping"],
-        tax=0.0,
-        total=calc["total"],
-        payment_status="PAYMENT_PENDING",
-        order_status="PAYMENT_PENDING",
-        payment_id=order_in.payment_id,
-        razorpay_order_id=order_in.razorpay_order_id,
-        tracking_number=order_in.tracking_number,
-        offer_id=calc["offer"].id if calc["offer"] else None,
-        voucher_code=calc["voucher_code"],
-        discount_amount=calc["discount"],
-        shipping_discount=0.0,
-        shipping_address=calc["shipping_address"],
-        city=calc["city"],
-        district=calc["district"],
-        state=calc["state"],
-        pincode=calc["pincode"]
-    )
-    db.add(db_order)
-    db.commit()
-    db.refresh(db_order)
-
-    # Initial timeline event
-    initial_event = models.OrderTimelineEvent(
-        order_id=db_order.id,
-        status="ORDER_PLACED",
-        notes="Order placed via checkout",
-        created_by="Customer"
-    )
-    db.add(initial_event)
-
-    # Record offer usage if applicable
-    if calc["offer"]:
-        calc["offer"].used_count = (calc["offer"].used_count or 0) + 1
-        usage = models.OfferUsage(
-            offer_id=calc["offer"].id,
+        db_order = models.Order(
+            order_number=order_number,
             customer_id=order_in.customer_id,
-            order_id=db_order.id,
-            discount_amount=calc["discount"]
+            subtotal=calc["subtotal"],
+            discount=calc["discount"],
+            shipping=calc["shipping"],
+            tax=0.0,
+            total=calc["total"],
+            payment_status="PAYMENT_PENDING",
+            order_status="PAYMENT_PENDING",
+            payment_id=order_in.payment_id,
+            razorpay_order_id=order_in.razorpay_order_id,
+            tracking_number=order_in.tracking_number,
+            offer_id=calc["offer"].id if calc["offer"] else None,
+            voucher_code=calc["voucher_code"],
+            discount_amount=calc["discount"],
+            shipping_discount=0.0,
+            shipping_address=calc["shipping_address"],
+            city=calc["city"],
+            district=calc["district"],
+            state=calc["state"],
+            pincode=calc["pincode"]
         )
-        db.add(usage)
-    
-    order_items_list = []
-    # Save order items and reduce stock
-    for product, unit_price, item_in in calc["order_items_prepared"]:
-        # Deduct stock
-        product.stock -= item_in.quantity
-        
-        db_item = models.OrderItem(
+        db.add(db_order)
+        db.commit()
+        db.refresh(db_order)
+
+        # Initial timeline event
+        initial_event = models.OrderTimelineEvent(
             order_id=db_order.id,
-            product_id=product.id,
-            quantity=item_in.quantity,
-            price=unit_price,
-            variant=item_in.variant
+            status="ORDER_PLACED",
+            notes="Order placed via checkout",
+            created_by="Customer"
         )
-        db.add(db_item)
-        order_items_list.append({
-            "product_id": product.id,
-            "name": product.name,
-            "quantity": item_in.quantity,
-            "price": unit_price,
-            "variant": item_in.variant,
-            "thumbnail": product.thumbnail
-        })
+        db.add(initial_event)
+
+        # Record offer usage if applicable
+        if calc["offer"]:
+            calc["offer"].used_count = (calc["offer"].used_count or 0) + 1
+            usage = models.OfferUsage(
+                offer_id=calc["offer"].id,
+                customer_id=order_in.customer_id,
+                order_id=db_order.id,
+                discount_amount=calc["discount"]
+            )
+            db.add(usage)
         
-    db.commit()
-    db.refresh(db_order)
+        order_items_list = []
+        # Save order items and reduce stock
+        for product, unit_price, item_in in calc["order_items_prepared"]:
+            # Deduct stock
+            product.stock -= item_in.quantity
+            
+            db_item = models.OrderItem(
+                order_id=db_order.id,
+                product_id=product.id,
+                quantity=item_in.quantity,
+                price=unit_price,
+                variant=item_in.variant
+            )
+            db.add(db_item)
+            order_items_list.append({
+                "product_id": product.id,
+                "name": product.name,
+                "quantity": item_in.quantity,
+                "price": unit_price,
+                "variant": item_in.variant,
+                "thumbnail": product.thumbnail
+            })
+            
+        db.commit()
+        db.refresh(db_order)
 
-    # Queue Admin New Order Notification Email
-    background_tasks.add_task(EmailService.send_admin_new_order_email, db, db_order, customer, order_items_list)
+        # Queue Admin New Order Notification Email
+        background_tasks.add_task(EmailService.send_admin_new_order_email, db, db_order, customer, order_items_list)
 
-    return db_order
+        return db_order
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Order creation failed: {str(e)}")
 
-@router.get("/", response_model=List[schemas.OrderResponse])
+@router.get("", response_model=List[schemas.OrderResponse])
+@router.get("/", response_model=List[schemas.OrderResponse], include_in_schema=False)
 def list_orders(status: Optional[str] = None, db: Session = Depends(get_db)):
     query = db.query(models.Order)
     if status:
@@ -191,6 +200,7 @@ def list_orders(status: Optional[str] = None, db: Session = Depends(get_db)):
     return query.order_by(models.Order.created_at.desc()).all()
 
 @router.get("/analytics/shipping", response_model=schemas.ShippingAnalyticsResponse)
+@router.get("/analytics/shipping/", response_model=schemas.ShippingAnalyticsResponse, include_in_schema=False)
 def get_shipping_analytics(db: Session = Depends(get_db)):
     orders = db.query(models.Order).all()
     total_orders = len(orders)

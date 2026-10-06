@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from backend.app.core.config import settings
 from backend.app.core.database import Base, engine
@@ -200,8 +200,14 @@ app.include_router(content.router, prefix="/api/v1/content", tags=["Content"])
 
 
 @app.get("/api/health")
+@app.get("/api/health/", include_in_schema=False)
 def api_health():
     return {"status": "ok"}
+
+@app.get("/api/admin/system-health")
+@app.get("/api/admin/system-health/", include_in_schema=False)
+def admin_system_health(db = Depends(health.get_db)):
+    return health.system_health_check(db)
 
 @app.get("/")
 def read_root():

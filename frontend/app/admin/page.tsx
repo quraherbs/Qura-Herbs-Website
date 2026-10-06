@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getApiV1Base, getApiUrl } from "@/lib/api";
+import { getApiV1Base, getApiUrl, getImageUrl, formatErrorMessage } from "@/lib/api";
+import SupabaseImageUrlInput from "@/components/SupabaseImageUrlInput";
 import { 
   BarChart3, Box, Folders, ShoppingBag, Star, 
   BookOpen, AlertCircle, Settings, 
@@ -1130,60 +1131,98 @@ export default function AdminPage() {
   const loadAdminData = () => {
     // 1. Fetch dashboard statistics
     fetch(getApiUrl("/api/v1/admin/dashboard"))
-      .then((res) => res.json())
-      .then((data) => setStats(data))
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => { if (data && typeof data === "object") setStats(data); })
       .catch((err) => console.log("Failed to load dashboard stats:", err));
 
     // 2. Fetch products
-    fetch(getApiUrl("/api/v1/products/"))
-      .then((res) => res.json())
+    fetch(getApiUrl("/api/v1/products"))
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        setProducts(data);
-        if (data.length > 0 && newReview.product_id === 0) {
-          setNewReview((prev) => ({ ...prev, product_id: data[0].id }));
+        if (Array.isArray(data)) {
+          setProducts(data);
+          if (data.length > 0 && newReview.product_id === 0) {
+            setNewReview((prev) => ({ ...prev, product_id: data[0].id }));
+          }
+        } else {
+          setProducts([]);
         }
       })
-      .catch((err) => console.log("Failed to load products:", err));
+      .catch((err) => {
+        console.log("Failed to load products:", err);
+        setProducts([]);
+      });
 
     // 3. Fetch categories
-    fetch(getApiUrl("/api/v1/categories/"))
-      .then((res) => res.json())
+    fetch(getApiUrl("/api/v1/categories"))
+      .then((res) => (res.ok ? res.json() : []))
       .then((data) => {
-        setCategories(data);
-        if (data.length > 0 && newProduct.category_id === 1) {
-          setNewProduct((prev) => ({ ...prev, category_id: data[0].id }));
+        if (Array.isArray(data)) {
+          setCategories(data);
+          if (data.length > 0 && newProduct.category_id === 1) {
+            setNewProduct((prev) => ({ ...prev, category_id: data[0].id }));
+          }
+        } else {
+          setCategories([]);
         }
       })
-      .catch((err) => console.log("Failed to load categories:", err));
+      .catch((err) => {
+        console.log("Failed to load categories:", err);
+        setCategories([]);
+      });
 
     // 4. Fetch reviews
-    fetch(getApiUrl("/api/v1/reviews/"))
-      .then((res) => res.json())
-      .then((data) => setReviews(data))
-      .catch((err) => console.log("Failed to load reviews:", err));
+    fetch(getApiUrl("/api/v1/reviews"))
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setReviews(data);
+        else setReviews([]);
+      })
+      .catch((err) => {
+        console.log("Failed to load reviews:", err);
+        setReviews([]);
+      });
 
     // 5. Fetch blogs
-    fetch(getApiUrl("/api/v1/blogs/?published_only=false"))
-      .then((res) => res.json())
-      .then((data) => setBlogs(data))
-      .catch((err) => console.log("Failed to load blogs:", err));
+    fetch(getApiUrl("/api/v1/blogs?published_only=false"))
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setBlogs(data);
+        else setBlogs([]);
+      })
+      .catch((err) => {
+        console.log("Failed to load blogs:", err);
+        setBlogs([]);
+      });
 
     // 6. Fetch orders
-    fetch(getApiUrl("/api/v1/orders/"))
-      .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((err) => console.log("Failed to load orders:", err));
+    fetch(getApiUrl("/api/v1/orders"))
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setOrders(data);
+        else setOrders([]);
+      })
+      .catch((err) => {
+        console.log("Failed to load orders:", err);
+        setOrders([]);
+      });
 
     // 7. Fetch offers
-    fetch(getApiUrl("/api/v1/offers/?active_only=false"))
-      .then((res) => res.json())
-      .then((data) => setOffers(data))
-      .catch((err) => console.log("Failed to load offers:", err));
+    fetch(getApiUrl("/api/v1/offers?active_only=false"))
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) setOffers(data);
+        else setOffers([]);
+      })
+      .catch((err) => {
+        console.log("Failed to load offers:", err);
+        setOffers([]);
+      });
 
     // 8. Fetch shipping analytics
     fetch(getApiUrl("/api/v1/orders/analytics/shipping"))
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => {
         if (data && data.total_orders !== undefined) {
           setShippingAnalytics(data);
         }
@@ -1192,62 +1231,61 @@ export default function AdminPage() {
 
     // 8. Fetch offer analytics
     fetch(getApiUrl("/api/v1/offers/analytics"))
-      .then((res) => res.json())
-      .then((data) => setOfferAnalytics(data))
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => { if (data && typeof data === "object") setOfferAnalytics(data); })
       .catch((err) => console.log("Failed to load offer analytics:", err));
 
     // 8.5. Fetch AI Analytics
     fetch(getApiUrl("/api/v1/ai/analytics"))
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => {
         if (data && data.total_analyses !== undefined) {
           setAiAnalytics(data);
         }
       })
       .catch((err) => console.log("Failed to load AI analytics:", err));
 
-
     // 9. Fetch Hero Banners
     fetch(getApiUrl("/api/v1/content/hero-banners?active_only=false"))
-      .then((res) => res.json())
-      .then((data) => { if (Array.isArray(data)) setHeroBanners(data); })
-      .catch((err) => console.log("Failed to load hero banners:", err));
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { if (Array.isArray(data)) setHeroBanners(data); else setHeroBanners([]); })
+      .catch((err) => { console.log("Failed to load hero banners:", err); setHeroBanners([]); });
 
     // 10. Fetch Result Gallery
     fetch(getApiUrl("/api/v1/content/results-gallery?active_only=false"))
-      .then((res) => res.json())
-      .then((data) => { if (Array.isArray(data)) setResultGalleryItems(data); })
-      .catch((err) => console.log("Failed to load result gallery:", err));
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { if (Array.isArray(data)) setResultGalleryItems(data); else setResultGalleryItems([]); })
+      .catch((err) => { console.log("Failed to load result gallery:", err); setResultGalleryItems([]); });
 
     // 11. Fetch Founder Story
     fetch(getApiUrl("/api/v1/content/founder"))
-      .then((res) => res.json())
-      .then((data) => { if (data) setFounderStory(data); })
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => { if (data && typeof data === "object") setFounderStory(data); })
       .catch((err) => console.log("Failed to load founder story:", err));
 
     // 12. Fetch CEO Story
     fetch(getApiUrl("/api/v1/content/ceo"))
-      .then((res) => res.json())
-      .then((data) => { if (data) setCeoStory(data); })
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => { if (data && typeof data === "object") setCeoStory(data); })
       .catch((err) => console.log("Failed to load ceo story:", err));
 
     // 13. Fetch About Page Content
     fetch(getApiUrl("/api/v1/content/about"))
-      .then((res) => res.json())
-      .then((data) => { if (data && data.title) setAboutContent(data); })
+      .then((res) => (res.ok ? res.json() : (null as any)))
+      .then((data: any) => { if (data && data.title) setAboutContent(data); })
       .catch((err) => console.log("Failed to load about page content:", err));
 
     // 14. Fetch Real Results
     fetch(getApiUrl("/api/v1/content/real-results?active_only=false"))
-      .then((res) => res.json())
-      .then((data) => { if (Array.isArray(data)) setRealResults(data); })
-      .catch((err) => console.log("Failed to load real results:", err));
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { if (Array.isArray(data)) setRealResults(data); else setRealResults([]); })
+      .catch((err) => { console.log("Failed to load real results:", err); setRealResults([]); });
 
     // 15. Fetch Botanical Journeys
     fetch(getApiUrl("/api/v1/content/botanical-journeys?active_only=false"))
-      .then((res) => res.json())
-      .then((data) => { if (Array.isArray(data)) setBotanicalJourneys(data); })
-      .catch((err) => console.log("Failed to load botanical journeys:", err));
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => { if (Array.isArray(data)) setBotanicalJourneys(data); else setBotanicalJourneys([]); })
+      .catch((err) => { console.log("Failed to load botanical journeys:", err); setBotanicalJourneys([]); });
   };
 
   // --- REAL RESULTS HANDLERS ---
@@ -1737,25 +1775,30 @@ export default function AdminPage() {
     if (!inputUrl || !inputUrl.trim()) return "";
     const cleanUrl = inputUrl.trim();
 
-    if (cleanUrl.includes("drive.google.com") || cleanUrl.includes("googleusercontent.com") || cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://")) {
-      try {
-        setIsUploading(true);
-        const apiBase = getApiV1Base();
-        const res = await fetch(`${apiBase}/media/import-drive-url`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ url: cleanUrl }),
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setIsUploading(false);
-          return data.url;
-        }
-      } catch (e) {
-        console.error("Drive import error:", e);
-      } finally {
+    // If it's a direct Supabase or HTTP(S) image URL, return the exact URL directly!
+    // Do NOT re-upload, proxy, or transform direct image URLs.
+    if (!cleanUrl.includes("drive.google.com") && !cleanUrl.includes("googleusercontent.com")) {
+      return cleanUrl;
+    }
+
+    // Only import Google Drive file links that require extracting public file bytes
+    try {
+      setIsUploading(true);
+      const apiBase = getApiV1Base();
+      const res = await fetch(`${apiBase}/media/import-drive-url`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url: cleanUrl }),
+      });
+      if (res.ok) {
+        const data = await res.json();
         setIsUploading(false);
+        return data.url;
       }
+    } catch (e) {
+      console.error("Drive import error:", e);
+    } finally {
+      setIsUploading(false);
     }
     return cleanUrl;
   };
@@ -2605,7 +2648,7 @@ export default function AdminPage() {
                           <div key={item.id} className="flex items-center justify-between bg-slate-900 p-3 border border-slate-850 text-xs">
                             <div className="flex items-center space-x-3">
                               <div className="w-12 h-12 bg-slate-950 border border-slate-800 overflow-hidden flex-shrink-0">
-                                <img src={item.thumbnail || "/uploads/product_placeholder.jpg"} alt={item.product_name} className="w-full h-full object-cover" />
+                                <img src={getImageUrl(item.thumbnail || "/uploads/product_placeholder.jpg")} alt={item.product_name} className="w-full h-full object-cover" />
                               </div>
                               <div>
                                 <p className="font-bold text-slate-100">{item.product_name}</p>
@@ -2889,12 +2932,12 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {orders.length === 0 ? (
+                    {!Array.isArray(orders) || orders.length === 0 ? (
                       <tr>
                         <td colSpan={7} className="p-8 text-center text-slate-500 italic">No orders found in database.</td>
                       </tr>
                     ) : (
-                      orders
+                      (Array.isArray(orders) ? orders : [])
                         .filter((o) => {
                           const matchesSearch = !orderSearch || 
                             o.order_number.toLowerCase().includes(orderSearch.toLowerCase());
@@ -3278,12 +3321,12 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {offers.length === 0 ? (
+                    {!Array.isArray(offers) || offers.length === 0 ? (
                       <tr>
                         <td colSpan={8} className="p-8 text-center text-slate-500 italic">No offers found. Create your first promotional voucher.</td>
                       </tr>
                     ) : (
-                      offers.map((off) => (
+                      (Array.isArray(offers) ? offers : []).map((off) => (
                         <tr key={off.id} className="border-b border-slate-850 hover:bg-slate-900/50">
                           <td className="p-4 font-bold text-slate-100">{off.name}</td>
                           <td className="p-4 font-mono font-bold text-emerald-400">{off.code}</td>
@@ -3409,33 +3452,15 @@ export default function AdminPage() {
                         </div>
 
                         <form onSubmit={handleSaveHeroBanner} className="space-y-4 text-xs">
-                          <div>
-                            <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Banner Desktop Image URL / File</label>
-                            <div className="flex gap-2">
-                              <input
-                                type="text"
-                                required
-                                value={newBanner.desktop_image}
-                                onChange={(e) => setNewBanner({ ...newBanner, desktop_image: e.target.value })}
-                                className="flex-1 bg-slate-950 border border-slate-800 p-2.5 text-slate-200 focus:outline-none"
-                              />
-                              <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 cursor-pointer font-bold flex items-center gap-1">
-                                <Upload size={14} />
-                                <span>Upload</span>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  className="hidden"
-                                  onChange={async (e) => {
-                                    if (e.target.files?.[0]) {
-                                      const url = await handleFileUpload(e.target.files[0], "banners");
-                                      setNewBanner({ ...newBanner, desktop_image: url });
-                                    }
-                                  }}
-                                />
-                              </label>
-                            </div>
-                          </div>
+                          <SupabaseImageUrlInput
+                            label="Banner Desktop Image URL / File"
+                            value={newBanner.desktop_image || ""}
+                            onChange={(url) => setNewBanner({ ...newBanner, desktop_image: url })}
+                            onUpload={(file) => handleFileUpload(file, "banners")}
+                            placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                            required
+                            aspectRatio="wide"
+                          />
 
                           <div>
                             <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Banner Heading</label>
@@ -3622,33 +3647,15 @@ export default function AdminPage() {
                         </div>
 
                         <form onSubmit={handleSaveResultItem} className="space-y-4 text-xs">
-                          <div>
-                            <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Result Image URL / File</label>
-                            <div className="flex gap-2">
-                              <input
-                                type="text"
-                                required
-                                value={newResult.image}
-                                onChange={(e) => setNewResult({ ...newResult, image: e.target.value })}
-                                className="flex-1 bg-slate-950 border border-slate-800 p-2.5 text-slate-200 focus:outline-none"
-                              />
-                              <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 cursor-pointer font-bold flex items-center gap-1">
-                                <Upload size={14} />
-                                <span>Upload</span>
-                                <input
-                                  type="file"
-                                  accept="image/*"
-                                  className="hidden"
-                                  onChange={async (e) => {
-                                    if (e.target.files?.[0]) {
-                                      const url = await handleFileUpload(e.target.files[0], "banners");
-                                      setNewResult({ ...newResult, image: url });
-                                    }
-                                  }}
-                                />
-                              </label>
-                            </div>
-                          </div>
+                          <SupabaseImageUrlInput
+                            label="Result Image URL / File"
+                            value={newResult.image || ""}
+                            onChange={(url) => setNewResult({ ...newResult, image: url })}
+                            onUpload={(file) => handleFileUpload(file, "results")}
+                            placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                            required
+                            aspectRatio="video"
+                          />
 
                           <div>
                             <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Result Title</label>
@@ -4118,85 +4125,28 @@ export default function AdminPage() {
                         </div>
                       </div>
 
-                      {/* Before Image & After Image Upload Controls */}
+                      {/* Before Image & After Image Upload & URL Input Controls */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                         {/* Before Image */}
-                        <div className="space-y-2 border border-slate-800 bg-slate-950 p-3 rounded">
-                          <label className="block text-slate-400 font-bold uppercase tracking-wider">Before Image *</label>
-                          <div className="h-32 border border-slate-800 bg-slate-900 rounded overflow-hidden relative flex items-center justify-center">
-                            {realResultForm.before_image ? (
-                              <img src={realResultForm.before_image} alt="Before Preview" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-slate-600">No Image Uploaded</span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <label className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 p-2 text-center cursor-pointer font-bold rounded flex items-center justify-center gap-1">
-                              <Upload size={14} />
-                              <span>Upload Before</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0], "results");
-                                    setRealResultForm({ ...realResultForm, before_image: url });
-                                  }
-                                }}
-                              />
-                            </label>
-                            {realResultForm.before_image && (
-                              <button
-                                type="button"
-                                onClick={() => setRealResultForm({ ...realResultForm, before_image: "" })}
-                                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded"
-                                title="Remove Image"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                        <SupabaseImageUrlInput
+                          label="Before Image (Optional)"
+                          value={realResultForm.before_image || ""}
+                          onChange={(url) => setRealResultForm({ ...realResultForm, before_image: url })}
+                          onUpload={(file) => handleFileUpload(file, "results")}
+                          placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                          aspectRatio="square"
+                        />
 
                         {/* After Image */}
-                        <div className="space-y-2 border border-slate-800 bg-slate-950 p-3 rounded">
-                          <label className="block text-slate-400 font-bold uppercase tracking-wider">After Image *</label>
-                          <div className="h-32 border border-slate-800 bg-slate-900 rounded overflow-hidden relative flex items-center justify-center">
-                            {realResultForm.after_image ? (
-                              <img src={realResultForm.after_image} alt="After Preview" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-slate-600">No Image Uploaded</span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <label className="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 p-2 text-center cursor-pointer font-bold rounded flex items-center justify-center gap-1">
-                              <Upload size={14} />
-                              <span>Upload After</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0], "results");
-                                    setRealResultForm({ ...realResultForm, after_image: url });
-                                  }
-                                }}
-                              />
-                            </label>
-                            {realResultForm.after_image && (
-                              <button
-                                type="button"
-                                onClick={() => setRealResultForm({ ...realResultForm, after_image: "" })}
-                                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded"
-                                title="Remove Image"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                        <SupabaseImageUrlInput
+                          label="After / Result Image *"
+                          value={realResultForm.after_image || ""}
+                          onChange={(url) => setRealResultForm({ ...realResultForm, after_image: url })}
+                          onUpload={(file) => handleFileUpload(file, "results")}
+                          placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                          required
+                          aspectRatio="square"
+                        />
                       </div>
 
                       <div>
@@ -4605,85 +4555,28 @@ export default function AdminPage() {
                         />
                       </div>
 
-                      {/* Image Uploads */}
+                      {/* Image Uploads & URL Inputs */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
                         {/* Main Final Result Image */}
-                        <div className="space-y-2 border border-slate-800 bg-slate-950 p-3 rounded">
-                          <label className="block text-slate-400 font-bold uppercase tracking-wider">Main / Final Result Image *</label>
-                          <div className="h-36 border border-slate-800 bg-slate-900 rounded overflow-hidden relative flex items-center justify-center">
-                            {botanicalJourneyForm.final_image ? (
-                              <img src={botanicalJourneyForm.final_image} alt="Final Preview" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-slate-600">No Image Uploaded</span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <label className="flex-1 bg-amber-500 hover:bg-amber-400 text-slate-950 p-2 text-center cursor-pointer font-bold rounded flex items-center justify-center gap-1">
-                              <Upload size={14} />
-                              <span>Upload Main Image</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0], "founder");
-                                    setBotanicalJourneyForm({ ...botanicalJourneyForm, final_image: url });
-                                  }
-                                }}
-                              />
-                            </label>
-                            {botanicalJourneyForm.final_image && (
-                              <button
-                                type="button"
-                                onClick={() => setBotanicalJourneyForm({ ...botanicalJourneyForm, final_image: "" })}
-                                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded"
-                                title="Remove Image"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                        <SupabaseImageUrlInput
+                          label="Main / Final Result Image *"
+                          value={botanicalJourneyForm.final_image || ""}
+                          onChange={(url) => setBotanicalJourneyForm({ ...botanicalJourneyForm, final_image: url })}
+                          onUpload={(file) => handleFileUpload(file, "results")}
+                          placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                          required
+                          aspectRatio="square"
+                        />
 
                         {/* Optional Before Image */}
-                        <div className="space-y-2 border border-slate-800 bg-slate-950 p-3 rounded">
-                          <label className="block text-slate-400 font-bold uppercase tracking-wider">Before Image (Optional)</label>
-                          <div className="h-36 border border-slate-800 bg-slate-900 rounded overflow-hidden relative flex items-center justify-center">
-                            {botanicalJourneyForm.before_image ? (
-                              <img src={botanicalJourneyForm.before_image} alt="Before Preview" className="w-full h-full object-cover" />
-                            ) : (
-                              <span className="text-slate-600">No Before Image</span>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <label className="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 p-2 text-center cursor-pointer font-bold rounded flex items-center justify-center gap-1">
-                              <Upload size={14} />
-                              <span>Upload Before</span>
-                              <input
-                                type="file"
-                                accept="image/*"
-                                className="hidden"
-                                onChange={async (e) => {
-                                  if (e.target.files?.[0]) {
-                                    const url = await handleFileUpload(e.target.files[0], "founder");
-                                    setBotanicalJourneyForm({ ...botanicalJourneyForm, before_image: url });
-                                  }
-                                }}
-                              />
-                            </label>
-                            {botanicalJourneyForm.before_image && (
-                              <button
-                                type="button"
-                                onClick={() => setBotanicalJourneyForm({ ...botanicalJourneyForm, before_image: "" })}
-                                className="bg-red-500/20 hover:bg-red-500/30 text-red-400 p-2 rounded"
-                                title="Remove Image"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            )}
-                          </div>
-                        </div>
+                        <SupabaseImageUrlInput
+                          label="Before Image (Optional)"
+                          value={botanicalJourneyForm.before_image || ""}
+                          onChange={(url) => setBotanicalJourneyForm({ ...botanicalJourneyForm, before_image: url })}
+                          onUpload={(file) => handleFileUpload(file, "results")}
+                          placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                          aspectRatio="square"
+                        />
                       </div>
 
                       <div className="grid grid-cols-2 gap-4 items-center">
@@ -4853,33 +4746,14 @@ export default function AdminPage() {
                         placeholder="Write story paragraph 2..."
                       />
 
-                      <div className="space-y-1">
-                        <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Hero Banner Visual (URL or Upload)</label>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            placeholder="Paste image URL or Drive link"
-                            value={aboutContent.hero_image || ""}
-                            onChange={(e) => setAboutContent({ ...aboutContent, hero_image: e.target.value })}
-                            className="flex-1 bg-slate-900 border border-slate-800 p-2.5 text-slate-200 focus:outline-none"
-                          />
-                          <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 cursor-pointer font-bold flex items-center gap-1">
-                            <Upload size={14} />
-                            <span>Upload</span>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={async (e) => {
-                                if (e.target.files?.[0]) {
-                                  const url = await handleFileUpload(e.target.files[0], "products");
-                                  setAboutContent({ ...aboutContent, hero_image: url });
-                                }
-                              }}
-                            />
-                          </label>
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="Hero Banner Visual"
+                        value={aboutContent.hero_image || ""}
+                        onChange={(url) => setAboutContent({ ...aboutContent, hero_image: url })}
+                        onUpload={(file) => handleFileUpload(file, "general")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="wide"
+                      />
 
                       {/* 3 Pillars / Standards */}
                       <div className="border-t border-slate-800 pt-4 space-y-4">
@@ -5018,32 +4892,14 @@ export default function AdminPage() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Founder Photo URL</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          value={founderStory.image || ""}
-                          onChange={(e) => setFounderStory({ ...founderStory, image: e.target.value })}
-                          className="flex-1 bg-slate-900 border border-slate-800 p-2.5 text-slate-200 focus:outline-none"
-                        />
-                        <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 cursor-pointer font-bold flex items-center gap-1">
-                          <Upload size={14} />
-                          <span>Upload</span>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async (e) => {
-                              if (e.target.files?.[0]) {
-                                const url = await handleFileUpload(e.target.files[0], "products");
-                                setFounderStory({ ...founderStory, image: url });
-                              }
-                            }}
-                          />
-                        </label>
-                      </div>
-                    </div>
+                    <SupabaseImageUrlInput
+                      label="Founder Photo URL"
+                      value={founderStory.image || ""}
+                      onChange={(url) => setFounderStory({ ...founderStory, image: url })}
+                      onUpload={(file) => handleFileUpload(file, "founder")}
+                      placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                      aspectRatio="square"
+                    />
 
                     <div>
                       <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Brand Philosophy Quote</label>
@@ -5102,32 +4958,14 @@ export default function AdminPage() {
                         />
                       </div>
 
-                      <div>
-                        <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">CEO Photo URL</label>
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={ceoStory.image || ceoStory.ceo_image || ""}
-                            onChange={(e) => setCeoStory({ ...ceoStory, image: e.target.value, ceo_image: e.target.value })}
-                            className="flex-1 bg-slate-900 border border-slate-800 p-2.5 text-slate-200 focus:outline-none"
-                          />
-                          <label className="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-2 cursor-pointer font-bold flex items-center gap-1">
-                            <Upload size={14} />
-                            <span>Upload</span>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={async (e) => {
-                                if (e.target.files?.[0]) {
-                                  const url = await handleFileUpload(e.target.files[0], "products");
-                                  setCeoStory({ ...ceoStory, image: url, ceo_image: url });
-                                }
-                              }}
-                            />
-                          </label>
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="CEO Photo URL"
+                        value={ceoStory.image || ceoStory.ceo_image || ""}
+                        onChange={(url) => setCeoStory({ ...ceoStory, image: url, ceo_image: url })}
+                        onUpload={(file) => handleFileUpload(file, "founder")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="square"
+                      />
 
                       <div>
                         <label className="block text-slate-400 uppercase tracking-widest text-[10px] mb-1 font-bold">Leadership & Growth Quote</label>
@@ -5316,7 +5154,7 @@ export default function AdminPage() {
                                   <span className="text-[9px] font-bold uppercase tracking-wider text-blue-400 block truncate">{slotLabel}</span>
                                   <div className="relative aspect-square w-full bg-slate-950 border border-slate-800 rounded overflow-hidden flex items-center justify-center">
                                     {currentVal ? (
-                                      <img src={currentVal} alt={`Slot ${slotIdx + 1}`} className="w-full h-full object-contain" />
+                                      <img src={getImageUrl(currentVal)} alt={`Slot ${slotIdx + 1}`} className="w-full h-full object-contain" />
                                     ) : (
                                       <span className="text-slate-600 text-[9px] italic">Slot {slotIdx + 1} Empty</span>
                                     )}
@@ -5344,7 +5182,7 @@ export default function AdminPage() {
                                 <div className="space-y-1.5">
                                   <input
                                     type="text"
-                                    placeholder="Paste URL or Drive link"
+                                    placeholder="Paste Supabase image URL"
                                     value={currentVal}
                                     onBlur={async (e) => {
                                       const imported = await handleUrlOrDriveImport(e.target.value);
@@ -5542,7 +5380,7 @@ export default function AdminPage() {
                                   <span className="text-[9px] font-bold uppercase tracking-wider text-blue-400 block truncate">{slotLabel}</span>
                                   <div className="relative aspect-square w-full bg-slate-950 border border-slate-800 rounded overflow-hidden flex items-center justify-center">
                                     {currentVal ? (
-                                      <img src={currentVal} alt={`Slot ${slotIdx + 1}`} className="w-full h-full object-contain" />
+                                      <img src={getImageUrl(currentVal)} alt={`Slot ${slotIdx + 1}`} className="w-full h-full object-contain" />
                                     ) : (
                                       <span className="text-slate-600 text-[9px] italic">Slot {slotIdx + 1} Empty</span>
                                     )}
@@ -5570,7 +5408,7 @@ export default function AdminPage() {
                                 <div className="space-y-1.5">
                                   <input
                                     type="text"
-                                    placeholder="Paste URL or Drive link"
+                                    placeholder="Paste Supabase image URL"
                                     value={currentVal}
                                     onBlur={async (e) => {
                                       const imported = await handleUrlOrDriveImport(e.target.value);
@@ -5672,39 +5510,45 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {products.map((prod) => (
-                      <tr key={prod.id} className="border-b border-slate-850 hover:bg-slate-900/50">
-                        <td className="p-4 font-mono">{prod.SKU}</td>
-                        <td className="p-4">
-                          <div className="w-10 h-10 border border-slate-800 bg-slate-900 overflow-hidden">
-                            {prod.thumbnail ? (
-                              <img src={prod.thumbnail} alt={prod.name} className="w-full h-full object-cover" />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center text-slate-700 text-[8px]">N/A</div>
-                            )}
-                          </div>
-                        </td>
-                        <td className="p-4 font-semibold">{prod.name}</td>
-                        <td className="p-4">₹{prod.price}</td>
-                        <td className="p-4">{prod.stock}</td>
-                        <td className="p-4 text-right space-x-2">
-                          <button
-                            onClick={() => setEditingProduct(prod)}
-                            className="text-slate-400 hover:text-slate-100 p-1.5 border border-slate-800 hover:border-slate-650 bg-slate-900/40"
-                            title="Edit product"
-                          >
-                            <Edit3 size={12} />
-                          </button>
-                          <button
-                            onClick={() => deleteProduct(prod.id)}
-                            className="text-red-400 hover:text-red-300 p-1.5 border border-slate-800 hover:border-red-950 bg-slate-900/40"
-                            title="Delete product"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </td>
+                    {!Array.isArray(products) || products.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-slate-500 italic">No products found in catalog.</td>
                       </tr>
-                    ))}
+                    ) : (
+                      (Array.isArray(products) ? products : []).map((prod) => (
+                        <tr key={prod.id} className="border-b border-slate-850 hover:bg-slate-900/50">
+                          <td className="p-4 font-mono">{prod.SKU}</td>
+                          <td className="p-4">
+                            <div className="w-10 h-10 border border-slate-800 bg-slate-900 overflow-hidden">
+                              {prod.thumbnail ? (
+                                <img src={getImageUrl(prod.thumbnail)} alt={prod.name} className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center text-slate-700 text-[8px]">N/A</div>
+                              )}
+                            </div>
+                          </td>
+                          <td className="p-4 font-semibold">{prod.name}</td>
+                          <td className="p-4">₹{prod.price}</td>
+                          <td className="p-4">{prod.stock}</td>
+                          <td className="p-4 text-right space-x-2">
+                            <button
+                              onClick={() => setEditingProduct(prod)}
+                              className="text-slate-400 hover:text-slate-100 p-1.5 border border-slate-800 hover:border-slate-650 bg-slate-900/40"
+                              title="Edit product"
+                            >
+                              <Edit3 size={12} />
+                            </button>
+                            <button
+                              onClick={() => deleteProduct(prod.id)}
+                              className="text-red-400 hover:text-red-300 p-1.5 border border-slate-800 hover:border-red-950 bg-slate-900/40"
+                              title="Delete product"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -5748,29 +5592,14 @@ export default function AdminPage() {
                       </div>
                       
                       {/* Image Upload Category Banner */}
-                      <div className="grid grid-cols-3 gap-3 border border-slate-800 p-2 bg-slate-950">
-                        <div className="col-span-2 flex flex-col space-y-2">
-                          <label className="text-slate-400 uppercase tracking-widest text-[9px]">Banner / Thumbnail</label>
-                          <input type="text" placeholder="URL Address" value={newCategory.image} onChange={(e) => setNewCategory({...newCategory, image: e.target.value})} className="bg-slate-900 border border-slate-800 p-1.5 text-slate-100 focus:outline-none text-[10px]" />
-                          <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 text-[9px] uppercase font-bold text-center self-start flex items-center space-x-1">
-                            <Upload size={10} />
-                            <span>Upload</span>
-                            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0], "reviews");
-                                if (url) setNewCategory({ ...newCategory, image: url });
-                              }
-                            }} />
-                          </label>
-                        </div>
-                        <div className="flex items-center justify-center border border-slate-850 bg-slate-900 overflow-hidden h-20 w-full">
-                          {newCategory.image ? (
-                            <img src={newCategory.image} alt="Preview" className="h-full w-full object-cover" />
-                          ) : (
-                            <span className="text-slate-700 text-[8px]">No Image</span>
-                          )}
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="Category Banner / Thumbnail"
+                        value={newCategory.image || ""}
+                        onChange={(url) => setNewCategory({ ...newCategory, image: url })}
+                        onUpload={(file) => handleFileUpload(file, "categories")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="wide"
+                      />
 
                       <div className="flex gap-4 pt-3 border-t border-slate-800">
                         <button type="submit" className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-950 py-2 font-bold uppercase tracking-widest">Save</button>
@@ -5805,29 +5634,14 @@ export default function AdminPage() {
                       </div>
 
                       {/* Image Upload Category Banner */}
-                      <div className="grid grid-cols-3 gap-3 border border-slate-800 p-2 bg-slate-955">
-                        <div className="col-span-2 flex flex-col space-y-2">
-                          <label className="text-slate-400 uppercase tracking-widest text-[9px]">Banner / Thumbnail</label>
-                          <input type="text" placeholder="URL Address" value={editingCategory.image || ""} onChange={(e) => setEditingCategory({...editingCategory, image: e.target.value})} className="bg-slate-900 border border-slate-800 p-1.5 text-slate-100 focus:outline-none text-[10px]" />
-                          <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 text-[9px] uppercase font-bold text-center self-start flex items-center space-x-1">
-                            <Upload size={10} />
-                            <span>Upload</span>
-                            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0], "reviews");
-                                if (url) setEditingCategory({ ...editingCategory, image: url });
-                              }
-                            }} />
-                          </label>
-                        </div>
-                        <div className="flex items-center justify-center border border-slate-850 bg-slate-900 overflow-hidden h-20 w-full">
-                          {editingCategory.image ? (
-                            <img src={editingCategory.image} alt="Preview" className="h-full w-full object-cover" />
-                          ) : (
-                            <span className="text-slate-700 text-[8px]">No Image</span>
-                          )}
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="Category Banner / Thumbnail"
+                        value={editingCategory.image || ""}
+                        onChange={(url) => setEditingCategory({ ...editingCategory, image: url })}
+                        onUpload={(file) => handleFileUpload(file, "categories")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="wide"
+                      />
 
                       <div className="flex gap-4 pt-3 border-t border-slate-800">
                         <button type="submit" className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-950 py-2 font-bold uppercase tracking-widest">Save Changes</button>
@@ -5851,20 +5665,25 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {categories.map((cat) => {
-                      const prodCount = products.filter((p) => p.category_id === cat.id).length;
-                      return (
-                        <tr key={cat.id} className="border-b border-slate-850 hover:bg-slate-900/50">
-                          <td className="p-4 font-mono">{cat.slug}</td>
-                          <td className="p-4">
-                            <div className="w-12 h-8 border border-slate-800 bg-slate-900 overflow-hidden">
-                              {cat.image ? (
-                                <img src={cat.image} alt={cat.name} className="w-full h-full object-cover" />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-slate-700 text-[7px]">No Image</div>
-                              )}
-                            </div>
-                          </td>
+                    {!Array.isArray(categories) || categories.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="p-8 text-center text-slate-500 italic">No categories found in catalog.</td>
+                      </tr>
+                    ) : (
+                      (Array.isArray(categories) ? categories : []).map((cat) => {
+                        const prodCount = (Array.isArray(products) ? products : []).filter((p) => p.category_id === cat.id).length;
+                        return (
+                          <tr key={cat.id} className="border-b border-slate-850 hover:bg-slate-900/50">
+                            <td className="p-4 font-mono">{cat.slug}</td>
+                            <td className="p-4">
+                              <div className="w-12 h-8 border border-slate-800 bg-slate-900 overflow-hidden">
+                                {cat.image ? (
+                                  <img src={getImageUrl(cat.image)} alt={cat.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-slate-700 text-[7px]">No Image</div>
+                                )}
+                              </div>
+                            </td>
                           <td className="p-4 font-semibold text-slate-200">{cat.name}</td>
                           <td className="p-4 font-semibold text-slate-350">{prodCount} Products</td>
                           <td className="p-4 text-right space-x-2">
@@ -5885,7 +5704,8 @@ export default function AdminPage() {
                           </td>
                         </tr>
                       );
-                    })}
+                    })
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -5957,29 +5777,14 @@ export default function AdminPage() {
                       </div>
 
                       {/* Image Upload Review Image */}
-                      <div className="grid grid-cols-3 gap-3 border border-slate-800 p-2 bg-slate-950">
-                        <div className="col-span-2 flex flex-col space-y-2">
-                          <label className="text-slate-400 uppercase tracking-widest text-[9px]">Review Attachment Image</label>
-                          <input type="text" placeholder="URL Address" value={newReview.image} onChange={(e) => setNewReview({...newReview, image: e.target.value})} className="bg-slate-900 border border-slate-800 p-1.5 text-slate-100 focus:outline-none text-[10px]" />
-                          <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 text-[9px] uppercase font-bold text-center self-start flex items-center space-x-1">
-                            <Upload size={10} />
-                            <span>Upload</span>
-                            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0], "blogs");
-                                if (url) setNewReview({ ...newReview, image: url });
-                              }
-                            }} />
-                          </label>
-                        </div>
-                        <div className="flex items-center justify-center border border-slate-855 bg-slate-900 overflow-hidden h-20 w-full">
-                          {newReview.image ? (
-                            <img src={newReview.image} alt="Preview" className="h-full w-full object-cover" />
-                          ) : (
-                            <span className="text-slate-700 text-[8px]">No Attachment</span>
-                          )}
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="Review Attachment Image (Optional)"
+                        value={newReview.image || ""}
+                        onChange={(url) => setNewReview({ ...newReview, image: url })}
+                        onUpload={(file) => handleFileUpload(file, "reviews")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="square"
+                      />
 
                       <div className="flex space-x-4 pt-1">
                         <label className="flex items-center space-x-2 cursor-pointer">
@@ -6049,29 +5854,14 @@ export default function AdminPage() {
                       </div>
 
                       {/* Image Upload Review Image */}
-                      <div className="grid grid-cols-3 gap-3 border border-slate-800 p-2 bg-slate-950">
-                        <div className="col-span-2 flex flex-col space-y-2">
-                          <label className="text-slate-400 uppercase tracking-widest text-[9px]">Review Attachment Image</label>
-                          <input type="text" placeholder="URL Address" value={editingReview.image || ""} onChange={(e) => setEditingReview({...editingReview, image: e.target.value})} className="bg-slate-900 border border-slate-800 p-1.5 text-slate-100 focus:outline-none text-[10px]" />
-                          <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-2 py-1 text-[9px] uppercase font-bold text-center self-start flex items-center space-x-1">
-                            <Upload size={10} />
-                            <span>Upload</span>
-                            <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                              if (e.target.files && e.target.files[0]) {
-                                const url = await handleFileUpload(e.target.files[0], "blogs");
-                                if (url) setEditingReview({ ...editingReview, image: url });
-                              }
-                            }} />
-                          </label>
-                        </div>
-                        <div className="flex items-center justify-center border border-slate-855 bg-slate-900 overflow-hidden h-20 w-full">
-                          {editingReview.image ? (
-                            <img src={editingReview.image} alt="Preview" className="h-full w-full object-cover" />
-                          ) : (
-                            <span className="text-slate-700 text-[8px]">No Attachment</span>
-                          )}
-                        </div>
-                      </div>
+                      <SupabaseImageUrlInput
+                        label="Review Attachment Image (Optional)"
+                        value={editingReview.image || ""}
+                        onChange={(url) => setEditingReview({ ...editingReview, image: url })}
+                        onUpload={(file) => handleFileUpload(file, "reviews")}
+                        placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                        aspectRatio="square"
+                      />
 
                       <div className="flex space-x-4 pt-1">
                         <label className="flex items-center space-x-2 cursor-pointer">
@@ -6104,8 +5894,13 @@ export default function AdminPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {reviews.map((rev) => {
-                      const linkedProd = products.find((p) => p.id === rev.product_id);
+                    {!Array.isArray(reviews) || reviews.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="p-8 text-center text-slate-500 italic">No customer reviews found.</td>
+                      </tr>
+                    ) : (
+                      (Array.isArray(reviews) ? reviews : []).map((rev) => {
+                        const linkedProd = (Array.isArray(products) ? products : []).find((p) => p.id === rev.product_id);
                       return (
                         <tr key={rev.id} className="border-b border-slate-850 hover:bg-slate-900/50">
                           <td className="p-4 font-semibold text-slate-200">
@@ -6158,7 +5953,8 @@ export default function AdminPage() {
                           </td>
                         </tr>
                       );
-                    })}
+                    })
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -6209,28 +6005,15 @@ export default function AdminPage() {
                         </div>
 
                         {/* Image Upload Cover Image */}
-                        <div className="col-span-2 grid grid-cols-3 gap-4 border border-slate-800 p-3 bg-slate-950">
-                          <div className="col-span-2 flex flex-col space-y-2">
-                            <label className="text-slate-400 uppercase tracking-widest text-[9px]">Cover Image (Featured Image)</label>
-                            <input type="text" placeholder="URL Address" value={newBlog.featured_image} onChange={(e) => setNewBlog({...newBlog, featured_image: e.target.value})} className="bg-slate-900 border border-slate-800 p-2 text-slate-100 focus:outline-none text-[11px]" />
-                            <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 text-[10px] uppercase font-bold flex items-center space-x-1 self-start">
-                              <Upload size={10} />
-                              <span>Upload</span>
-                              <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                                if (e.target.files && e.target.files[0]) {
-                                  const url = await handleFileUpload(e.target.files[0], "general");
-                                  if (url) setNewBlog({ ...newBlog, featured_image: url });
-                                }
-                              }} />
-                            </label>
-                          </div>
-                          <div className="flex items-center justify-center border border-slate-855 bg-slate-900 overflow-hidden h-24 w-full">
-                            {newBlog.featured_image ? (
-                              <img src={newBlog.featured_image} alt="Preview" className="h-full w-full object-cover" />
-                            ) : (
-                              <span className="text-slate-700 text-[9px]">No Cover Image</span>
-                            )}
-                          </div>
+                        <div className="col-span-2">
+                          <SupabaseImageUrlInput
+                            label="Cover Image (Featured Image)"
+                            value={newBlog.featured_image || ""}
+                            onChange={(url) => setNewBlog({ ...newBlog, featured_image: url })}
+                            onUpload={(file) => handleFileUpload(file, "general")}
+                            placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                            aspectRatio="wide"
+                          />
                         </div>
 
                         <div className="col-span-2 flex flex-col space-y-1">
@@ -6341,28 +6124,15 @@ export default function AdminPage() {
                         </div>
 
                         {/* Image Upload Cover Image */}
-                        <div className="col-span-2 grid grid-cols-3 gap-4 border border-slate-800 p-3 bg-slate-950">
-                          <div className="col-span-2 flex flex-col space-y-2">
-                            <label className="text-slate-400 uppercase tracking-widest text-[9px]">Cover Image (Featured Image)</label>
-                            <input type="text" placeholder="URL Address" value={editingBlog.featured_image || ""} onChange={(e) => setEditingBlog({...editingBlog, featured_image: e.target.value})} className="bg-slate-900 border border-slate-800 p-2 text-slate-100 focus:outline-none text-[11px]" />
-                            <label className="cursor-pointer bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 text-[10px] uppercase font-bold flex items-center space-x-1 self-start">
-                              <Upload size={10} />
-                              <span>Upload</span>
-                              <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
-                                if (e.target.files && e.target.files[0]) {
-                                  const url = await handleFileUpload(e.target.files[0], "general");
-                                  if (url) setEditingBlog({ ...editingBlog, featured_image: url });
-                                }
-                              }} />
-                            </label>
-                          </div>
-                          <div className="flex items-center justify-center border border-slate-855 bg-slate-900 overflow-hidden h-24 w-full">
-                            {editingBlog.featured_image ? (
-                              <img src={editingBlog.featured_image} alt="Preview" className="h-full w-full object-cover" />
-                            ) : (
-                              <span className="text-slate-700 text-[9px]">No Cover Image</span>
-                            )}
-                          </div>
+                        <div className="col-span-2">
+                          <SupabaseImageUrlInput
+                            label="Cover Image (Featured Image)"
+                            value={editingBlog.featured_image || ""}
+                            onChange={(url) => setEditingBlog({ ...editingBlog, featured_image: url })}
+                            onUpload={(file) => handleFileUpload(file, "general")}
+                            placeholder="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/..."
+                            aspectRatio="wide"
+                          />
                         </div>
 
                         <div className="col-span-2 flex flex-col space-y-1">
@@ -6443,13 +6213,13 @@ export default function AdminPage() {
               )}
 
               {/* Compact Horizontal Journal Cards */}
-              {blogs.length === 0 ? (
+              {!Array.isArray(blogs) || blogs.length === 0 ? (
                 <div className="bg-slate-950 border border-slate-800 p-8 text-center text-slate-500 text-xs">
                   No blog articles found. Click "Add Blog Post" to create one.
                 </div>
               ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                  {blogs.map((b) => (
+                  {(Array.isArray(blogs) ? blogs : []).map((b) => (
                     <div
                       key={b.id}
                       className="bg-slate-950 border border-slate-800 hover:border-slate-700 transition-all p-3.5 flex flex-col sm:flex-row gap-4 items-stretch group"
@@ -6458,7 +6228,7 @@ export default function AdminPage() {
                       <div className="w-full sm:w-[32%] sm:min-w-[120px] sm:max-w-[150px] aspect-[4/3] bg-slate-900 border border-slate-800 flex items-center justify-center overflow-hidden shrink-0">
                         {b.featured_image ? (
                           <img
-                            src={b.featured_image}
+                            src={getImageUrl(b.featured_image)}
                             alt={b.title}
                             className="w-full h-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                           />

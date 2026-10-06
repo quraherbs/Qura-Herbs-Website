@@ -9,7 +9,8 @@ from backend.app.schemas import schemas
 
 router = APIRouter()
 
-@router.get("/", response_model=List[schemas.OfferResponse])
+@router.get("", response_model=List[schemas.OfferResponse])
+@router.get("/", response_model=List[schemas.OfferResponse], include_in_schema=False)
 def list_offers(active_only: bool = False, db: Session = Depends(get_db)):
     query = db.query(models.Offer)
     if active_only:
@@ -21,7 +22,8 @@ def list_offers(active_only: bool = False, db: Session = Depends(get_db)):
         )
     return query.order_by(models.Offer.created_at.desc()).all()
 
-@router.get("/analytics")
+@router.get("/analytics", response_model=dict)
+@router.get("/analytics/", response_model=dict, include_in_schema=False)
 def get_offer_analytics(db: Session = Depends(get_db)):
     now = datetime.now()
     total_offers = db.query(models.Offer).count()
@@ -47,6 +49,7 @@ def get_offer_analytics(db: Session = Depends(get_db)):
     }
 
 @router.post("/validate", response_model=schemas.OfferValidateResponse)
+@router.post("/validate/", response_model=schemas.OfferValidateResponse, include_in_schema=False)
 def validate_offer(payload: schemas.OfferValidateRequest, db: Session = Depends(get_db)):
     code_clean = payload.voucher_code.strip().upper()
     now = datetime.now()
@@ -195,37 +198,52 @@ def validate_offer(payload: schemas.OfferValidateRequest, db: Session = Depends(
         offer_id=offer.id
     )
 
-@router.post("/", response_model=schemas.OfferResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.OfferResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.OfferResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_offer(offer_in: schemas.OfferCreate, db: Session = Depends(get_db)):
-    code_clean = offer_in.code.strip().upper()
-    existing = db.query(models.Offer).filter(func.upper(models.Offer.code) == code_clean).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Voucher code already exists.")
+    try:
+        code_clean = offer_in.code.strip().upper()
+        existing = db.query(models.Offer).filter(func.upper(models.Offer.code) == code_clean).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="Voucher code already exists.")
 
-    offer_data = offer_in.model_dump()
-    offer_data["code"] = code_clean
-    db_offer = models.Offer(**offer_data)
-    db.add(db_offer)
-    db.commit()
-    db.refresh(db_offer)
-    return db_offer
+        offer_data = offer_in.model_dump()
+        offer_data["code"] = code_clean
+        db_offer = models.Offer(**offer_data)
+        db.add(db_offer)
+        db.commit()
+        db.refresh(db_offer)
+        return db_offer
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to create offer: {str(e)}")
 
 @router.put("/{id}", response_model=schemas.OfferResponse)
 def update_offer(id: int, offer_in: schemas.OfferCreate, db: Session = Depends(get_db)):
-    db_offer = db.query(models.Offer).filter(models.Offer.id == id).first()
-    if not db_offer:
-        raise HTTPException(status_code=404, detail="Offer not found")
+    try:
+        db_offer = db.query(models.Offer).filter(models.Offer.id == id).first()
+        if not db_offer:
+            raise HTTPException(status_code=404, detail="Offer not found")
 
-    code_clean = offer_in.code.strip().upper()
-    for key, val in offer_in.model_dump().items():
-        if key == "code":
-            setattr(db_offer, key, code_clean)
-        else:
-            setattr(db_offer, key, val)
+        code_clean = offer_in.code.strip().upper()
+        for key, val in offer_in.model_dump().items():
+            if key == "code":
+                setattr(db_offer, key, code_clean)
+            else:
+                setattr(db_offer, key, val)
 
-    db.commit()
-    db.refresh(db_offer)
-    return db_offer
+        db.commit()
+        db.refresh(db_offer)
+        return db_offer
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Failed to update offer: {str(e)}")
 
 @router.delete("/{id}")
 def delete_offer(id: int, db: Session = Depends(get_db)):

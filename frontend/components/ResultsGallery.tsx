@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -151,7 +151,7 @@ export default function ResultsGallery() {
                     {/* Image Container */}
                     <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-[#F7F3E9] border border-[#EFE8D8]">
                       <img
-                        src={item.image}
+                        src={getImageUrl(item.image)}
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
@@ -218,7 +218,7 @@ export default function ResultsGallery() {
 
               <div className="space-y-4">
                 <div className="w-full aspect-[16/10] bg-[#F7F3E9] border border-[#EFE8D8] rounded-lg overflow-hidden">
-                  <img src={selectedItem.image} alt={selectedItem.title} className="w-full h-full object-cover" />
+                  <img src={getImageUrl(selectedItem.image)} alt={selectedItem.title} className="w-full h-full object-cover" />
                 </div>
 
                 <div className="space-y-2">

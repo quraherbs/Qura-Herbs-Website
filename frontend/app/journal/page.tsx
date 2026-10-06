@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import AnnouncementBar from "../../components/AnnouncementBar";
@@ -82,7 +82,7 @@ export default function JournalPage() {
                   className="block aspect-[16/10] overflow-hidden bg-brand-sand/10 border border-brand-sand/10"
                 >
                   <img
-                    src={blog.featured_image || "/uploads/blog_placeholder.jpg"}
+                    src={getImageUrl(blog.featured_image || "/uploads/blog_placeholder.jpg")}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
                   />

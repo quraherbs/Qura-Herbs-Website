@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 interface Blog {
   id: number;
@@ -87,7 +87,7 @@ export default function JournalSection() {
                   className="block aspect-[16/10] overflow-hidden bg-brand-sand/10 border border-brand-sand/10 relative"
                 >
                   <img
-                    src={blog.featured_image || "/uploads/blog_placeholder.jpg"}
+                    src={getImageUrl(blog.featured_image || "/uploads/blog_placeholder.jpg")}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   />

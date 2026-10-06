@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 export default function BrandStory() {
   const [content, setContent] = useState({
@@ -89,7 +89,7 @@ export default function BrandStory() {
             {/* Main Founder Image container */}
             <div 
               className="absolute inset-0 bg-cover bg-center border border-brand-sand shadow-lg" 
-              style={{ backgroundImage: `url('${content.founder_image}')` }}
+              style={{ backgroundImage: `url('${getImageUrl(content.founder_image)}')` }}
             >
             </div>
             

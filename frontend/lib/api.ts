@@ -13,12 +13,21 @@ export const API_BASE_URL = (() => {
   return process.env.NODE_ENV === "production" ? "" : "http://localhost:8000";
 })();
 
+/**
+ * Normalizes API endpoint URLs.
+ * Strips trailing slashes to avoid Vercel 308 redirect loops.
+ */
 export function getApiUrl(path: string): string {
-  const cleanPath = path.startsWith("/") ? path : `/${path}`;
-  if (API_BASE_URL && cleanPath.startsWith("/api/v1") && API_BASE_URL.endsWith("/api/v1")) {
-    return `${API_BASE_URL}${cleanPath.slice(7)}`;
+  const [pathname, search] = path.split("?");
+  let cleanPath = pathname.startsWith("/") ? pathname : `/${pathname}`;
+  if (cleanPath.length > 1 && cleanPath.endsWith("/")) {
+    cleanPath = cleanPath.slice(0, -1);
   }
-  return `${API_BASE_URL}${cleanPath}`;
+  const finalPath = search !== undefined ? `${cleanPath}?${search}` : cleanPath;
+  if (API_BASE_URL && finalPath.startsWith("/api/v1") && API_BASE_URL.endsWith("/api/v1")) {
+    return `${API_BASE_URL}${finalPath.slice(7)}`;
+  }
+  return `${API_BASE_URL}${finalPath}`;
 }
 
 export function getApiV1Base(): string {
@@ -32,6 +41,14 @@ export function getApiV1Base(): string {
   return getApiUrl("/api/v1");
 }
 
+/**
+ * Universal Image URL resolver.
+ * Rules:
+ * 1. Full HTTPS / HTTP URL -> return unchanged.
+ * 2. Relative Supabase storage path -> resolve to Supabase public CDN URL.
+ * 3. Old local /uploads/ path -> resolve to Supabase CDN URL unless static placeholder.
+ * 4. null / empty -> return product placeholder.
+ */
 export function getImageUrl(url: string | null | undefined): string {
   if (!url || !url.trim()) return "/uploads/product_placeholder.jpg";
   const cleanUrl = url.trim();
@@ -49,10 +66,10 @@ export function getImageUrl(url: string | null | undefined): string {
     return cleanUrl;
   }
 
-  // 2. Relative Supabase storage path (e.g. "products/xxx.jpg" or "97833121acd449019ba3674d729c6243.jpg")
   const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://slyiyvegvcefhzaeymoo.supabase.co").trim().replace(/\/$/, "");
   const bucket = "product-images";
 
+  // 2. Relative Supabase storage path (e.g. "products/xxx.jpg")
   if (!cleanUrl.startsWith("/")) {
     return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanUrl}`;
   }
@@ -63,9 +80,25 @@ export function getImageUrl(url: string | null | undefined): string {
     if (filename.includes("placeholder") || filename.includes("hero_main") || filename.includes("about_banner")) {
       return cleanUrl;
     }
-    // Return direct Supabase CDN URL for uploaded media files
     return `${supabaseUrl}/storage/v1/object/public/${bucket}/${filename}`;
   }
 
   return cleanUrl;
+}
+
+/**
+ * Formats API or Pydantic validation errors safely for UI display.
+ */
+export function formatErrorMessage(detail: any): string {
+  if (!detail) return "Unknown error occurred";
+  if (typeof detail === "string") return detail;
+  if (Array.isArray(detail)) {
+    return detail
+      .map((item) => (typeof item === "string" ? item : item.msg || item.message || JSON.stringify(item)))
+      .join(", ");
+  }
+  if (typeof detail === "object") {
+    return detail.message || detail.msg || detail.detail || JSON.stringify(detail);
+  }
+  return String(detail);
 }

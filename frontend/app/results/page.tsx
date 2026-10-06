@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
 import CartDrawer from "../../components/CartDrawer";
@@ -97,13 +97,13 @@ export default function ResultsPage() {
                   <span className="absolute top-2 left-2 bg-brand-dark/65 text-brand-cream text-[9px] font-sans uppercase font-bold tracking-widest px-2 py-0.5 z-10 rounded">
                     Before
                   </span>
-                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${item.before_image || "/uploads/product_placeholder.jpg"}')` }}></div>
+                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${getImageUrl(item.before_image || "/uploads/product_placeholder.jpg")}')` }}></div>
                 </div>
                 <div className="relative border border-brand-sand/20 overflow-hidden bg-brand-sand/10 flex flex-col items-center justify-center rounded-lg">
                   <span className="absolute top-2 left-2 bg-brand-accent text-brand-cream text-[9px] font-sans uppercase font-bold tracking-widest px-2 py-0.5 z-10 rounded">
                     After
                   </span>
-                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${item.after_image || "/uploads/product_placeholder.jpg"}')` }}></div>
+                  <div className="w-full h-full bg-cover bg-center" style={{ backgroundImage: `url('${getImageUrl(item.after_image || "/uploads/product_placeholder.jpg")}')` }}></div>
                 </div>
               </div>
 

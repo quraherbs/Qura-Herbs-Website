@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -161,9 +161,9 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
     }
   }, [tabParam]);
 
-  const founderImgSrc = founderData.image || founderData.founder_image;
-  const ceoImgSrc = ceoData.image || ceoData.ceo_image;
-  const brandImgSrc = aboutData.hero_image || aboutData.image;
+  const founderImgSrc = (founderData.image || founderData.founder_image) ? getImageUrl(founderData.image || founderData.founder_image) : "";
+  const ceoImgSrc = (ceoData.image || ceoData.ceo_image) ? getImageUrl(ceoData.image || ceoData.ceo_image) : "";
+  const brandImgSrc = (aboutData.hero_image || aboutData.image) ? getImageUrl(aboutData.hero_image || aboutData.image) : "";
 
   return (
     <div className="flex flex-col min-h-screen bg-brand-cream text-brand-dark font-sans selection:bg-brand-accent/20">

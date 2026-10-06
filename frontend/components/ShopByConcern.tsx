@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 interface Category {
   id: number;
@@ -73,7 +73,7 @@ export default function ShopByConcern() {
                 {/* Background Zooming Image */}
                 <div 
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
-                  style={{ backgroundImage: `url('${cat.image}')` }}
+                  style={{ backgroundImage: `url('${getImageUrl(cat.image)}')` }}
                 >
                   {/* Backdrop Tint */}
                   <div className="absolute inset-0 bg-brand-dark/20 transition-opacity duration-300 group-hover:bg-brand-dark/30"></div>

@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { X, Plus, Minus, Trash2, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { getImageUrl } from "@/lib/api";
 
 export default function CartDrawer() {
   const { 
@@ -104,7 +105,7 @@ export default function CartDrawer() {
                       {/* Image */}
                       <div className="w-20 h-20 bg-brand-light border border-brand-sand/30 overflow-hidden flex-shrink-0">
                         <img 
-                          src={item.thumbnail} 
+                          src={getImageUrl(item.thumbnail)} 
                           alt={item.name} 
                           className="w-full h-full object-cover" 
                         />

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 import { ChevronLeft, ChevronRight, Sparkles, ArrowRight, ShieldCheck, Leaf, ChevronUp } from "lucide-react";
 
 interface Banner {
@@ -161,7 +161,7 @@ export default function HeroSection() {
               >
                 {/* Main High-Res Banner Graphic */}
                 <img
-                  src={currentBanner.desktop_image}
+                  src={getImageUrl(currentBanner.desktop_image)}
                   alt={currentBanner.heading}
                   className="w-full h-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105"
                 />

@@ -5,6 +5,7 @@ import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
 import CartDrawer from "../../components/CartDrawer";
 import { useCart } from "../../context/CartContext";
+import { getImageUrl } from "@/lib/api";
 import { ShoppingBag, Star, Heart, Trash2 } from "lucide-react";
 import Link from "next/link";
 
@@ -97,7 +98,7 @@ export default function WishlistPage() {
                     className="relative block aspect-square w-full overflow-hidden bg-brand-light border border-brand-sand/10"
                   >
                     <img
-                      src={prod.thumbnail}
+                      src={getImageUrl(prod.thumbnail)}
                       alt={prod.name}
                       className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                     />

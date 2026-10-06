@@ -1,6 +1,6 @@
 "use client";
 
-import { getApiUrl } from "@/lib/api";
+import { getApiUrl, getImageUrl } from "@/lib/api";
 
 import { useEffect, useState } from "react";
 import { useCart } from "../../../context/CartContext";
@@ -96,7 +96,7 @@ export default function CategoryProductList({ slug }: { slug: string }) {
         {category.image && (
           <div className="lg:col-span-4 h-48 relative overflow-hidden bg-brand-sand/10 border border-brand-sand/20">
             <img 
-              src={category.image} 
+              src={getImageUrl(category.image)} 
               alt={category.name} 
               className="w-full h-full object-cover" 
             />
@@ -134,7 +134,7 @@ export default function CategoryProductList({ slug }: { slug: string }) {
                   className="relative block aspect-square w-full overflow-hidden bg-brand-light border border-brand-sand/10"
                 >
                   <img
-                    src={prod.thumbnail}
+                    src={getImageUrl(prod.thumbnail)}
                     alt={prod.name}
                     className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                   />

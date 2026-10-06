@@ -201,6 +201,7 @@ def upload_file(
 
 
 @router.post("/import-drive-url")
+@router.post("/import-drive-url/", include_in_schema=False)
 def import_drive_url(payload: dict = Body(...)):
     raw_url = payload.get("url", "").strip()
     folder = payload.get("folder", "")
