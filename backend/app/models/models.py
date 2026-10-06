@@ -9,7 +9,7 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, index=True, nullable=False)
-    profile_image = Column(String(255), nullable=True)
+    profile_image = Column(Text, nullable=True)
     role = Column(String(20), default="customer")  # admin, customer
     google_id = Column(String(100), unique=True, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -55,7 +55,7 @@ class Category(Base):
     name = Column(String(100), nullable=False)
     slug = Column(String(100), unique=True, index=True, nullable=False)
     description = Column(Text, nullable=True)
-    image = Column(String(255), nullable=True)
+    image = Column(Text, nullable=True)
     active = Column(Boolean, default=True)
     display_order = Column(Integer, default=0)
 
@@ -80,7 +80,7 @@ class Product(Base):
     how_to_use = Column(Text, nullable=True)
     skin_type = Column(String(100), nullable=True)
     product_images = Column(JSON, nullable=True)  # List of strings
-    thumbnail = Column(String(255), nullable=True)
+    thumbnail = Column(Text, nullable=True)
     featured = Column(Boolean, default=False)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
@@ -221,7 +221,7 @@ class Review(Base):
     customer_id = Column(Integer, ForeignKey("customers.id"), nullable=False)
     rating = Column(Integer, nullable=False)  # 1 to 5
     review = Column(Text, nullable=False)
-    image = Column(String(255), nullable=True)
+    image = Column(Text, nullable=True)
     verified_purchase = Column(Boolean, default=True)
     approved = Column(Boolean, default=False)
     featured = Column(Boolean, default=False)
@@ -247,7 +247,7 @@ class Blog(Base):
     slug = Column(String(200), unique=True, index=True, nullable=False)
     excerpt = Column(Text, nullable=False)
     content = Column(Text, nullable=False)
-    featured_image = Column(String(255), nullable=True)
+    featured_image = Column(Text, nullable=True)
     author = Column(String(100), nullable=False)
     published = Column(Boolean, default=False)
     published_at = Column(DateTime, nullable=True)
@@ -306,8 +306,8 @@ class HeroBanner(Base):
     __tablename__ = "hero_banners"
 
     id = Column(Integer, primary_key=True, index=True)
-    desktop_image = Column(String(255), nullable=False)
-    mobile_image = Column(String(255), nullable=True)
+    desktop_image = Column(Text, nullable=False)
+    mobile_image = Column(Text, nullable=True)
     heading = Column(String(200), nullable=False)
     subheading = Column(Text, nullable=True)
     cta_text = Column(String(100), default="SHOP THE RITUAL")
@@ -321,7 +321,7 @@ class ResultGalleryItem(Base):
     __tablename__ = "results_gallery"
 
     id = Column(Integer, primary_key=True, index=True)
-    image = Column(String(255), nullable=False)
+    image = Column(Text, nullable=False)
     title = Column(String(200), nullable=False)
     description = Column(Text, nullable=True)
     product_used = Column(String(150), nullable=True)
@@ -338,8 +338,8 @@ class RealResult(Base):
     id = Column(Integer, primary_key=True, index=True)
     customer_name = Column(String(100), nullable=False)
     customer_location = Column(String(100), nullable=True)
-    before_image = Column(String(255), nullable=False)
-    after_image = Column(String(255), nullable=False)
+    before_image = Column(Text, nullable=False)
+    after_image = Column(Text, nullable=False)
     description = Column(Text, nullable=False)
     product_used = Column(String(150), nullable=True)
     duration = Column(String(100), nullable=True)
@@ -363,9 +363,9 @@ class BotanicalJourney(Base):
     night_routine = Column(Text, nullable=True)
     duration = Column(String(100), nullable=True)
     result_description = Column(Text, nullable=True)
-    before_image = Column(String(255), nullable=True)
+    before_image = Column(Text, nullable=True)
     progress_images = Column(JSON, nullable=True)
-    final_image = Column(String(255), nullable=False)
+    final_image = Column(Text, nullable=False)
     display_order = Column(Integer, default=0)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

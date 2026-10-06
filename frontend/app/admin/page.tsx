@@ -1681,6 +1681,23 @@ export default function AdminPage() {
     }
   };
 
+  // --- ERROR FORMATTING HELPER ---
+  const formatErrorMessage = (detail: any): string => {
+    if (!detail) return "Unknown error occurred.";
+    if (typeof detail === "string") return detail;
+    if (Array.isArray(detail)) {
+      return detail
+        .map((err) => {
+          if (typeof err === "string") return err;
+          const loc = err.loc ? err.loc.filter((l: any) => l !== "body").join(".") : "";
+          return `${loc ? loc + ": " : ""}${err.msg || JSON.stringify(err)}`;
+        })
+        .join("; ");
+    }
+    if (typeof detail === "object") return detail.message || detail.detail || JSON.stringify(detail);
+    return String(detail);
+  };
+
   // --- FILE UPLOAD HELPER ---
   const handleFileUpload = async (file: File, folderName?: string): Promise<string> => {
     setIsUploading(true);
@@ -1701,16 +1718,16 @@ export default function AdminPage() {
         return data.url;
       }
       setIsUploading(false);
-      const errMsg = data.detail || `Upload failed (Status ${res.status})`;
-      alert(`Media upload failed: ${errMsg}`);
+      const errMsg = formatErrorMessage(data.detail) || `Upload failed (Status ${res.status})`;
+      alert(`Image upload failed: ${errMsg}`);
       throw new Error(errMsg);
     } catch (e: any) {
       setIsUploading(false);
       console.error("Backend upload error:", e);
-      if (e.message && e.message.includes("Media upload failed")) {
-        throw e;
+      const errText = formatErrorMessage(e.message || e);
+      if (!errText.includes("Image upload failed")) {
+        alert(`Image upload failed: ${errText || "Failed to reach backend server"}`);
       }
-      alert(`Media upload error: ${e.message || "Failed to reach backend server"}`);
       throw e;
     }
   };
@@ -1750,22 +1767,42 @@ export default function AdminPage() {
       alert("Please enter valid positive values for Price and Stock");
       return;
     }
+    if (!newProduct.name || !newProduct.name.trim()) {
+      alert("Product Name is required.");
+      return;
+    }
+    if (!newProduct.slug || !newProduct.slug.trim()) {
+      alert("Product Slug is required.");
+      return;
+    }
+    if (!newProduct.SKU || !newProduct.SKU.trim()) {
+      alert("Product SKU is required.");
+      return;
+    }
     try {
       const selectedCategoryIds = (newProduct.category_ids && newProduct.category_ids.length > 0)
         ? newProduct.category_ids
-        : [Number(newProduct.category_id || 1)];
+        : [Number(newProduct.category_id || categories[0]?.id || 1)];
+
+      const payload = {
+        ...newProduct,
+        name: newProduct.name.trim(),
+        slug: newProduct.slug.trim(),
+        SKU: newProduct.SKU.trim(),
+        short_description: newProduct.short_description ? newProduct.short_description.trim() : newProduct.name.trim(),
+        full_description: newProduct.full_description ? newProduct.full_description.trim() : newProduct.name.trim(),
+        price: Number(newProduct.price),
+        sale_price: newProduct.sale_price ? Number(newProduct.sale_price) : null,
+        stock: Number(newProduct.stock),
+        category_id: selectedCategoryIds[0],
+        category_ids: selectedCategoryIds,
+        product_images: (newProduct.product_images || []).filter(Boolean)
+      };
 
       const res = await fetch(getApiUrl("/api/v1/products/"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...newProduct,
-          price: Number(newProduct.price),
-          sale_price: newProduct.sale_price ? Number(newProduct.sale_price) : null,
-          stock: Number(newProduct.stock),
-          category_id: selectedCategoryIds[0],
-          category_ids: selectedCategoryIds
-        }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         alert("Product created successfully!");
@@ -1779,11 +1816,13 @@ export default function AdminPage() {
         });
         loadAdminData();
       } else {
-        const data = await res.json();
-        alert(`Failed to create product: ${data.detail || "Check for duplicates."}`);
+        const data = await res.json().catch(() => ({}));
+        const errorMsg = formatErrorMessage(data.detail) || `HTTP error ${res.status}`;
+        alert(`Product save failed: ${errorMsg}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert(`Product save failed: ${e.message || "Failed to save product"}`);
     }
   };
 
@@ -1794,33 +1833,55 @@ export default function AdminPage() {
       alert("Please enter valid positive values for Price and Stock");
       return;
     }
+    if (!editingProduct.name || !editingProduct.name.trim()) {
+      alert("Product Name is required.");
+      return;
+    }
+    if (!editingProduct.slug || !editingProduct.slug.trim()) {
+      alert("Product Slug is required.");
+      return;
+    }
+    if (!editingProduct.SKU || !editingProduct.SKU.trim()) {
+      alert("Product SKU is required.");
+      return;
+    }
     try {
       const selectedCategoryIds = (editingProduct.category_ids && editingProduct.category_ids.length > 0)
         ? editingProduct.category_ids
         : (editingProduct.category_id ? [Number(editingProduct.category_id)] : []);
 
+      const payload = {
+        ...editingProduct,
+        name: editingProduct.name.trim(),
+        slug: editingProduct.slug.trim(),
+        SKU: editingProduct.SKU.trim(),
+        short_description: editingProduct.short_description ? editingProduct.short_description.trim() : editingProduct.name.trim(),
+        full_description: editingProduct.full_description ? editingProduct.full_description.trim() : editingProduct.name.trim(),
+        price: Number(editingProduct.price),
+        sale_price: editingProduct.sale_price ? Number(editingProduct.sale_price) : null,
+        stock: Number(editingProduct.stock),
+        category_id: selectedCategoryIds[0] || editingProduct.category_id,
+        category_ids: selectedCategoryIds,
+        product_images: (editingProduct.product_images || []).filter(Boolean)
+      };
+
       const res = await fetch(getApiUrl(`/api/v1/products/${editingProduct.id}`), {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...editingProduct,
-          price: Number(editingProduct.price),
-          sale_price: editingProduct.sale_price ? Number(editingProduct.sale_price) : null,
-          stock: Number(editingProduct.stock),
-          category_id: selectedCategoryIds[0] || editingProduct.category_id,
-          category_ids: selectedCategoryIds
-        }),
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         alert("Product updated successfully!");
         setEditingProduct(null);
         loadAdminData();
       } else {
-        const data = await res.json();
-        alert(`Failed to update product: ${data.detail || "Error saving changes."}`);
+        const data = await res.json().catch(() => ({}));
+        const errorMsg = formatErrorMessage(data.detail) || `HTTP error ${res.status}`;
+        alert(`Product save failed: ${errorMsg}`);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
+      alert(`Product save failed: ${e.message || "Failed to update product"}`);
     }
   };
 
@@ -5319,7 +5380,7 @@ export default function AdminPage() {
                                       className="hidden"
                                       onChange={async (e) => {
                                         if (e.target.files?.[0]) {
-                                          const url = await handleFileUpload(e.target.files[0], "categories");
+                                          const url = await handleFileUpload(e.target.files[0], "products");
                                           if (url) {
                                             if (isPrimary) {
                                               setNewProduct({ ...newProduct, thumbnail: url });
@@ -5545,7 +5606,7 @@ export default function AdminPage() {
                                       className="hidden"
                                       onChange={async (e) => {
                                         if (e.target.files?.[0]) {
-                                          const url = await handleFileUpload(e.target.files[0], "categories");
+                                          const url = await handleFileUpload(e.target.files[0], "products");
                                           if (url) {
                                             if (isPrimary) {
                                               setEditingProduct({ ...editingProduct, thumbnail: url });

@@ -60,66 +60,97 @@ def get_product_by_slug(slug: str, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=schemas.ProductResponse, status_code=status.HTTP_201_CREATED)
 def create_product(product_in: schemas.ProductCreate, db: Session = Depends(get_db)):
-    # Check if slug is unique
-    existing = db.query(models.Product).filter(models.Product.slug == product_in.slug).first()
-    if existing:
-        raise HTTPException(status_code=400, detail="Product slug must be unique")
+    try:
+        # Check if slug is unique
+        existing = db.query(models.Product).filter(models.Product.slug == product_in.slug).first()
+        if existing:
+            raise HTTPException(status_code=400, detail=f"Product save failed: Slug '{product_in.slug}' already exists. Please enter a unique slug.")
+            
+        # Check if SKU is unique
+        if product_in.SKU:
+            existing_sku = db.query(models.Product).filter(models.Product.SKU == product_in.SKU).first()
+            if existing_sku:
+                raise HTTPException(status_code=400, detail=f"Product save failed: SKU '{product_in.SKU}' already exists. Please use a unique SKU.")
+
+        # Extract variants and category_ids
+        variants_data = product_in.variants or []
+        category_ids = product_in.category_ids or ([product_in.category_id] if product_in.category_id else [])
         
-    # Extract variants and category_ids
-    variants_data = product_in.variants or []
-    category_ids = product_in.category_ids or ([product_in.category_id] if product_in.category_id else [])
-    
-    product_dict = product_in.model_dump(exclude={"variants", "category_ids"})
-    if category_ids and not product_dict.get("category_id"):
-        product_dict["category_id"] = category_ids[0]
+        product_dict = product_in.model_dump(exclude={"variants", "category_ids"})
+        if category_ids and not product_dict.get("category_id"):
+            product_dict["category_id"] = category_ids[0]
+            
+        db_product = models.Product(**product_dict)
         
-    db_product = models.Product(**product_dict)
-    
-    if category_ids:
-        cats = db.query(models.Category).filter(models.Category.id.in_(category_ids)).all()
-        db_product.categories = cats
+        if category_ids:
+            cats = db.query(models.Category).filter(models.Category.id.in_(category_ids)).all()
+            db_product.categories = cats
+            
+        db.add(db_product)
+        db.commit()
+        db.refresh(db_product)
         
-    db.add(db_product)
-    db.commit()
-    db.refresh(db_product)
-    
-    for variant in variants_data:
-        db_variant = models.ProductVariant(**variant.model_dump(), product_id=db_product.id)
-        db.add(db_variant)
-    
-    db.commit()
-    db.refresh(db_product)
-    return _format_product(db_product)
+        for variant in variants_data:
+            db_variant = models.ProductVariant(**variant.model_dump(), product_id=db_product.id)
+            db.add(db_variant)
+        
+        db.commit()
+        db.refresh(db_product)
+        return _format_product(db_product)
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database save failed: {str(e)}")
 
 @router.put("/{id}", response_model=schemas.ProductResponse)
 def update_product(id: int, product_in: schemas.ProductCreate, db: Session = Depends(get_db)):
-    db_product = db.query(models.Product).filter(models.Product.id == id).first()
-    if not db_product:
-        raise HTTPException(status_code=404, detail="Product not found")
-        
-    category_ids = product_in.category_ids
-    product_dict = product_in.model_dump(exclude={"variants", "category_ids"})
-    
-    for key, val in product_dict.items():
-        setattr(db_product, key, val)
-        
-    if category_ids is not None:
-        cats = db.query(models.Category).filter(models.Category.id.in_(category_ids)).all()
-        db_product.categories = cats
-        if category_ids:
-            db_product.category_id = category_ids[0]
-        
-    # Re-sync variants if provided
-    if product_in.variants is not None:
-        # Clear existing variants
-        db.query(models.ProductVariant).filter(models.ProductVariant.product_id == id).delete()
-        for variant in product_in.variants:
-            db_variant = models.ProductVariant(**variant.model_dump(), product_id=id)
-            db.add(db_variant)
+    try:
+        db_product = db.query(models.Product).filter(models.Product.id == id).first()
+        if not db_product:
+            raise HTTPException(status_code=404, detail="Product not found")
             
-    db.commit()
-    db.refresh(db_product)
-    return _format_product(db_product)
+        # Check slug uniqueness if changed
+        if product_in.slug != db_product.slug:
+            existing = db.query(models.Product).filter(models.Product.slug == product_in.slug, models.Product.id != id).first()
+            if existing:
+                raise HTTPException(status_code=400, detail=f"Product save failed: Slug '{product_in.slug}' already exists. Please enter a unique slug.")
+
+        # Check SKU uniqueness if changed
+        if product_in.SKU and product_in.SKU != db_product.SKU:
+            existing_sku = db.query(models.Product).filter(models.Product.SKU == product_in.SKU, models.Product.id != id).first()
+            if existing_sku:
+                raise HTTPException(status_code=400, detail=f"Product save failed: SKU '{product_in.SKU}' already exists. Please use a unique SKU.")
+
+        category_ids = product_in.category_ids
+        product_dict = product_in.model_dump(exclude={"variants", "category_ids"})
+        
+        for key, val in product_dict.items():
+            setattr(db_product, key, val)
+            
+        if category_ids is not None:
+            cats = db.query(models.Category).filter(models.Category.id.in_(category_ids)).all()
+            db_product.categories = cats
+            if category_ids:
+                db_product.category_id = category_ids[0]
+            
+        # Re-sync variants if provided
+        if product_in.variants is not None:
+            db.query(models.ProductVariant).filter(models.ProductVariant.product_id == id).delete()
+            for variant in product_in.variants:
+                db_variant = models.ProductVariant(**variant.model_dump(), product_id=id)
+                db.add(db_variant)
+                
+        db.commit()
+        db.refresh(db_product)
+        return _format_product(db_product)
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Database save failed: {str(e)}")
 
 @router.delete("/{id}")
 def delete_product(id: int, db: Session = Depends(get_db)):

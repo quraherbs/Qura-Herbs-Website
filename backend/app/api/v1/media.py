@@ -66,7 +66,7 @@ def upload_to_supabase(content: bytes, object_path: str, content_type: str = "im
     if not supabase_url or not supabase_key:
         raise ValueError("Supabase Storage credentials (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) are not configured.")
 
-    bucket = (settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
+    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
     endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
 
     headers = {
@@ -91,7 +91,7 @@ def upload_to_supabase(content: bytes, object_path: str, content_type: str = "im
         res = requests.post(endpoint, data=content, headers=headers)
 
     if res.status_code not in (200, 201):
-        raise Exception(f"Supabase upload failed ({res.status_code}): {res.text}")
+        raise Exception(f"Supabase Storage error ({res.status_code}): {res.text}")
 
     public_url = f"{supabase_url}/storage/v1/object/public/{bucket}/{object_path}"
     return public_url
@@ -105,7 +105,7 @@ def delete_from_supabase(public_url: str) -> bool:
     if not supabase_url or not supabase_key or not public_url:
         return False
 
-    bucket = settings.SUPABASE_STORAGE_BUCKET or "product-images"
+    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
     prefix = f"{supabase_url}/storage/v1/object/public/{bucket}/"
     if not public_url.startswith(prefix):
         return False
@@ -148,17 +148,21 @@ def upload_file(
 ):
     allowed_extensions = {".jpg", ".jpeg", ".png", ".webp", ".gif", ".svg", ".avif"}
     original_filename = file.filename or "image.jpg"
-    _, ext = os.path.splitext(original_filename)
+    base_name = os.path.basename(original_filename)
+    name_part, ext = os.path.splitext(base_name)
     ext = ext.lower()
     
     if ext not in allowed_extensions:
         ext = ".jpg"
-        
-    unique_name = f"{uuid.uuid4().hex}{ext}"
-    clean_folder = re.sub(r'[^a-zA-Z0-9_-]', '', folder).strip('/') if folder else ""
-    object_path = f"{clean_folder}/{unique_name}" if clean_folder else unique_name
+
+    safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name_part).strip('_') or "file"
+    unique_id = uuid.uuid4().hex[:12]
+    filename_with_id = f"{unique_id}-{safe_name}{ext}"
+
+    clean_folder = re.sub(r'[^a-zA-Z0-9_-]', '', folder).strip('/') if folder else "general"
+    object_path = f"{clean_folder}/{filename_with_id}"
     
-    content_type = file.content_type or mimetypes.guess_type(unique_name)[0] or "image/jpeg"
+    content_type = file.content_type or mimetypes.guess_type(filename_with_id)[0] or "image/jpeg"
     
     try:
         content = file.file.read()
@@ -177,20 +181,20 @@ def upload_file(
                 if is_production:
                     raise HTTPException(
                         status_code=500,
-                        detail=f"Production media upload failed: Could not store file in Supabase Storage ({str(se)})"
+                        detail=f"Image upload failed: Could not store file in Supabase Storage ({str(se)})"
                     )
 
         # Local development fallback
         if not is_production:
-            url = save_locally(content, unique_name)
+            url = save_locally(content, filename_with_id)
             return {"url": url, "storage": "local"}
         else:
-            raise HTTPException(status_code=500, detail="Supabase Storage credentials missing in production environment.")
+            raise HTTPException(status_code=500, detail="Image upload failed: Supabase Storage credentials missing in production environment.")
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Failed to process uploaded file: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to save file: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Image upload failed: {str(e)}")
 
 
 @router.post("/import-drive-url")
