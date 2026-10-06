@@ -1,4 +1,5 @@
 {
+  "trailingSlash": false,
   "functions": {
     "api/index.py": {
       "excludeFiles": "{backend/uploads/**,backend/venv/**,frontend/**,node_modules/**,*.db,*.db-backup,*.db-shm,*.db-wal,qura_herbs_export.json}"

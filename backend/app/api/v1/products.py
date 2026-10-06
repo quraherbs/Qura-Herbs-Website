@@ -16,7 +16,8 @@ def _format_product(prod: models.Product):
     setattr(prod, "category_ids", cat_ids)
     return prod
 
-@router.get("/", response_model=List[schemas.ProductResponse])
+@router.get("", response_model=List[schemas.ProductResponse])
+@router.get("/", response_model=List[schemas.ProductResponse], include_in_schema=False)
 def list_products(
     category_id: Optional[int] = None,
     featured: Optional[bool] = None,
@@ -58,7 +59,8 @@ def get_product_by_slug(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Product not found")
     return _format_product(product)
 
-@router.post("/", response_model=schemas.ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.ProductResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_product(product_in: schemas.ProductCreate, db: Session = Depends(get_db)):
     try:
         # Check if slug is unique

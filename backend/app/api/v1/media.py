@@ -142,6 +142,7 @@ def save_locally(content: bytes, filename: str) -> str:
 
 
 @router.post("/upload")
+@router.post("/upload/", include_in_schema=False)
 def upload_file(
     file: UploadFile = File(...),
     folder: Optional[str] = Form(None)
@@ -174,10 +175,12 @@ def upload_file(
         
         if s_url and s_key:
             try:
+                logger.info(f"[MEDIA_UPLOAD] path={object_path}, contentType={content_type}")
                 public_url = upload_to_supabase(content, object_path, content_type)
+                logger.info(f"[STORAGE] uploadSuccess=True, publicUrl={public_url}")
                 return {"url": public_url, "storage": "supabase", "path": object_path}
             except Exception as se:
-                logger.error(f"Supabase Storage upload error: {se}")
+                logger.error(f"[STORAGE_ERROR] Supabase Storage upload error: {se}")
                 if is_production:
                     raise HTTPException(
                         status_code=500,

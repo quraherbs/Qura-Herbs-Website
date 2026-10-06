@@ -7,7 +7,8 @@ from backend.app.schemas import schemas
 
 router = APIRouter()
 
-@router.get("/", response_model=List[schemas.CategoryResponse])
+@router.get("", response_model=List[schemas.CategoryResponse])
+@router.get("/", response_model=List[schemas.CategoryResponse], include_in_schema=False)
 def list_categories(db: Session = Depends(get_db)):
     return db.query(models.Category).filter(models.Category.active == True).order_by(models.Category.display_order).all()
 
@@ -25,7 +26,8 @@ def get_category_by_slug(slug: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Category not found")
     return category
 
-@router.post("/", response_model=schemas.CategoryResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=schemas.CategoryResponse, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=schemas.CategoryResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_category(category_in: schemas.CategoryCreate, db: Session = Depends(get_db)):
     existing = db.query(models.Category).filter(models.Category.slug == category_in.slug).first()
     if existing:

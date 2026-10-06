@@ -33,20 +33,39 @@ export function getApiV1Base(): string {
 }
 
 export function getImageUrl(url: string | null | undefined): string {
-  if (!url) return "/uploads/product_placeholder.jpg";
-  if (url.startsWith("http://localhost:8000")) {
-    const relativePath = url.replace("http://localhost:8000", "");
-    return getApiUrl(relativePath);
+  if (!url || !url.trim()) return "/uploads/product_placeholder.jpg";
+  const cleanUrl = url.trim();
+
+  // 1. Full HTTP / HTTPS URL (Supabase CDN, Unsplash, Google, etc.)
+  if (cleanUrl.startsWith("http://") || cleanUrl.startsWith("https://")) {
+    if (cleanUrl.startsWith("http://localhost:8000")) {
+      const relativePath = cleanUrl.replace("http://localhost:8000", "");
+      return getApiUrl(relativePath);
+    }
+    if (cleanUrl.startsWith("http://127.0.0.1:8000")) {
+      const relativePath = cleanUrl.replace("http://127.0.0.1:8000", "");
+      return getApiUrl(relativePath);
+    }
+    return cleanUrl;
   }
-  if (url.startsWith("http://127.0.0.1:8000")) {
-    const relativePath = url.replace("http://127.0.0.1:8000", "");
-    return getApiUrl(relativePath);
+
+  // 2. Relative Supabase storage path (e.g. "products/xxx.jpg" or "97833121acd449019ba3674d729c6243.jpg")
+  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://slyiyvegvcefhzaeymoo.supabase.co").trim().replace(/\/$/, "");
+  const bucket = "product-images";
+
+  if (!cleanUrl.startsWith("/")) {
+    return `${supabaseUrl}/storage/v1/object/public/${bucket}/${cleanUrl}`;
   }
-  if (url.startsWith("http://") || url.startsWith("https://")) {
-    return url;
+
+  // 3. Old local /uploads/ path
+  if (cleanUrl.startsWith("/uploads/")) {
+    const filename = cleanUrl.replace("/uploads/", "").trim();
+    if (filename.includes("placeholder") || filename.includes("hero_main") || filename.includes("about_banner")) {
+      return cleanUrl;
+    }
+    // Return direct Supabase CDN URL for uploaded media files
+    return `${supabaseUrl}/storage/v1/object/public/${bucket}/${filename}`;
   }
-  if (url.startsWith("/uploads/")) {
-    return getApiUrl(url);
-  }
-  return url;
+
+  return cleanUrl;
 }
