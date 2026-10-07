@@ -883,8 +883,8 @@ export default function AdminPage() {
   const [showAddBannerModal, setShowAddBannerModal] = useState(false);
   const [editingBanner, setEditingBanner] = useState<any | null>(null);
   const [newBanner, setNewBanner] = useState<any>({
-    desktop_image: "/uploads/hero_main.jpg",
-    mobile_image: "/uploads/hero_main.jpg",
+    desktop_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%20001.png",
+    mobile_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%20001.png",
     heading: "",
     subheading: "",
     cta_text: "EXPLORE PRODUCTS",

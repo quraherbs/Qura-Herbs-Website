@@ -22,11 +22,22 @@ export default function HeroSection() {
   const [banners, setBanners] = useState<Banner[]>([
     {
       id: 1,
-      desktop_image: "/uploads/hero_main.jpg",
+      desktop_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%20001.png",
+      mobile_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%20001.png",
       heading: "Good Skin Starts Here.",
       subheading: "Thoughtfully crafted botanical skincare inspired by nature and made for your everyday skin ritual.",
       cta_text: "SHOP THE RITUAL",
       cta_link: "/shop",
+      active: true
+    },
+    {
+      id: 2,
+      desktop_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%203.jpg",
+      mobile_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/BANNER/web%20banner%203.jpg",
+      heading: "Your Skin Can Change.",
+      subheading: "Founder's Skin Journey • 30 Days Progress • Formulated for a visibly clearer complexion.",
+      cta_text: "EXPLORE THE JOURNEY",
+      cta_link: "/results",
       active: true
     }
   ]);

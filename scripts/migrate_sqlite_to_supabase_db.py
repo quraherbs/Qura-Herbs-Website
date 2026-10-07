@@ -86,6 +86,8 @@ def migrate_to_postgresql(target_pg_url):
 
     pg_counts = {}
 
+    from datetime import datetime as dt
+
     try:
         # Transfer data table by table
         for table_name, model_cls in TABLE_MODELS:
@@ -98,12 +100,30 @@ def migrate_to_postgresql(target_pg_url):
                 continue
 
             if model_cls is not None:
-                # Use ORM model insertion
+                # Check if rows already exist in Postgres to prevent duplicates
+                existing_count = pg_session.query(model_cls).count()
+                if existing_count >= len(rows):
+                    logger.info(f"Table '{table_name}' already has {existing_count} records in PostgreSQL. Skipping.")
+                    pg_counts[table_name] = existing_count
+                    continue
+
                 inst_list = []
                 for r in rows:
                     inst = model_cls()
                     for col_name, val in r.items():
                         if hasattr(inst, col_name):
+                            # Parse JSON strings if applicable
+                            if col_name in ["product_images", "progress_images", "value"] and isinstance(val, str):
+                                try:
+                                    val = json.loads(val)
+                                except Exception:
+                                    pass
+                            # Parse datetime strings if applicable
+                            if col_name in ["created_at", "updated_at", "published_at", "start_date", "end_date"] and isinstance(val, str):
+                                try:
+                                    val = dt.fromisoformat(val)
+                                except Exception:
+                                    pass
                             setattr(inst, col_name, val)
                     inst_list.append(inst)
                 pg_session.add_all(inst_list)
