@@ -349,7 +349,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
         
         {reviews.length === 0 ? (
           <div className="bg-brand-light border border-brand-sand/20 text-center py-12 text-xs font-sans text-brand-dark/40 rounded-none">
-            No reviews yet. Share your experience under the admin dashboard moderator.
+            No reviews yet.
           </div>
         ) : (
           <div className="space-y-6">
