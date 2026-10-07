@@ -84,22 +84,13 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-brand-cream text-brand-dark">
+    <div className="flex flex-col min-h-screen bg-brand-cream text-brand-dark overflow-x-hidden w-full max-w-full">
       {/* Navigation Layout */}
       <AnnouncementBar />
       <Navbar />
 
-      {/* Main Sections - Ordered as requested by user:
-          1. 1st Banner (Hero)
-          2. 2nd Our Bestsellers
-          3. 3rd Shop by Concern
-          4. 4th Botanical Routine Journeys (Results Gallery)
-          5. 5th New Herbal Based Product Spotlight
-          6. 6th Customer Impressions (Reviews)
-          7. 7th Before & After Swipe-Up Face Action Transformation
-          8. Last Footer
-      */}
-      <main className="flex-1">
+      {/* Main Sections */}
+      <main className="flex-1 overflow-x-hidden w-full max-w-full">
         
         {/* 1. 1st Banner */}
         <HeroSection />

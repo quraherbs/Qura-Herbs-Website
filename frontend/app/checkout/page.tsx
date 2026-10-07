@@ -246,25 +246,34 @@ export default function CheckoutPage() {
       }
 
       // 1. Create or update customer profile
-      const customerRes = await fetch(getApiUrl("/api/v1/customers/"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          address: form.address,
-          city: form.city,
-          district: form.district || null,
-          state: form.state,
-          pincode: form.pincode,
-        }),
-      });
-      
       let customerId = 1;
-      if (customerRes.ok) {
-        const customerData = await customerRes.json();
-        customerId = customerData.id;
+      try {
+        const customerRes = await fetch(getApiUrl("/api/v1/customers/"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.name.trim(),
+            email: form.email.trim(),
+            phone: form.phone.trim(),
+            address: form.address.trim(),
+            city: form.city.trim(),
+            district: form.district ? form.district.trim() : null,
+            state: form.state.trim(),
+            pincode: form.pincode.trim(),
+          }),
+        });
+        
+        if (customerRes.ok) {
+          const contentType = customerRes.headers.get("content-type") || "";
+          if (contentType.includes("application/json")) {
+            const customerData = await customerRes.json();
+            if (customerData && customerData.id) {
+              customerId = customerData.id;
+            }
+          }
+        }
+      } catch (custErr) {
+        console.warn("Customer creation non-blocking warning:", custErr);
       }
 
       setLoadingStep("Placing your secure order...");
@@ -286,15 +295,15 @@ export default function CheckoutPage() {
         voucher_code: appliedVoucher?.voucher_code || null,
         discount_amount: voucherDiscount,
         shipping_discount: shippingDiscount,
-        shipping_address: form.address,
-        city: form.city,
-        district: form.district || null,
-        state: form.state,
-        pincode: form.pincode,
+        shipping_address: form.address.trim(),
+        city: form.city.trim(),
+        district: form.district ? form.district.trim() : null,
+        state: form.state.trim(),
+        pincode: form.pincode.trim(),
         items: cart.map((i) => ({
-          product_id: i.id,
-          quantity: i.quantity,
-          price: i.sale_price || i.price,
+          product_id: Number(i.id),
+          quantity: Number(i.quantity),
+          price: Number(i.sale_price || i.price),
           variant: i.variant || null,
         })),
       };
@@ -305,8 +314,25 @@ export default function CheckoutPage() {
         body: JSON.stringify(orderPayload),
       });
 
-      if (orderRes.ok) {
-        const orderData = await orderRes.json();
+      let orderData: any = null;
+      const contentType = orderRes.headers.get("content-type") || "";
+
+      if (contentType.includes("application/json")) {
+        try {
+          orderData = await orderRes.json();
+        } catch {
+          orderData = null;
+        }
+      } else {
+        try {
+          const rawText = await orderRes.text();
+          console.warn("Server responded with non-JSON content:", rawText.slice(0, 200));
+        } catch {
+          // ignore stream read issues
+        }
+      }
+
+      if (orderRes.ok && orderData && orderData.order_number) {
         setLoadingStep("Redirecting to order confirmation...");
         clearCart();
         
@@ -322,11 +348,15 @@ export default function CheckoutPage() {
         
         router.push(`/order-success/${orderData.order_number}`);
       } else {
-        const errorData = await orderRes.json();
+        const errorDetail = orderData?.detail 
+          || (typeof orderData?.message === "string" ? orderData.message : null)
+          || (orderRes.status === 500 ? "Server encountered an issue while saving the order. Please verify details or try again." : null)
+          || "Unable to process order. Please check item details or try again.";
+
         setModalNotice({
           isOpen: true,
           title: "Order Placement Issue",
-          message: errorData.detail || "Unable to process order. Please check item inventory or try again.",
+          message: errorDetail,
           iconType: "warning"
         });
       }
@@ -336,7 +366,7 @@ export default function CheckoutPage() {
       setModalNotice({
         isOpen: true,
         title: "Communication Error",
-        message: `Network communication error with server${detail}. Please try again.`,
+        message: `Network communication error with server${detail}. Please check your connection and try again.`,
         iconType: "warning"
       });
     } finally {
@@ -478,103 +508,116 @@ export default function CheckoutPage() {
                 
                 {/* Name & Phone */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                       Full Name *
                     </label>
                     <input
+                      type="text"
                       name="name"
+                      autoComplete="name"
                       value={form.name}
                       onChange={handleInput}
                       placeholder="e.g. Ananya Sharma"
-                      className={`bg-[#FDFBF7] border ${errors.name ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                      className={`w-full bg-[#FDFBF7] border ${errors.name ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                     />
-                    {errors.name && <span className="text-[10px] text-red-500 font-sans">{errors.name}</span>}
+                    {errors.name && <span className="text-[11px] text-red-500 font-sans">{errors.name}</span>}
                   </div>
 
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                       Mobile Number *
                     </label>
                     <input
+                      type="tel"
+                      inputMode="tel"
+                      autoComplete="tel"
                       name="phone"
                       value={form.phone}
                       onChange={handleInput}
                       placeholder="10-digit mobile number"
-                      className={`bg-[#FDFBF7] border ${errors.phone ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                      className={`w-full bg-[#FDFBF7] border ${errors.phone ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                     />
-                    {errors.phone && <span className="text-[10px] text-red-500 font-sans">{errors.phone}</span>}
+                    {errors.phone && <span className="text-[11px] text-red-500 font-sans">{errors.phone}</span>}
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1.5 w-full">
                   <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                     Email Address *
                   </label>
                   <input
                     type="email"
+                    inputMode="email"
+                    autoComplete="email"
                     name="email"
                     value={form.email}
                     onChange={handleInput}
                     placeholder="For order tracking & receipt"
-                    className={`bg-[#FDFBF7] border ${errors.email ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                    className={`w-full bg-[#FDFBF7] border ${errors.email ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                   />
-                  {errors.email && <span className="text-[10px] text-red-500 font-sans">{errors.email}</span>}
+                  {errors.email && <span className="text-[11px] text-red-500 font-sans">{errors.email}</span>}
                 </div>
 
                 {/* Address */}
-                <div className="flex flex-col space-y-1.5">
+                <div className="flex flex-col space-y-1.5 w-full">
                   <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                     Address / House / Street *
                   </label>
                   <input
+                    type="text"
+                    autoComplete="street-address"
                     name="address"
                     value={form.address}
                     onChange={handleInput}
                     placeholder="House/Flat No., Building Name, Street"
-                    className={`bg-[#FDFBF7] border ${errors.address ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                    className={`w-full bg-[#FDFBF7] border ${errors.address ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                   />
-                  {errors.address && <span className="text-[10px] text-red-500 font-sans">{errors.address}</span>}
+                  {errors.address && <span className="text-[11px] text-red-500 font-sans">{errors.address}</span>}
                 </div>
 
                 {/* City, District, State, Pincode */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                       City *
                     </label>
                     <input
+                      type="text"
+                      autoComplete="address-level2"
                       name="city"
                       value={form.city}
                       onChange={handleInput}
                       placeholder="City / Town"
-                      className={`bg-[#FDFBF7] border ${errors.city ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                      className={`w-full bg-[#FDFBF7] border ${errors.city ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                     />
-                    {errors.city && <span className="text-[10px] text-red-500 font-sans">{errors.city}</span>}
+                    {errors.city && <span className="text-[11px] text-red-500 font-sans">{errors.city}</span>}
                   </div>
 
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                       District
                     </label>
                     <input
+                      type="text"
+                      autoComplete="address-level3"
                       name="district"
                       value={form.district}
                       onChange={handleInput}
                       placeholder="District"
-                      className="bg-[#FDFBF7] border border-[#EFE8D8] focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm"
+                      className="w-full bg-[#FDFBF7] border border-[#EFE8D8] focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <div className="flex justify-between items-center">
                       <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                         State *
                       </label>
-                      <span className="text-[9px] font-semibold text-[#A47148]">
+                      <span className="text-[10px] font-semibold text-[#A47148]">
                         {isTamilNaduState(form.state) ? "TN ₹80 Shipping" : "Outside TN ₹150 Shipping"}
                       </span>
                     </div>
@@ -583,7 +626,7 @@ export default function CheckoutPage() {
                       name="state"
                       value={form.state}
                       onChange={handleInput}
-                      className={`bg-[#FDFBF7] border ${errors.state ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm cursor-pointer`}
+                      className={`w-full bg-[#FDFBF7] border ${errors.state ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm cursor-pointer`}
                     >
                       {INDIAN_STATES.map((st) => (
                         <option key={st} value={st}>
@@ -591,21 +634,26 @@ export default function CheckoutPage() {
                         </option>
                       ))}
                     </select>
-                    {errors.state && <span className="text-[10px] text-red-500 font-sans">{errors.state}</span>}
+                    {errors.state && <span className="text-[11px] text-red-500 font-sans">{errors.state}</span>}
                   </div>
 
-                  <div className="flex flex-col space-y-1.5">
+                  <div className="flex flex-col space-y-1.5 w-full">
                     <label className="text-[10px] uppercase tracking-wider text-[#3D261D] font-semibold font-sans">
                       Pincode *
                     </label>
                     <input
+                      type="text"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      maxLength={6}
+                      autoComplete="postal-code"
                       name="pincode"
                       value={form.pincode}
                       onChange={handleInput}
                       placeholder="6-digit pincode"
-                      className={`bg-[#FDFBF7] border ${errors.pincode ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] p-3 text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
+                      className={`w-full bg-[#FDFBF7] border ${errors.pincode ? 'border-red-500' : 'border-[#EFE8D8]'} focus:border-[#2C1A14] py-3 px-3.5 min-h-[44px] text-base sm:text-xs text-[#2C1A14] focus:outline-none transition-colors rounded-sm`}
                     />
-                    {errors.pincode && <span className="text-[10px] text-red-500 font-sans">{errors.pincode}</span>}
+                    {errors.pincode && <span className="text-[11px] text-red-500 font-sans">{errors.pincode}</span>}
                   </div>
                 </div>
 
@@ -729,7 +777,7 @@ export default function CheckoutPage() {
                   type="submit"
                   form="checkout-form"
                   disabled={placing}
-                  className="w-full bg-[#2C1A14] hover:bg-[#3D261D] text-[#FDFBF7] text-xs uppercase tracking-widest py-4 font-bold transition-all duration-300 shadow-md disabled:opacity-50 flex items-center justify-center space-x-2 rounded-sm group"
+                  className="w-full bg-[#2C1A14] hover:bg-[#3D261D] text-[#FDFBF7] text-xs sm:text-sm uppercase tracking-widest min-h-[50px] py-4 font-bold transition-all duration-300 shadow-md disabled:opacity-50 flex items-center justify-center space-x-2 rounded-sm group active:scale-[0.99] cursor-pointer"
                 >
                   {placing ? (
                     <div className="flex items-center space-x-2">

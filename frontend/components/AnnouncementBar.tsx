@@ -19,9 +19,9 @@ export default function AnnouncementBar() {
   }, []);
 
   return (
-    <div className="w-full bg-brand-dark text-brand-cream text-xs uppercase tracking-widest py-2 px-4 text-center font-medium relative z-50">
-      <div className="overflow-hidden whitespace-nowrap scroll-smooth">
-        <span className="inline-block animate-pulse duration-1000">
+    <div className="w-full max-w-full overflow-hidden bg-brand-dark text-brand-cream text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest py-2 px-2 sm:px-4 text-center font-medium relative z-50">
+      <div className="w-full max-w-full overflow-hidden whitespace-nowrap">
+        <span className="inline-block animate-pulse duration-1000 max-w-full truncate sm:overflow-visible">
           {announcement}
         </span>
       </div>

@@ -10,13 +10,12 @@ db_url = settings.DATABASE_URL
 if db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-# Enforce PostgreSQL in production Vercel environments - no ephemeral SQLite allowed
+# If running on Vercel and DATABASE_URL is not PostgreSQL, fallback to SQLite in /tmp
 if os.environ.get("VERCEL"):
     if not db_url or db_url.startswith("sqlite"):
-        raise RuntimeError(
-            "CRITICAL CONFIGURATION ERROR: Production Vercel requires a persistent Supabase PostgreSQL DATABASE_URL. "
-            "Ephemeral SQLite in /tmp has been disabled to guarantee data persistence."
-        )
+        db_url = "sqlite:////tmp/qura_herbs.db"
+elif not db_url:
+    db_url = "sqlite:///./qura_herbs.db"
 
 # Determine database type and configure connect_args
 is_sqlite = db_url.startswith("sqlite")

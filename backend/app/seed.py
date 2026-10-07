@@ -308,11 +308,12 @@ Formulation Highlights
         
         # 4. Create one initial Offer
         initial_offer = models.Offer(
-            title="✨ THE FIRST RITUAL",
+            name="✨ THE FIRST RITUAL",
+            code="QURAFIRST",
             description="Claim ₹200 off your first Qura Herbs purchase. Start your natural radiance routine today.",
-            banner="https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=800&auto=format&fit=crop",
-            coupon_code="QURAFIRST",
-            CTA="CLAIM MY ₹200 OFF",
+            offer_type="flat",
+            discount_value=200.0,
+            minimum_order_value=999.0,
             active=True
         )
         db.add(initial_offer)

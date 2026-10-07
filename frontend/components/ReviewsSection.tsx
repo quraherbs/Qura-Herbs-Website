@@ -114,7 +114,7 @@ export default function ReviewsSection() {
   const bottomTrack = prepareRowTrack(filteredReviews, 3);
 
   return (
-    <section className="py-20 md:py-28 bg-[#F7F3E9]/50 border-t border-[#EFE8D8]/60 overflow-hidden">
+    <section className="py-20 md:py-28 bg-[#F7F3E9]/50 border-t border-[#EFE8D8]/60 overflow-hidden max-w-full relative" style={{ contain: "paint" }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         
         {/* Section Header */}
@@ -157,13 +157,13 @@ export default function ReviewsSection() {
       </div>
 
       {/* Marquee Rows Container */}
-      <div className="relative w-full overflow-hidden mt-12 space-y-6 sm:space-y-8">
+      <div className="relative w-full max-w-full overflow-hidden mt-12 space-y-6 sm:space-y-8" style={{ contain: "paint" }}>
         {/* Left & Right Edge Gradient Fade Masks */}
         <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-32 md:w-48 bg-gradient-to-r from-[#F7F3E9] via-[#F7F3E9]/80 to-transparent z-10" />
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-32 md:w-48 bg-gradient-to-l from-[#F7F3E9] via-[#F7F3E9]/80 to-transparent z-10" />
 
         {/* TOP ROW: Right to Left */}
-        <div className="w-full overflow-hidden py-1">
+        <div className="w-full max-w-full overflow-hidden py-1 relative" style={{ contain: "paint" }}>
           <div className="flex space-x-6 w-max animate-marquee-left">
             {topTrack.map((rev, idx) => (
               <div
@@ -198,7 +198,7 @@ export default function ReviewsSection() {
         </div>
 
         {/* BOTTOM ROW: Left to Right */}
-        <div className="w-full overflow-hidden py-1">
+        <div className="w-full max-w-full overflow-hidden py-1 relative" style={{ contain: "paint" }}>
           <div className="flex space-x-6 w-max animate-marquee-right">
             {bottomTrack.map((rev, idx) => (
               <div
