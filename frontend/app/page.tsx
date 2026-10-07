@@ -37,18 +37,48 @@ export default function Home() {
   const [bestsellers, setBestsellers] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const FALLBACK_FEATURED: Product[] = [
+    {
+      id: 1,
+      name: "Glow Radiant Night Cream",
+      slug: "glow-radiant-night-cream",
+      short_description: "Deeply restorative night cream for natural skin radiance and clarity.",
+      price: 1399.0,
+      sale_price: 1199.0,
+      SKU: "QH-GLOW-NC-30",
+      stock: 50,
+      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/Glow%20Radiant%20Night%20Cream/IMG_20260406_145624.jpg",
+      skin_type: "All Skin Types"
+    },
+    {
+      id: 2,
+      name: "Avocado Pro Nourish Night Cream",
+      slug: "avocado-night-cream",
+      short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
+      price: 1299.0,
+      sale_price: 1149.0,
+      SKU: "QH-HYD-AVONIGHT-35",
+      stock: 30,
+      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
+      skin_type: "Oily, combination, aging, dull, and normal skin types"
+    }
+  ];
+
   useEffect(() => {
     // Fetch featured products for bestsellers
     fetch(getApiUrl("/api/v1/products/?featured=true"))
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && data.length > 0) {
           setBestsellers(data);
+        } else {
+          setBestsellers(FALLBACK_FEATURED);
         }
         setLoading(false);
       })
       .catch((err) => {
         console.log("Failed to load bestsellers:", err);
+        setBestsellers(FALLBACK_FEATURED);
         setLoading(false);
       });
   }, []);

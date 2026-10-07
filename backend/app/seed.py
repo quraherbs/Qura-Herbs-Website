@@ -90,21 +90,56 @@ def seed_db():
                 "active": True
             },
             {
-                "name": "Avocado Night Cream",
+                "name": "Avocado Pro Nourish Night Cream",
                 "slug": "avocado-night-cream",
-                "short_description": "Deeply replenishing overnight treatment with rich Avocado Butter.",
-                "full_description": "Our premium Avocado Night Cream works in sync with your skin's nocturnal recovery cycle. Fortified with cold-pressed Avocado Butter and Ashwagandha extract, it rebuilds the skin barrier, reduces fine lines, and delivers intensive morning elasticity.",
+                "short_description": "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
+                "full_description": """Avocado Pro Nourish Night Cream — 30g
+
+Feed your skin. Reveal its natural brightness.
+
+A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.
+
+Key Benefits
+• Deep, sustained nourishment throughout the day
+• Visibly softer and smoother skin with regular use
+• Restores a natural, healthy radiance to dull skin
+• Strengthens the skin barrier over time
+• Supports a more even, luminous complexion
+
+Key Ingredients
+• Avocado - rich in fatty acids that repair the skin barrier and restore suppleness
+• Sweet Almond Oil - lightweight and emollient, softens without congesting pores
+• Honey - a natural humectant that draws and locks moisture into the skin
+• Wheatgerm Extract - packed with Vitamin E to support renewal and reduce dullness
+• Milk Protein - smooths skin tone and refines the complexion
+• Seaweed - marine-derived minerals that firm, hydrate, and restore luminosity
+
+Suitable For
+Oily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.
+
+How To Use
+Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.
+
+Formulation Highlights
+• Paraben-free
+• No harsh bleaching agents
+• Botanically sourced actives
+• Suitable for daily use""",
                 "price": 1299.0,
                 "sale_price": 1149.0,
                 "SKU": "QH-HYD-AVONIGHT-35",
                 "stock": 30,
                 "category_id": cat_map["dry-skin"],
-                "ingredients": "Cold-pressed Avocado Butter, Ashwagandha Root extract, Jojoba Oil, Vitamin E, Shea Butter, Rose Water.",
-                "benefits": "Deeply nourishes, restores skin elegance, smoothes fine lines, and locks in moisture for 24 hours.",
-                "how_to_use": "Smooth a pea-sized amount onto face and neck as the final step of your night ritual.",
-                "skin_type": "Dry and Mature Skin",
-                "product_images": ["https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?q=80&w=600&auto=format&fit=crop",
+                "ingredients": "Avocado (rich in fatty acids), Sweet Almond Oil, Honey, Wheatgerm Extract, Milk Protein, Seaweed minerals, Botanically Sourced Actives.",
+                "benefits": "Deep, sustained nourishment throughout the day • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
+                "how_to_use": "Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.",
+                "skin_type": "Oily, combination, aging, dull, and normal skin types",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_before_after.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
                 "featured": True,
                 "active": True
             },
