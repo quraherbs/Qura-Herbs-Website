@@ -10,7 +10,7 @@ export default function BrandStory() {
     founder_quote: "Skincare should not be about changing who you are. It should be about taking better care of the skin you already have.",
     founder_name: "Nandavel V",
     founder_designation: "Founder",
-    founder_image: "/uploads/botanical_potion_founder.jpg",
+    founder_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
     founder_bio: "Founded by Nandavel V in Coimbatore in 2025, Qura Herbs began as a vision to create herbal skincare that feels genuine, practical, and accessible. Combining creativity, nature, and customer understanding, Qura focuses on healthier-looking skin, consistent care, and self-acceptance."
   });
 
@@ -41,7 +41,7 @@ export default function BrandStory() {
                 founder_quote: data.value.founder_quote,
                 founder_name: data.value.founder_name || prev.founder_name,
                 founder_designation: data.value.founder_designation || prev.founder_designation,
-                founder_image: data.value.image || data.value.founder_image || "/uploads/botanical_potion_founder.jpg",
+                founder_image: data.value.image || data.value.founder_image || "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
                 founder_bio: data.value.founder_bio || prev.founder_bio
               }));
             }

@@ -36,7 +36,7 @@ We are building Qura Herbs for people who want to care for their skin and hair w
   const [founderData, setFounderData] = useState<any>({
     name: "Nandavel V",
     title: "Founder & CEO, Qura Herbs",
-    image: "",
+    image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
     quote: "Build Qura Herbs with purpose. Grow it with people. And never lose the reason we started.",
     description: `Qura Herbs started with an idea that was personal to me: people deserve skincare that understands their concerns instead of making them feel like they need to change who they are.
 
