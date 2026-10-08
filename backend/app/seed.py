@@ -73,19 +73,54 @@ def seed_db():
             {
                 "name": "Glow Radiant Plus",
                 "slug": "glow-radiant-plus",
-                "short_description": "An intense brightness booster with Saffron & Turmeric extracts.",
-                "full_description": "Glow Radiant Plus is an editorial-grade luxury face elixir formulated with authentic Indian Saffron (Kesar) and Sandalwood extracts. This serum target hyperpigmentation, uneven skin tone, and dullness, revealing a natural luminous finish.",
-                "price": 999.0,
-                "sale_price": 849.0,
-                "SKU": "QH-GLOW-RADPLUS-30",
+                "short_description": "Let your skin do its best work while you rest. A botanically nourishing night cream that deeply hydrates, visibly brightens, and repairs the skin barrier.",
+                "full_description": """Glow Radiant Plus Skin Whitening Cream — 35g
+
+Let your skin do its best work while you rest. Reveal your natural brightness.
+
+A botanically nourishing skin brightening cream that works in harmony with your skin's natural renewal cycle. Powered by pure botanical extracts, it deeply hydrates, visibly brightens, and steadily repairs a compromised skin barrier, so you wake up to skin that looks and feels genuinely restored.
+
+Key Benefits
+• Deep Hydration: Sustained overnight hydration that locks in moisture without heaviness
+• Brightens Skin: Visibly brightens uneven, dull, or tired-looking skin and fades dark spots
+• Repairs Barrier: Strengthens and repairs the natural skin barrier with consistent use
+• Evens Skin Tone: Targets hyperpigmentation revealing an editorial-level luminous complexion
+
+Key Ingredients
+• Aloe Vera — deeply hydrating and calming, reduces redness and soothes irritated skin
+• Licorice — a well-regarded botanical that gently brightens and evens skin tone over time
+• Sweet Almond Oil — nourishes and softens skin texture without congesting pores
+• Lavender — calms the skin and supports overnight recovery from environmental stress
+• Mango Seed Butter — rich and emollient, restores suppleness and seals in moisture
+• Carrot Seed Oil — high in antioxidants and vitamins, supports skin renewal and a healthy natural glow
+
+Suitable For
+Dull, dry, combination, and normal skin types. Particularly beneficial for skin that looks fatigued or uneven. Ideal for daily nighttime rituals.
+
+How To Use
+Cleanse thoroughly and pat your face dry. Take a small amount and warm between your fingertips. Apply evenly across face and neck using gentle upward strokes. Allow the formula to absorb fully overnight. Rinse gently in the morning.
+
+Formulation Highlights
+• Paraben-free & Sulphate-free
+• No harsh bleaching or peeling agents
+• 100% Botanically sourced actives
+• Suitable for nightly ritual""",
+                "price": 799.0,
+                "sale_price": 799.0,
+                "SKU": "QH-GLOW-RADPLUS-35",
                 "stock": 45,
-                "category_id": cat_map["oily-skin"],
-                "ingredients": "Kashmiri Saffron, Wild Turmeric, Sandalwood Oil, Licorice Extract, Hyaluronic Acid, Aloe Vera Extract.",
-                "benefits": "Reduces dark spots, provides an instant glass-skin glow, balances tone, and deeply moisturizes.",
-                "how_to_use": "Apply 3-4 drops to cleansed face and neck in the morning and evening. Gently press into skin until fully absorbed.",
-                "skin_type": "Oily & Dull Skin",
-                "product_images": ["https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=600&auto=format&fit=crop", "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=600&auto=format&fit=crop",
+                "category_id": cat_map["dry-skin"],
+                "ingredients": "Aloe Vera, Licorice Extract, Sweet Almond Oil, Lavender Oil, Mango Seed Butter, Carrot Seed Oil, Botanical Actives.",
+                "benefits": "Deep Hydration • Brightens Skin • Repairs Barrier • Fades Dark Spots • Even Skin Tone.",
+                "how_to_use": "Cleanse thoroughly and pat your face dry. Warm between fingertips and apply evenly using gentle upward strokes before sleeping.",
+                "skin_type": "Dull, Dry & Uneven Skin Types",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_before_after_1.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_before_after_2.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
                 "featured": True,
                 "active": True
             },
@@ -93,7 +128,7 @@ def seed_db():
                 "name": "Avocado Pro Nourish Night Cream",
                 "slug": "avocado-night-cream",
                 "short_description": "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-                "full_description": """Avocado Pro Nourish Night Cream — 30g
+                "full_description": """Avocado Pro Nourish Night Cream — 35g
 
 Feed your skin. Reveal its natural brightness.
 
@@ -125,8 +160,8 @@ Formulation Highlights
 • No harsh bleaching agents
 • Botanically sourced actives
 • Suitable for daily use""",
-                "price": 1299.0,
-                "sale_price": 1149.0,
+                "price": 799.0,
+                "sale_price": 799.0,
                 "SKU": "QH-HYD-AVONIGHT-35",
                 "stock": 30,
                 "category_id": cat_map["dry-skin"],
@@ -148,8 +183,8 @@ Formulation Highlights
                 "slug": "tea-tree-pureveil-cleanser",
                 "short_description": "A purifying, non-stripping face wash for acne control.",
                 "full_description": "A gentle botanical gel cleanser containing pure Australian Tea Tree oil and Neem extracts. Dissolves excess sebum and acne-causing impurities while keeping the skin barrier perfectly hydrated without tight post-wash dryness.",
-                "price": 549.0,
-                "sale_price": None,
+                "price": 399.0,
+                "sale_price": 399.0,
                 "SKU": "QH-ACNE-TEATREE-100",
                 "stock": 100,
                 "category_id": cat_map["oily-skin"],
@@ -167,8 +202,8 @@ Formulation Highlights
                 "slug": "red-wine-glow-cleanser",
                 "short_description": "Luxury antioxidant face cleanser for youthful radiance.",
                 "full_description": "Experience botanical opulence. Red Wine Glow Cleanser is infused with Resveratrol (extracted from red grape skins) and organic honey. It combats free-radical damage, washes off pollution, and leaves a visible luminous veil.",
-                "price": 649.0,
-                "sale_price": 599.0,
+                "price": 399.0,
+                "sale_price": 399.0,
                 "SKU": "QH-GLOW-REDWINE-100",
                 "stock": 60,
                 "category_id": cat_map["dry-skin"],
@@ -186,8 +221,8 @@ Formulation Highlights
                 "slug": "spf-50-sunscreen",
                 "short_description": "Ultra-lightweight, zero-white-cast botanical sunscreen.",
                 "full_description": "Our SPF 50 Broad Spectrum Sunscreen protects against UVA and UVB rays while delivering rich hydration. Blended with Cucumber and Green Tea extracts, it leaves a dry-touch mtte finish that sits beautifully under makeup.",
-                "price": 799.0,
-                "sale_price": 699.0,
+                "price": 499.0,
+                "sale_price": 499.0,
                 "SKU": "QH-HYD-SPF50-100",
                 "stock": 80,
                 "category_id": cat_map["combination-skin"],
@@ -205,8 +240,8 @@ Formulation Highlights
                 "slug": "vitamin-c-serum",
                 "short_description": "15% Kakadu Plum Vitamin C for luminous skin defense.",
                 "full_description": "A high-potency serum featuring 15% Vitamin C from natural Kakadu Plum extract and Ferulic Acid. Provides advanced environmental protection, brightens hyperpigmentation, and stimulates natural collagen synthesis.",
-                "price": 899.0,
-                "sale_price": 799.0,
+                "price": 599.0,
+                "sale_price": 599.0,
                 "SKU": "QH-GLOW-VITC-30",
                 "stock": 50,
                 "category_id": cat_map["sensitive-skin"],
@@ -224,8 +259,8 @@ Formulation Highlights
                 "slug": "hair-shine-serum",
                 "short_description": "Silky smoothing botanical serum with Moroccan Argan & Bhringraj.",
                 "full_description": "Transform dry, frizzy strands into a gloss cascade. Enriched with Moroccan Argan Oil and Bhringraj herb, this lightweight elixir forms a protective coat, seals split ends, and delivers high-shine finish.",
-                "price": 699.0,
-                "sale_price": None,
+                "price": 544.0,
+                "sale_price": 544.0,
                 "SKU": "QH-HAIR-SHINE-50",
                 "stock": 70,
                 "category_id": cat_map["hair-care"],
@@ -243,8 +278,8 @@ Formulation Highlights
                 "slug": "anti-dandruff-scalp-detox-gel",
                 "short_description": "Clearing scalp treatment with Tea Tree and Rosemary.",
                 "full_description": "A detoxifying scalp gel that targets itching, flaking, and buildup. Infused with Tea Tree, Rosemary, and Ginger oil, it deeply purifies scalp pores and controls dandruff microbes, boosting hair follicle health.",
-                "price": 599.0,
-                "sale_price": 499.0,
+                "price": 649.0,
+                "sale_price": 649.0,
                 "SKU": "QH-HAIR-DETOX-100",
                 "stock": 25,
                 "category_id": cat_map["hair-care"],
@@ -265,7 +300,7 @@ Formulation Highlights
             "red-wine-glow-cleanser": "100ml",
             "spf-50-sunscreen": "100ml",
             "vitamin-c-serum": "30ml",
-            "glow-radiant-plus": "30ml",
+            "glow-radiant-plus": "35g",
             "hair-shine-serum": "50ml",
             "anti-dandruff-scalp-detox-gel": "100g",
         }

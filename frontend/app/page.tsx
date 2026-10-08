@@ -40,14 +40,14 @@ export default function Home() {
   const FALLBACK_FEATURED: Product[] = [
     {
       id: 1,
-      name: "Glow Radiant Night Cream",
-      slug: "glow-radiant-night-cream",
-      short_description: "Deeply restorative night cream for natural skin radiance and clarity.",
-      price: 1399.0,
-      sale_price: 1199.0,
-      SKU: "QH-GLOW-NC-30",
+      name: "Glow Radiant Plus",
+      slug: "glow-radiant-plus",
+      short_description: "A botanically nourishing night cream that deeply hydrates, visibly brightens, and repairs the skin barrier.",
+      price: 799.0,
+      sale_price: 799.0,
+      SKU: "QH-GLOW-RADPLUS-35",
       stock: 50,
-      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/Glow%20Radiant%20Night%20Cream/IMG_20260406_145624.jpg",
+      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
       skin_type: "All Skin Types"
     },
     {
@@ -55,8 +55,8 @@ export default function Home() {
       name: "Avocado Pro Nourish Night Cream",
       slug: "avocado-night-cream",
       short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-      price: 1299.0,
-      sale_price: 1149.0,
+      price: 799.0,
+      sale_price: 799.0,
       SKU: "QH-HYD-AVONIGHT-35",
       stock: 30,
       thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",

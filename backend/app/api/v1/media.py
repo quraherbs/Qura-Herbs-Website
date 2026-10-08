@@ -66,8 +66,9 @@ def upload_to_supabase(content: bytes, object_path: str, content_type: str = "im
     if not supabase_url or not supabase_key:
         raise ValueError("Supabase Storage credentials (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY) are not configured.")
 
-    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
-    endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
+    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "Product Images").strip()
+    bucket_enc = urllib.parse.quote(bucket)
+    endpoint = f"{supabase_url}/storage/v1/object/{bucket_enc}/{object_path}"
 
     headers = {
         "Authorization": f"Bearer {supabase_key}",
@@ -93,7 +94,7 @@ def upload_to_supabase(content: bytes, object_path: str, content_type: str = "im
     if res.status_code not in (200, 201):
         raise Exception(f"Supabase Storage error ({res.status_code}): {res.text}")
 
-    public_url = f"{supabase_url}/storage/v1/object/public/{bucket}/{object_path}"
+    public_url = f"{supabase_url}/storage/v1/object/public/{bucket_enc}/{object_path}"
     return public_url
 
 
@@ -105,13 +106,17 @@ def delete_from_supabase(public_url: str) -> bool:
     if not supabase_url or not supabase_key or not public_url:
         return False
 
-    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "product-images").strip()
-    prefix = f"{supabase_url}/storage/v1/object/public/{bucket}/"
+    bucket = str(settings.SUPABASE_STORAGE_BUCKET or os.environ.get("SUPABASE_STORAGE_BUCKET") or "Product Images").strip()
+    bucket_enc = urllib.parse.quote(bucket)
+    prefix = f"{supabase_url}/storage/v1/object/public/{bucket_enc}/"
     if not public_url.startswith(prefix):
-        return False
+        prefix_unenc = f"{supabase_url}/storage/v1/object/public/{bucket}/"
+        if not public_url.startswith(prefix_unenc):
+            return False
+        prefix = prefix_unenc
 
     object_path = public_url.replace(prefix, "")
-    endpoint = f"{supabase_url}/storage/v1/object/{bucket}/{object_path}"
+    endpoint = f"{supabase_url}/storage/v1/object/{bucket_enc}/{object_path}"
     headers = {
         "Authorization": f"Bearer {supabase_key}",
         "apiKey": supabase_key

@@ -8,6 +8,7 @@ import Link from "next/link";
 
 interface ProductVariant {
   id: number;
+  product_id?: number;
   name: string;
   sku_suffix: string;
   price_override: number | null;
@@ -78,15 +79,48 @@ export default function ProductDetails({ slug }: { slug: string }) {
       })
       .catch((err) => {
         console.error("Failed to load product:", err);
+        if (slug === "glow-radiant-plus") {
+          const fallbackGlow: Product = {
+            id: 1,
+            name: "Glow Radiant Plus",
+            slug: "glow-radiant-plus",
+            short_description: "Let your skin do its best work while you rest. A botanically nourishing night cream that deeply hydrates, visibly brightens, and repairs the skin barrier.",
+            full_description: `Glow Radiant Plus Skin Whitening Cream — 35g\n\nLet your skin do its best work while you rest. Reveal your natural brightness.\n\nA botanically nourishing skin brightening cream that works in harmony with your skin's natural renewal cycle. Powered by pure botanical extracts, it deeply hydrates, visibly brightens, and steadily repairs a compromised skin barrier, so you wake up to skin that looks and feels genuinely restored.\n\nKey Benefits\n• Deep Hydration: Sustained overnight hydration that locks in moisture without heaviness\n• Brightens Skin: Visibly brightens uneven, dull, or tired-looking skin and fades dark spots\n• Repairs Barrier: Strengthens and repairs the natural skin barrier with consistent use\n• Evens Skin Tone: Targets hyperpigmentation revealing an editorial-level luminous complexion\n\nKey Ingredients\n• Aloe Vera — deeply hydrating and calming, reduces redness and soothes irritated skin\n• Licorice — a well-regarded botanical that gently brightens and evens skin tone over time\n• Sweet Almond Oil — nourishes and softens skin texture without congesting pores\n• Lavender — calms the skin and supports overnight recovery from environmental stress\n• Mango Seed Butter — rich and emollient, restores suppleness and seals in moisture\n• Carrot Seed Oil — high in antioxidants and vitamins, supports skin renewal and a healthy natural glow\n\nSuitable For\nDull, dry, combination, and normal skin types. Particularly beneficial for skin that looks fatigued or uneven. Ideal for daily nighttime rituals.\n\nHow To Use\nCleanse thoroughly and pat your face dry. Take a small amount and warm between your fingertips. Apply evenly across face and neck using gentle upward strokes. Allow the formula to absorb fully overnight. Rinse gently in the morning.\n\nFormulation Highlights\n• Paraben-free & Sulphate-free\n• No harsh bleaching or peeling agents\n• 100% Botanically sourced actives\n• Suitable for nightly ritual`,
+            price: 799.0,
+            sale_price: 799.0,
+            SKU: "QH-GLOW-RADPLUS-35",
+            stock: 45,
+            ingredients: "Aloe Vera, Licorice Extract, Sweet Almond Oil, Lavender Oil, Mango Seed Butter, Carrot Seed Oil, Botanical Actives.",
+            benefits: "Deep Hydration • Brightens Skin • Repairs Barrier • Fades Dark Spots • Even Skin Tone.",
+            how_to_use: "Cleanse thoroughly and pat your face dry. Warm between fingertips and apply evenly using gentle upward strokes before sleeping.",
+            skin_type: "Dull, Dry & Uneven Skin Types",
+            product_images: [
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_ingredients.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_before_after_1.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_before_after_2.jpg"
+            ],
+            thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
+            variants: [
+              { id: 28, product_id: 1, name: "35g", sku_suffix: "V35G", price_override: null, stock: 45 }
+            ]
+          };
+          setProduct(fallbackGlow);
+          setSelectedImage(fallbackGlow.thumbnail);
+          setSelectedVariant(fallbackGlow.variants[0]);
+          setError(false);
+          setLoading(false);
+          return;
+        }
         if (slug === "avocado-night-cream") {
           const fallbackProduct: Product = {
             id: 2,
             name: "Avocado Pro Nourish Night Cream",
             slug: "avocado-night-cream",
             short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-            full_description: `Avocado Pro Nourish Night Cream — 30g\n\nFeed your skin. Reveal its natural brightness.\n\nA botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.\n\nKey Benefits\n• Deep, sustained nourishment throughout the day\n• Visibly softer and smoother skin with regular use\n• Restores a natural, healthy radiance to dull skin\n• Strengthens the skin barrier over time\n• Supports a more even, luminous complexion\n\nKey Ingredients\n• Avocado - rich in fatty acids that repair the skin barrier and restore suppleness\n• Sweet Almond Oil - lightweight and emollient, softens without congesting pores\n• Honey - a natural humectant that draws and locks moisture into the skin\n• Wheatgerm Extract - packed with Vitamin E to support renewal and reduce dullness\n• Milk Protein - smooths skin tone and refines the complexion\n• Seaweed - marine-derived minerals that firm, hydrate, and restore luminosity\n\nSuitable For\nOily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.\n\nHow To Use\nCleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.\n\nFormulation Highlights\n• Paraben-free\n• No harsh bleaching agents\n• Botanically sourced actives\n• Suitable for daily use`,
-            price: 1299.0,
-            sale_price: 1149.0,
+            full_description: `Avocado Pro Nourish Night Cream — 35g\n\nFeed your skin. Reveal its natural brightness.\n\nA botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.\n\nKey Benefits\n• Deep, sustained nourishment throughout the day\n• Visibly softer and smoother skin with regular use\n• Restores a natural, healthy radiance to dull skin\n• Strengthens the skin barrier over time\n• Supports a more even, luminous complexion\n\nKey Ingredients\n• Avocado - rich in fatty acids that repair the skin barrier and restore suppleness\n• Sweet Almond Oil - lightweight and emollient, softens without congesting pores\n• Honey - a natural humectant that draws and locks moisture into the skin\n• Wheatgerm Extract - packed with Vitamin E to support renewal and reduce dullness\n• Milk Protein - smooths skin tone and refines the complexion\n• Seaweed - marine-derived minerals that firm, hydrate, and restore luminosity\n\nSuitable For\nOily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.\n\nHow To Use\nCleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.\n\nFormulation Highlights\n• Paraben-free\n• No harsh bleaching agents\n• Botanically sourced actives\n• Suitable for daily use`,
+            price: 799.0,
+            sale_price: 799.0,
             SKU: "QH-HYD-AVONIGHT-35",
             stock: 30,
             ingredients: "Avocado (rich in fatty acids), Sweet Almond Oil, Honey, Wheatgerm Extract, Milk Protein, Seaweed minerals, Botanically Sourced Actives.",
@@ -99,10 +133,13 @@ export default function ProductDetails({ slug }: { slug: string }) {
               "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_before_after.jpg"
             ],
             thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
-            variants: []
+            variants: [
+              { id: 29, product_id: 2, name: "35g", sku_suffix: "V35G", price_override: null, stock: 30 }
+            ]
           };
           setProduct(fallbackProduct);
           setSelectedImage(fallbackProduct.thumbnail);
+          setSelectedVariant(fallbackProduct.variants[0]);
           setError(false);
           setLoading(false);
           return;
