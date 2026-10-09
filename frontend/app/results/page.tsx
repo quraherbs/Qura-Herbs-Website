@@ -28,8 +28,8 @@ export default function ResultsPage() {
       skin_concern: "Hyperpigmentation & Dullness",
       duration: "4 Weeks",
       product_used: "Glow Radiant Plus",
-      before_image: "/uploads/product_placeholder.jpg",
-      after_image: "/uploads/product_placeholder.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg",
       description: "My dark spots faded dramatically and my overall complexion got an intense radiant boost. The saffron formulation feels so luxury."
     },
     {
@@ -61,7 +61,21 @@ export default function ResultsPage() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setTransformations(data);
+          const mapped = data.map((item: ResultCard) => {
+            const isAnanya =
+              item.id === 1 ||
+              item.customer_name?.toLowerCase().includes("ananya");
+            return {
+              ...item,
+              before_image: isAnanya
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg"
+                : item.before_image,
+              after_image: isAnanya
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg"
+                : item.after_image,
+            };
+          });
+          setTransformations(mapped);
         }
       })
       .catch((err) => console.log("Failed to load real results:", err));
