@@ -26,9 +26,16 @@ export default function JournalSection() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          const apiSlugs = new Set(data.map((d: any) => d.slug));
+          const filtered = data.filter(
+            (d: any) =>
+              !d.author?.toLowerCase().includes("pranavi") &&
+              d.slug !== "how-to-use-our-night-cream" &&
+              d.slug !== "Minimal Care Refine You" &&
+              d.id !== 1
+          );
+          const apiSlugs = new Set(filtered.map((d: any) => d.slug));
           const missing = CANONICAL_JOURNAL_ARTICLES.filter((c) => !apiSlugs.has(c.slug));
-          setBlogs([...data, ...missing] as Blog[]);
+          setBlogs([...filtered, ...missing] as Blog[]);
         } else {
           setBlogs(CANONICAL_JOURNAL_ARTICLES as Blog[]);
         }
@@ -102,7 +109,11 @@ export default function JournalSection() {
                 {/* Article Info */}
                 <div className="flex-1 flex flex-col space-y-3">
                   <div className="flex justify-between items-center text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold">
-                    <span>BY {blog.author || "QURA HERBS"}</span>
+                    <span>
+                      {blog.author?.toUpperCase().startsWith("BY ")
+                        ? blog.author.toUpperCase()
+                        : `BY ${blog.author?.toUpperCase() || "QURA HERBS"}`}
+                    </span>
                     {blog.published_at && (
                       <span>{new Date(blog.published_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
                     )}

@@ -16,10 +16,10 @@ export const CANONICAL_JOURNAL_ARTICLES: JournalArticle[] = [
     title: "How to Use Our Avocado Night Cream for Maximum Hydration",
     slug: "how-to-use-our-avocado-night-cream-for-maximum-hydration",
     excerpt: "Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin.",
-    featured_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
+    featured_image: "/uploads/the_glow_guide_journal.jpg",
     author: "BY QURA HERBS | SKINCARE JOURNAL",
     published: true,
-    published_at: "2026-10-09T23:30:00.000Z",
+    published_at: "2026-10-10T00:00:00.000Z",
     content: `## Your Nighttime Ritual for Naturally Nourished Skin
 
 Your skin deserves gentle care at the end of the day. A consistent nighttime skincare routine helps maintain hydration and leaves your skin feeling soft, smooth, and refreshed.

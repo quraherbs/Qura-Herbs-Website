@@ -547,11 +547,11 @@ Formulation Highlights
         # 6. Create Initial Blog Post
         initial_blog = models.Blog(
             title="How to Use Our Avocado Night Cream for Maximum Hydration",
-            slug="how-to-use-our-night-cream",
-            excerpt="Minimal care rituals to refine and deeply nourish dry to mature skin barriers overnight.",
+            slug="how-to-use-our-avocado-night-cream-for-maximum-hydration",
+            excerpt="Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin.",
             content="Using a wonderful texture of cold-pressed Avocado Butter and Ashwagandha extract, our Avocado Night Cream restores your skin's elasticity while you sleep.",
-            featured_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/the_glow_guide_journal.jpg",
-            author="Pranavi",
+            featured_image="/uploads/the_glow_guide_journal.jpg",
+            author="BY QURA HERBS | SKINCARE JOURNAL",
             published=True,
             published_at=datetime.utcnow(),
             meta_description="Learn how to incorporate Avocado Night Cream into your evening botanical ritual."
