@@ -40,10 +40,12 @@ export default function ResultsGallery() {
     },
     {
       id: 2,
-      image: "/uploads/product_placeholder.jpg",
-      title: "Radiance & Natural Glow Boost",
-      description: "Skin appears visibly brighter and more balanced with regular botanical cleansing and nourishment.",
-      product_used: "Kumkumadi Radiance Elixir",
+      image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_journey.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_before.jpg",
+      final_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_after.jpg",
+      title: "Shine and Smooth Hair",
+      description: "Apply 3-4 drops of Anti-Frizz Serum to your hair and distribute it evenly through the lengths to achieve smooth, shiny hair.",
+      product_used: "Anti-Frizz Hair Shine Serum",
       customer_name: "Routine Journey Progress",
       duration: "3 Weeks Ritual",
       active: true
@@ -68,31 +70,92 @@ export default function ResultsGallery() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((d: any) => ({
-            ...d,
-            image:
-              d.id === 1 || d.title?.toLowerCase().includes("overnight")
+          const mapped = data.map((d: any) => {
+            const isHairRoutine =
+              d.id === 2 ||
+              d.title?.toLowerCase().includes("shine") ||
+              d.title?.toLowerCase().includes("radiance") ||
+              d.title?.toLowerCase().includes("hair");
+            const isOvernightRoutine =
+              d.id === 1 || d.title?.toLowerCase().includes("overnight");
+
+            return {
+              ...d,
+              title: isHairRoutine ? "Shine and Smooth Hair" : d.title,
+              description: isHairRoutine
+                ? "Apply 3-4 drops of Anti-Frizz Serum to your hair and distribute it evenly through the lengths to achieve smooth, shiny hair."
+                : d.routine_description || d.description,
+              product_used: isHairRoutine
+                ? "Anti-Frizz Hair Shine Serum"
+                : d.products_used || d.product_used,
+              image: isOvernightRoutine
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg"
+                : isHairRoutine
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_journey.jpg"
                 : d.final_image || d.image || "/uploads/product_placeholder.jpg",
-            before_image:
-              d.before_image ||
-              (d.id === 1 || d.title?.toLowerCase().includes("overnight")
-                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
-                : undefined),
-            final_image:
-              d.final_image ||
-              (d.id === 1 || d.title?.toLowerCase().includes("overnight")
-                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
-                : undefined),
-            description: d.routine_description || d.description,
-            product_used: d.products_used || d.product_used
-          }));
+              before_image:
+                d.before_image ||
+                (isOvernightRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
+                  : isHairRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_before.jpg"
+                  : undefined),
+              final_image:
+                d.final_image ||
+                (isOvernightRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
+                  : isHairRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_after.jpg"
+                  : undefined),
+            };
+          });
           setItems(mapped);
         } else {
           fetch(getApiUrl("/api/v1/content/results-gallery?active_only=true"))
             .then((r) => r.json())
             .then((resData) => {
-              if (Array.isArray(resData) && resData.length > 0) setItems(resData);
+              if (Array.isArray(resData) && resData.length > 0) {
+                const mapped = resData.map((d: any) => {
+                  const isHairRoutine =
+                    d.id === 2 ||
+                    d.title?.toLowerCase().includes("shine") ||
+                    d.title?.toLowerCase().includes("radiance") ||
+                    d.title?.toLowerCase().includes("hair");
+                  const isOvernightRoutine =
+                    d.id === 1 || d.title?.toLowerCase().includes("overnight");
+
+                  return {
+                    ...d,
+                    title: isHairRoutine ? "Shine and Smooth Hair" : d.title,
+                    description: isHairRoutine
+                      ? "Apply 3-4 drops of Anti-Frizz Serum to your hair and distribute it evenly through the lengths to achieve smooth, shiny hair."
+                      : d.routine_description || d.description,
+                    product_used: isHairRoutine
+                      ? "Anti-Frizz Hair Shine Serum"
+                      : d.products_used || d.product_used,
+                    image: isOvernightRoutine
+                      ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg"
+                      : isHairRoutine
+                      ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_journey.jpg"
+                      : d.image || "/uploads/product_placeholder.jpg",
+                    before_image:
+                      d.before_image ||
+                      (isOvernightRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
+                        : isHairRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_before.jpg"
+                        : undefined),
+                    final_image:
+                      d.final_image ||
+                      (isOvernightRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
+                        : isHairRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_after.jpg"
+                        : undefined),
+                  };
+                });
+                setItems(mapped);
+              }
             });
         }
       })
