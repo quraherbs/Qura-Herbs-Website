@@ -133,9 +133,6 @@ class Order(Base):
     district = Column(String(100), nullable=True)
     state = Column(String(100), nullable=True)
     pincode = Column(String(20), nullable=True)
-    google_sheets_sync_status = Column(String(20), default="PENDING")  # PENDING, SYNCED, FAILED
-    google_sheets_synced_at = Column(DateTime, nullable=True)
-    google_sheets_sync_error = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     customer = relationship("Customer", back_populates="orders")
@@ -200,6 +197,10 @@ class OrderItem(Base):
 
     order = relationship("Order", back_populates="items")
     product = relationship("Product", back_populates="order_items")
+
+    @property
+    def product_name(self):
+        return self.product.name if self.product else None
 
 
 class Coupon(Base):

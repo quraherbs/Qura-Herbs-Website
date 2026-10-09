@@ -8,6 +8,7 @@ import Navbar from "../../components/Navbar";
 import ThemeModal from "../../components/ThemeModal";
 import { ShieldCheck, Copy, Check, Lock, ChevronDown, ChevronUp, MapPin, Truck, Sparkles, CheckCircle2, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 const INDIAN_STATES = [
   "Tamil Nadu",
@@ -334,11 +335,38 @@ export default function CheckoutPage() {
 
       if (orderRes.ok && orderData && orderData.order_number) {
         setLoadingStep("Redirecting to order confirmation...");
-        clearCart();
         
-        // WhatsApp notification URL creation
-        const whatsappMessage = `Hi Qura Herbs Team,\n\nI have placed an order through the Qura Herbs website.\n\n*Order Details*\nOrder Number: ${orderData.order_number}\nCustomer Name: ${form.name}\nPhone: ${form.phone}\nState: ${form.state}\n\n*Payment Details*\nPayment Method: UPI\nAmount Paid: ₹${orderData.total}\n\n*Payment Verification*\nI have completed the UPI payment and attached the payment screenshot for verification.\n\nPlease verify the payment and confirm my order. Once the payment has been successfully verified, please proceed with processing my order.\n\nPayment Screenshot:\n[Attach Screenshot Here]\n\nThank you,\nQura Herbs Customer`;
-        const whatsappUrl = `https://wa.me/919363739675?text=${encodeURIComponent(whatsappMessage)}`;
+        // WhatsApp notification URL creation with actual product items and verified totals
+        const fullAddress = `${form.address.trim()}, ${form.city.trim()}${form.district ? `, ${form.district.trim()}` : ""}, ${form.state.trim()} - ${form.pincode.trim()}`;
+        
+        const whatsappItems = (orderData.items && orderData.items.length > 0)
+          ? orderData.items.map((item: any) => ({
+              name: item.product_name || cart.find((c) => Number(c.id) === Number(item.product_id))?.name || "Product",
+              quantity: Number(item.quantity),
+              price: Number(item.price),
+              variant: item.variant || null
+            }))
+          : cart.map((c) => ({
+              name: c.name,
+              quantity: Number(c.quantity),
+              price: Number(c.sale_price || c.price),
+              variant: c.variant || null
+            }));
+
+        const whatsappUrl = getWhatsAppOrderUrl({
+          orderNumber: orderData.order_number,
+          orderDate: orderData.created_at || new Date(),
+          customerName: form.name.trim(),
+          customerPhone: form.phone.trim(),
+          shippingAddress: fullAddress,
+          items: whatsappItems,
+          paymentMethod: orderData.payment_id || "UPI",
+          subtotal: Number(orderData.subtotal ?? subtotal),
+          discount: Number(orderData.discount ?? voucherDiscount),
+          shippingCharge: Number(orderData.shipping ?? shipping),
+          orderTotal: Number(orderData.total ?? grandTotal),
+          paymentStatus: orderData.payment_status || "PAYMENT_PENDING"
+        });
         
         try {
           window.open(whatsappUrl, "_blank");
@@ -346,6 +374,7 @@ export default function CheckoutPage() {
           console.error("Popup blocked by browser", e);
         }
         
+        clearCart();
         router.push(`/order-success/${orderData.order_number}`);
       } else {
         const errorDetail = orderData?.detail 

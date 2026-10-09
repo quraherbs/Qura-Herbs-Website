@@ -40,12 +40,6 @@ class Settings(BaseSettings):
     WHATSAPP_ACCESS_TOKEN: str = ""
     WHATSAPP_PHONE_NUMBER_ID: str = ""
     
-    # Google Sheets Integration
-    GOOGLE_SHEETS_SPREADSHEET_ID: str = "1H7iGw3w3r-LIZYe_oiYMrrUP6dyBtqweRM-tskRALlk"
-    GOOGLE_SHEETS_WEBHOOK_URL: str = ""
-    GOOGLE_SHEETS_WEBHOOK_SECRET: str = "qura_sheets_sync_secret_2026"
-    GOOGLE_SHEETS_CREDENTIALS: str = ""
-    
     # Cloudinary (fallback to local if empty)
     CLOUDINARY_CLOUD_NAME: str = ""
     CLOUDINARY_API_KEY: str = ""

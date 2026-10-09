@@ -1,6 +1,7 @@
 "use client";
 
 import { getApiUrl, getImageUrl } from "@/lib/api";
+import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 import React, { useEffect, useState, use } from "react";
 import AnnouncementBar from "../../../components/AnnouncementBar";
@@ -29,6 +30,11 @@ interface OrderData {
   order_status: string;
   payment_id?: string;
   tracking_number?: string;
+  shipping_address?: string;
+  city?: string;
+  district?: string;
+  state?: string;
+  pincode?: string;
   created_at: string;
   items: OrderItem[];
 }
@@ -117,8 +123,35 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
     fetchOrderDetails();
   }, [orderId]);
 
-  const whatsappMessage = `Hi Qura Herbs Team,\n\nI have placed an order through the Qura Herbs website.\n\n*Order Details*\nOrder Number: ${orderId}\nCustomer Name: ${customer?.name || ""}\nPhone: ${customer?.phone || ""}\nState: ${customer?.state || ""}\n\n*Payment Details*\nPayment Method: UPI\nAmount Paid: ₹${order?.total || 0}\n\n*Payment Verification*\nI have completed the UPI payment and attached the payment screenshot for verification.\n\nPlease verify the payment and confirm my order. Once the payment has been successfully verified, please proceed with processing my order.\n\nPayment Screenshot:\n[Attach Screenshot Here]\n\nThank you,\nQura Herbs Customer`;
-  const whatsappUrl = `https://wa.me/919363739675?text=${encodeURIComponent(whatsappMessage)}`;
+  const fullAddress = order?.shipping_address
+    ? `${order.shipping_address}, ${order.city || ""}${order.district ? `, ${order.district}` : ""}, ${order.state || ""} - ${order.pincode || ""}`
+    : customer?.address
+    ? `${customer.address}, ${customer.city || ""}, ${customer.state || ""} - ${customer.pincode || ""}`
+    : "";
+
+  const itemsList = (order?.items || []).map((item) => ({
+    name: productMap[item.product_id]?.name || `Product #${item.product_id}`,
+    quantity: item.quantity,
+    price: item.price,
+    variant: item.variant || null,
+  }));
+
+  const whatsappUrl = order
+    ? getWhatsAppOrderUrl({
+        orderNumber: String(orderId),
+        orderDate: order.created_at,
+        customerName: customer?.name || "",
+        customerPhone: customer?.phone || "",
+        shippingAddress: fullAddress,
+        items: itemsList,
+        paymentMethod: order.payment_id || "UPI",
+        subtotal: order.subtotal,
+        discount: order.discount,
+        shippingCharge: order.shipping,
+        orderTotal: order.total,
+        paymentStatus: order.payment_status || "PAYMENT_PENDING",
+      })
+    : `https://wa.me/919363739675?text=${encodeURIComponent("Hi Qura Herbs Team, Order Number: " + orderId)}`;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#FDFBF7] text-[#2C1A14]">

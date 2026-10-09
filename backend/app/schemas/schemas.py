@@ -130,6 +130,7 @@ class OrderItemCreate(OrderItemBase):
 class OrderItemResponse(OrderItemBase):
     id: int
     order_id: int
+    product_name: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -197,9 +198,6 @@ class OrderBase(BaseModel):
     district: Optional[str] = None
     state: Optional[str] = None
     pincode: Optional[str] = None
-    google_sheets_sync_status: Optional[str] = "PENDING"
-    google_sheets_synced_at: Optional[datetime] = None
-    google_sheets_sync_error: Optional[str] = None
 
 class OrderCreate(OrderBase):
     items: List[OrderItemCreate]

@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, MessageCircle, ShoppingBag, MapPin, CreditCard, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { getWhatsAppOrderUrl } from "@/lib/whatsapp";
 
 export default function SuccessDetails() {
   const searchParams = useSearchParams();
@@ -18,8 +19,20 @@ export default function SuccessDetails() {
     }
   }, [searchParams, router]);
 
-  const whatsappMessage = `Hi Qura Herbs Team,\n\nI have placed an order through the Qura Herbs website.\n\n*Order Details*\nOrder Number: ${orderNumber}\nCustomer Name: ${name ? decodeURIComponent(name) : ""}\nPhone: \nState: \n\n*Payment Details*\nPayment Method: UPI\nAmount Paid: ₹${total}\n\n*Payment Verification*\nI have completed the UPI payment and attached the payment screenshot for verification.\n\nPlease verify the payment and confirm my order. Once the payment has been successfully verified, please proceed with processing my order.\n\nPayment Screenshot:\n[Attach Screenshot Here]\n\nThank you,\nQura Herbs Customer`;
-  const whatsappUrl = `https://wa.me/919363739675?text=${encodeURIComponent(whatsappMessage)}`;
+  const whatsappUrl = getWhatsAppOrderUrl({
+    orderNumber: orderNumber,
+    orderDate: new Date(),
+    customerName: name ? decodeURIComponent(name) : "Customer",
+    customerPhone: "",
+    shippingAddress: "",
+    items: [],
+    paymentMethod: "UPI",
+    subtotal: Number(total) || 0,
+    discount: 0,
+    shippingCharge: 0,
+    orderTotal: Number(total) || 0,
+    paymentStatus: "PAYMENT_PENDING",
+  });
 
   return (
     <div className="w-full space-y-8 animate-fade-in text-[#2C1A14]">
