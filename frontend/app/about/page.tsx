@@ -53,7 +53,7 @@ There is still a long way to go, but the vision remains simple:`,
   const [ceoData, setCeoData] = useState<any>({
     name: "Pranavi G",
     title: "Chief Executive Officer, Qura Herbs",
-    image: "",
+    image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
     quote: "This is more than building a company for me. It is about building something I can be proud to put my name behind.",
     description: `For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.
 
@@ -95,7 +95,11 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data === "object") {
-          setCeoData((prev: any) => ({ ...prev, ...data }));
+          setCeoData((prev: any) => ({
+            ...prev,
+            ...data,
+            image: data.image || data.ceo_image || prev.image || "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg"
+          }));
         }
       })
       .catch((err) => console.log("Failed to load ceo data:", err));
@@ -162,7 +166,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
   }, [tabParam]);
 
   const founderImgSrc = (founderData.image || founderData.founder_image) ? getImageUrl(founderData.image || founderData.founder_image) : "";
-  const ceoImgSrc = (ceoData.image || ceoData.ceo_image) ? getImageUrl(ceoData.image || ceoData.ceo_image) : "";
+  const ceoImgSrc = (ceoData.image || ceoData.ceo_image) ? getImageUrl(ceoData.image || ceoData.ceo_image) : "/ceo_pranavi.jpg";
   const brandImgSrc = (aboutData.hero_image || aboutData.image) ? getImageUrl(aboutData.hero_image || aboutData.image) : "";
 
   return (
@@ -561,7 +565,13 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                     src={ceoImgSrc}
                     alt="Pranavi G — Chief Executive Officer"
                     className="absolute inset-0 w-full h-full object-cover"
-                    onError={() => setCeoImgError(true)}
+                    onError={(e) => {
+                      if (e.currentTarget.src !== "/ceo_pranavi.jpg") {
+                        e.currentTarget.src = "/ceo_pranavi.jpg";
+                      } else {
+                        setCeoImgError(true);
+                      }
+                    }}
                   />
                 ) : (
                   /* Refined CEO Profile Placeholder Area */
