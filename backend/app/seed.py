@@ -550,7 +550,7 @@ Formulation Highlights
             slug="how-to-use-our-night-cream",
             excerpt="Minimal care rituals to refine and deeply nourish dry to mature skin barriers overnight.",
             content="Using a wonderful texture of cold-pressed Avocado Butter and Ashwagandha extract, our Avocado Night Cream restores your skin's elasticity while you sleep.",
-            featured_image="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+            featured_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/the_glow_guide_journal.jpg",
             author="Pranavi",
             published=True,
             published_at=datetime.utcnow(),

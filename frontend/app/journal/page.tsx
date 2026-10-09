@@ -82,7 +82,7 @@ export default function JournalPage() {
                   className="block aspect-[16/10] overflow-hidden bg-brand-sand/10 border border-brand-sand/10"
                 >
                   <img
-                    src={getImageUrl(blog.featured_image || "/uploads/blog_placeholder.jpg")}
+                    src={getImageUrl(blog.featured_image || "/uploads/the_glow_guide_journal.jpg")}
                     alt={blog.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
                   />
