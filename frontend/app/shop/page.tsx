@@ -9,6 +9,7 @@ import CartDrawer from "../../components/CartDrawer";
 import { useCart } from "../../context/CartContext";
 import { ShoppingBag, Star, Heart } from "lucide-react";
 import Link from "next/link";
+import { CONCERN_CATEGORIES } from "@/lib/concerns";
 
 interface Product {
   id: number;
@@ -113,8 +114,23 @@ export default function ShopPage() {
       });
   }, []);
 
+  const selectedCatObj = categories.find((c) => c.id === selectedCategory);
+  const concernDef = selectedCatObj
+    ? CONCERN_CATEGORIES.find(
+        (c) =>
+          c.slug === selectedCatObj.slug ||
+          c.name.toLowerCase() === selectedCatObj.name.toLowerCase()
+      )
+    : null;
+
   const filteredProducts = selectedCategory
-    ? products.filter((p) => p.category_id === selectedCategory || (p.category_ids && p.category_ids.includes(selectedCategory)))
+    ? (concernDef
+        ? products.filter((p) => concernDef.productSlugs.includes(p.slug))
+        : products.filter(
+            (p) =>
+              p.category_id === selectedCategory ||
+              (p.category_ids && p.category_ids.includes(selectedCategory))
+          ))
     : products;
 
   return (

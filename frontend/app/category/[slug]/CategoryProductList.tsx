@@ -7,6 +7,8 @@ import { useCart } from "../../../context/CartContext";
 import { ShoppingBag, Star } from "lucide-react";
 import Link from "next/link";
 
+import { CONCERN_CATEGORIES, getConcernProducts, ConcernDefinition, ConcernProduct } from "@/lib/concerns";
+
 interface Category {
   id: number;
   name: string;
@@ -28,36 +30,47 @@ interface Product {
 
 export default function CategoryProductList({ slug }: { slug: string }) {
   const { addToCart } = useCart();
-  const [category, setCategory] = useState<Category | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const normalizedSlug = slug.toLowerCase().trim();
+  const localConcern = CONCERN_CATEGORIES.find((c) => c.slug === normalizedSlug);
+
+  const [category, setCategory] = useState<Category | null>(localConcern || null);
+  const [products, setProducts] = useState<Product[]>(getConcernProducts(normalizedSlug) as Product[]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    // 1. Fetch category by slug
-    fetch(getApiUrl(`/api/v1/categories/slug/${slug}`))
+    // 1. Fetch category from API if available to enrich metadata
+    fetch(getApiUrl(`/api/v1/categories/slug/${normalizedSlug}`))
       .then((res) => {
-        if (!res.ok) throw new Error("Category not found");
+        if (!res.ok) throw new Error("Category not found in API");
         return res.json();
       })
       .then((catData: Category) => {
-        setCategory(catData);
-        // 2. Fetch products by category ID
-        return fetch(getApiUrl(`/api/v1/products/?category_id=${catData.id}`));
-      })
-      .then((res) => res.json())
-      .then((prodData: Product[]) => {
-        if (Array.isArray(prodData)) {
-          setProducts(prodData);
-        }
-        setLoading(false);
+        setCategory((prev) => ({
+          ...catData,
+          image: localConcern?.image || catData.image,
+          description: localConcern?.description || catData.description,
+        }));
       })
       .catch((err) => {
-        console.error("Failed to load category data:", err);
-        setError(true);
-        setLoading(false);
+        if (!localConcern) {
+          setError(true);
+        }
       });
-  }, [slug]);
+
+    // 2. Fetch live products from backend to enrich pricing/stock
+    fetch(getApiUrl(`/api/v1/products/`))
+      .then((res) => res.json())
+      .then((apiProds) => {
+        if (Array.isArray(apiProds) && apiProds.length > 0) {
+          const mapped = getConcernProducts(normalizedSlug, apiProds);
+          if (mapped.length > 0) {
+            setProducts(mapped as Product[]);
+          }
+        }
+      })
+      .catch((err) => console.log("Failed to enrich category products:", err));
+  }, [normalizedSlug, localConcern]);
 
   if (loading) {
     return (
