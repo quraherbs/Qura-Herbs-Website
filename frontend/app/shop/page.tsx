@@ -79,7 +79,16 @@ export default function ShopPage() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setProducts(data);
+          const mapped = data.map((p: Product) => {
+            if (p.slug === "spf-50-sunscreen" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
+              return {
+                ...p,
+                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg"
+              };
+            }
+            return p;
+          });
+          setProducts(mapped);
         } else {
           setProducts(FALLBACK_PRODUCTS);
         }

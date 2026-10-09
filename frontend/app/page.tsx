@@ -70,7 +70,16 @@ export default function Home() {
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          setBestsellers(data);
+          const mapped = data.map((p: Product) => {
+            if (p.slug === "spf-50-sunscreen" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
+              return {
+                ...p,
+                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg"
+              };
+            }
+            return p;
+          });
+          setBestsellers(mapped);
         } else {
           setBestsellers(FALLBACK_FEATURED);
         }

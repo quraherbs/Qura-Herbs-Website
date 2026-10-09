@@ -60,6 +60,15 @@ export default function ProductDetails({ slug }: { slug: string }) {
         return res.json();
       })
       .then((data: Product) => {
+        if (data.slug === "spf-50-sunscreen" && (data.thumbnail?.includes("unsplash") || !data.product_images || data.product_images.length < 4)) {
+          data.thumbnail = "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg";
+          data.product_images = [
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_back.jpg",
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_ingredients.jpg",
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_before_after.jpg"
+          ];
+        }
         setProduct(data);
         setSelectedImage(data.thumbnail);
         if (data.variants && data.variants.length > 0) {
@@ -207,6 +216,39 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setProduct(fallbackTeaTree);
           setSelectedImage(fallbackTeaTree.thumbnail);
           setSelectedVariant(fallbackTeaTree.variants[0]);
+          setError(false);
+          setLoading(false);
+          return;
+        }
+        if (slug === "spf-50-sunscreen") {
+          const fallbackSPF: Product = {
+            id: 5,
+            name: "SPF 50 Sunscreen",
+            slug: "spf-50-sunscreen",
+            short_description: "Moisturizing SPF 50+ sunscreen with Coconut & Sesame Oil, Shea Butter, and Aloe Vera for broad-spectrum protection and hydration.",
+            full_description: `SPF 50 Sunscreen — 100ml\n\nMoisturizing Sun Screen • Hydrates & Protects SPF 50+\n\nA botanical broad-spectrum sunscreen that provides high-level daily defense against UVA and UVB rays while keeping the skin barrier hydrated and calm. Enriched with natural oils and soothing plant extracts, it protects against sunburn, reduces photo-damage, and blends smoothly without greasy residue or white cast.\n\nKey Benefits\n• Broad-Spectrum SPF 50+ Defense: Shields skin from damaging UV rays and photo-aging\n• Reduce Irritation: Calms inflammation and sunburn redness with soothing pure Aloe Vera\n• Antioxidant Properties: Rich botanical oils protect against environmental free-radical damage\n• Maintain Even Skin Tone: Prevents sunspots, tan buildup, and hyperpigmentation\n• Deeply Moisturizing: Shea Butter and Sesame Oil maintain all-day moisture without heaviness\n\nKey Ingredients\n• Coconut & Sesame Oil — rich in natural sun-protective lipids, essential fatty acids, and antioxidants to nourish and guard skin\n• Shea Butter — rich emollient that seals in hydration and strengthens the epidermal barrier\n• Aloe Vera — instantly cools, calms irritation, and hydrates sun-exposed skin\n\nSuitable For\nAll skin types, including sensitive, combination, dry, and normal skin. Ideal for daily morning wear.\n\nHow To Use\nApply generously to clean face and neck every morning. Allow 10 minutes before direct sun exposure. Reapply every 2-3 hours during prolonged sun exposure.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Non-greasy\n• Suitable for daily morning ritual\n• Broad spectrum SPF 50+ protection`,
+            price: 499.0,
+            sale_price: 499.0,
+            SKU: "QH-HYD-SPF50-100",
+            stock: 80,
+            ingredients: "Coconut & Sesame Oil, Shea Butter, Aloe Vera, Botanical Actives.",
+            benefits: "Broad-Spectrum SPF 50+ Defense • Reduce Irritation • Antioxidant Properties • Maintain Even Skin Tone • Non-Greasy.",
+            how_to_use: "Apply on Clean Face Every Morning, and Avoid direct sun exposure for 10 minutes.",
+            skin_type: "All Skin Types",
+            product_images: [
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_back.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_ingredients.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_before_after.jpg"
+            ],
+            thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
+            variants: [
+              { id: 24, product_id: 5, name: "100ml", sku_suffix: "V100ML", price_override: null, stock: 80 }
+            ]
+          };
+          setProduct(fallbackSPF);
+          setSelectedImage(fallbackSPF.thumbnail);
+          setSelectedVariant(fallbackSPF.variants[0]);
           setError(false);
           setLoading(false);
           return;

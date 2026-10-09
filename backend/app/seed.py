@@ -8,65 +8,72 @@ def seed_db():
     
     db = SessionLocal()
     try:
-        # Check if database is already seeded
-        if db.query(models.Category).first() is not None:
-            print("Database already contains data. Skipping seeding.")
-            return
+        existing_categories = db.query(models.Category).all()
+        already_seeded = len(existing_categories) > 0
 
-        print("Seeding database...")
+        if not already_seeded:
+            print("Seeding database categories...")
 
-        # 1. Create Categories
-        categories_data = [
-            {
-                "name": "Oily Skin",
-                "slug": "oily-skin",
-                "description": "Purifying, sebum-balancing formulas to clarify pores and prevent acne & blemishes.",
-                "image": "https://images.unsplash.com/photo-1501570889534-b3d6790757a5?q=80&w=800&auto=format&fit=crop",
-                "display_order": 1
-            },
-            {
-                "name": "Dry Skin",
-                "slug": "dry-skin",
-                "description": "Deeply replenishing botanical creams and elixirs for moisture locking and barrier repair.",
-                "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
-                "display_order": 2
-            },
-            {
-                "name": "Sensitive Skin",
-                "slug": "sensitive-skin",
-                "description": "Soothing, hypoallergenic herbal formulas to calm redness and irritation.",
-                "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
-                "display_order": 3
-            },
-            {
-                "name": "Combination Skin",
-                "slug": "combination-skin",
-                "description": "Harmonizing botanical care to balance T-zone oiliness while nourishing dry areas.",
-                "image": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800&auto=format&fit=crop",
-                "display_order": 4
-            },
-            {
-                "name": "Hair Care",
-                "slug": "hair-care",
-                "description": "Nourishing remedies for healthy scalp and lustrous hair roots.",
-                "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop",
-                "display_order": 5
-            }
-        ]
+            # 1. Create Categories
+            categories_data = [
+                {
+                    "name": "Oily Skin",
+                    "slug": "oily-skin",
+                    "description": "Purifying, sebum-balancing formulas to clarify pores and prevent acne & blemishes.",
+                    "image": "https://images.unsplash.com/photo-1501570889534-b3d6790757a5?q=80&w=800&auto=format&fit=crop",
+                    "display_order": 1
+                },
+                {
+                    "name": "Dry Skin",
+                    "slug": "dry-skin",
+                    "description": "Deeply replenishing botanical creams and elixirs for moisture locking and barrier repair.",
+                    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+                    "display_order": 2
+                },
+                {
+                    "name": "Sensitive Skin",
+                    "slug": "sensitive-skin",
+                    "description": "Soothing, hypoallergenic herbal formulas to calm redness and irritation.",
+                    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
+                    "display_order": 3
+                },
+                {
+                    "name": "Combination Skin",
+                    "slug": "combination-skin",
+                    "description": "Harmonizing botanical care to balance T-zone oiliness while nourishing dry areas.",
+                    "image": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800&auto=format&fit=crop",
+                    "display_order": 4
+                },
+                {
+                    "name": "Hair Care",
+                    "slug": "hair-care",
+                    "description": "Nourishing remedies for healthy scalp and lustrous hair roots.",
+                    "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop",
+                    "display_order": 5
+                }
+            ]
 
-        db_categories = []
-        for cat in categories_data:
-            db_cat = models.Category(**cat)
-            db.add(db_cat)
-            db_categories.append(db_cat)
-            
-        db.commit()
-        # Refresh categories to get IDs
-        for db_cat in db_categories:
-            db.refresh(db_cat)
-            
-        # Map slugs to IDs for easier product creation
-        cat_map = {c.slug: c.id for c in db_categories}
+            db_categories = []
+            for cat in categories_data:
+                db_cat = models.Category(**cat)
+                db.add(db_cat)
+                db_categories.append(db_cat)
+                
+            db.commit()
+            # Refresh categories to get IDs
+            for db_cat in db_categories:
+                db.refresh(db_cat)
+                
+        cat_list = existing_categories if already_seeded else db_categories
+        cat_map = {}
+        for c in cat_list:
+            cat_map[c.slug] = c.id
+            if c.name:
+                norm = c.name.lower().strip().replace(' ', '-')
+                cat_map[norm] = c.id
+                cat_map[c.name.lower().strip()] = c.id
+        if already_seeded:
+            print("Database categories already exist. Syncing products with seed definitions...")
 
         # 2. Create Products
         products_data = [
@@ -109,7 +116,7 @@ Formulation Highlights
                 "sale_price": 799.0,
                 "SKU": "QH-GLOW-RADPLUS-35",
                 "stock": 45,
-                "category_id": cat_map["dry-skin"],
+                "category_id": cat_map.get("dry-skin", 2),
                 "ingredients": "Aloe Vera, Licorice Extract, Sweet Almond Oil, Lavender Oil, Mango Seed Butter, Carrot Seed Oil, Botanical Actives.",
                 "benefits": "Deep Hydration • Brightens Skin • Repairs Barrier • Fades Dark Spots • Even Skin Tone.",
                 "how_to_use": "Cleanse thoroughly and pat your face dry. Warm between fingertips and apply evenly using gentle upward strokes before sleeping.",
@@ -164,7 +171,7 @@ Formulation Highlights
                 "sale_price": 799.0,
                 "SKU": "QH-HYD-AVONIGHT-35",
                 "stock": 30,
-                "category_id": cat_map["dry-skin"],
+                "category_id": cat_map.get("dry-skin", 2),
                 "ingredients": "Avocado (rich in fatty acids), Sweet Almond Oil, Honey, Wheatgerm Extract, Milk Protein, Seaweed minerals, Botanically Sourced Actives.",
                 "benefits": "Deep, sustained nourishment throughout the day • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
                 "how_to_use": "Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.",
@@ -218,7 +225,7 @@ Formulation Highlights
                 "sale_price": 399.0,
                 "SKU": "QH-ACNE-TEATREE-100",
                 "stock": 100,
-                "category_id": cat_map["oily-skin"],
+                "category_id": cat_map.get("oily-skin", 1),
                 "ingredients": "Tea Tree Extract, Neem & Aloe Vera Extract, Avocado Oil, Lavender Oil, Botanical Actives.",
                 "benefits": "Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin • Balances Sebum • Non-Stripping.",
                 "how_to_use": "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
@@ -271,7 +278,7 @@ Formulation Highlights
                 "sale_price": 399.0,
                 "SKU": "QH-GLOW-REDWINE-100",
                 "stock": 60,
-                "category_id": cat_map["dry-skin"],
+                "category_id": cat_map.get("dry-skin", 2),
                 "ingredients": "Fresh Grape Red Wine Extract (Resveratrol), Rice Exfoliator, Pure Glycerin, Botanical Actives.",
                 "benefits": "Antioxidant Care • Even Tone Support • Anti-Aging Boost • Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin.",
                 "how_to_use": "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
@@ -290,19 +297,52 @@ Formulation Highlights
             {
                 "name": "SPF 50 Sunscreen",
                 "slug": "spf-50-sunscreen",
-                "short_description": "Ultra-lightweight, zero-white-cast botanical sunscreen.",
-                "full_description": "Our SPF 50 Broad Spectrum Sunscreen protects against UVA and UVB rays while delivering rich hydration. Blended with Cucumber and Green Tea extracts, it leaves a dry-touch mtte finish that sits beautifully under makeup.",
+                "short_description": "Moisturizing SPF 50+ sunscreen with Coconut & Sesame Oil, Shea Butter, and Aloe Vera for broad-spectrum protection and hydration.",
+                "full_description": """SPF 50 Sunscreen — 100ml
+
+Moisturizing Sun Screen • Hydrates & Protects SPF 50+
+
+A botanical broad-spectrum sunscreen that provides high-level daily defense against UVA and UVB rays while keeping the skin barrier hydrated and calm. Enriched with natural oils and soothing plant extracts, it protects against sunburn, reduces photo-damage, and blends smoothly without greasy residue or white cast.
+
+Key Benefits
+• Broad-Spectrum SPF 50+ Defense: Shields skin from damaging UV rays and photo-aging
+• Reduce Irritation: Calms inflammation and sunburn redness with soothing pure Aloe Vera
+• Antioxidant Properties: Rich botanical oils protect against environmental free-radical damage
+• Maintain Even Skin Tone: Prevents sunspots, tan buildup, and hyperpigmentation
+• Deeply Moisturizing: Shea Butter and Sesame Oil maintain all-day moisture without heaviness
+
+Key Ingredients
+• Coconut & Sesame Oil — rich in natural sun-protective lipids, essential fatty acids, and antioxidants to nourish and guard skin
+• Shea Butter — rich emollient that seals in hydration and strengthens the epidermal barrier
+• Aloe Vera — instantly cools, calms irritation, and hydrates sun-exposed skin
+
+Suitable For
+All skin types, including sensitive, combination, dry, and normal skin. Ideal for daily morning wear.
+
+How To Use
+Apply generously to clean face and neck every morning. Allow 10 minutes before direct sun exposure. Reapply every 2-3 hours during prolonged sun exposure.
+
+Formulation Highlights
+• 100% Herbal & Botanical actives
+• Paraben-free & Non-greasy
+• Suitable for daily morning ritual
+• Broad spectrum SPF 50+ protection""",
                 "price": 499.0,
                 "sale_price": 499.0,
                 "SKU": "QH-HYD-SPF50-100",
                 "stock": 80,
-                "category_id": cat_map["combination-skin"],
-                "ingredients": "Zinc Oxide, Titanium Dioxide, Cucumber extract, Green Tea extract, Gotu Kola, Licorice.",
-                "benefits": "Broad-spectrum UV protection, prevents sun spots, lightweight and non-greasy, soothing effect.",
-                "how_to_use": "Apply generously on clean face and neck 15 minutes before sun exposure. Reapply every 2 hours.",
-                "skin_type": "Combination & All Skin Types",
-                "product_images": ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?q=80&w=600&auto=format&fit=crop",
+                "category_id": cat_map.get("combination-skin", 4),
+                "ingredients": "Coconut & Sesame Oil, Shea Butter, Aloe Vera, Botanical Actives.",
+                "benefits": "Broad-Spectrum SPF 50+ Defense • Reduce Irritation • Antioxidant Properties • Maintain Even Skin Tone • Non-Greasy.",
+                "how_to_use": "Apply on Clean Face Every Morning, and Avoid direct sun exposure for 10 minutes.",
+                "skin_type": "All Skin Types",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_back.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_before_after.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
                 "featured": True,
                 "active": True
             },
@@ -315,7 +355,7 @@ Formulation Highlights
                 "sale_price": 599.0,
                 "SKU": "QH-GLOW-VITC-30",
                 "stock": 50,
-                "category_id": cat_map["sensitive-skin"],
+                "category_id": cat_map.get("sensitive-skin", 3),
                 "ingredients": "Kakadu Plum extract (15% Vitamin C), Ferulic Acid, Hyaluronic Acid, Vitamin E, Sweet Orange Oil.",
                 "benefits": "Reduces fine lines, clears skin tone, repairs UV damage, and hydrates.",
                 "how_to_use": "Smooth 2-3 drops onto face after cleansing and toning. Always follow with SPF during daytime.",
@@ -334,7 +374,7 @@ Formulation Highlights
                 "sale_price": 544.0,
                 "SKU": "QH-HAIR-SHINE-50",
                 "stock": 70,
-                "category_id": cat_map["hair-care"],
+                "category_id": cat_map.get("hair-care", 5),
                 "ingredients": "Moroccan Argan Oil, Bhringraj extract, Almond Oil, Coconut Oil fractions, Rosemary Essential Oil.",
                 "benefits": "Controls frizz instantly, gives a glossy shine, strengthens hair shafts, protects from heat styling.",
                 "how_to_use": "Take 2-3 drops on palms and distribute evenly through damp or dry hair lengths, avoiding the roots.",
@@ -353,7 +393,7 @@ Formulation Highlights
                 "sale_price": 649.0,
                 "SKU": "QH-HAIR-DETOX-100",
                 "stock": 25,
-                "category_id": cat_map["hair-care"],
+                "category_id": cat_map.get("hair-care", 5),
                 "ingredients": "Tea Tree oil, Rosemary hydrosol, Aloe Vera gel base, Salicylic Acid (0.5%), Ginger root extract.",
                 "benefits": "Reduces dandruff flaking, relieves scalp itchiness, removes sebum buildup, soothes roots.",
                 "how_to_use": "Apply directly to scalp dry or damp. Message gently for 5 minutes. Leave on for 30 minutes, then shampoo out.",
@@ -377,22 +417,32 @@ Formulation Highlights
         }
 
         for p_data in products_data:
-            db_prod = models.Product(**p_data)
-            db.add(db_prod)
-            db.commit()
-            db.refresh(db_prod)
+            existing_prod = db.query(models.Product).filter(models.Product.slug == p_data["slug"]).first()
+            if existing_prod:
+                for k, v in p_data.items():
+                    setattr(existing_prod, k, v)
+                db.commit()
+                db.refresh(existing_prod)
+            else:
+                db_prod = models.Product(**p_data)
+                db.add(db_prod)
+                db.commit()
+                db.refresh(db_prod)
 
-            vol_name = volume_mapping.get(db_prod.slug, "100ml")
-            single_variant = models.ProductVariant(
-                product_id=db_prod.id,
-                name=vol_name,
-                sku_suffix=f"V{vol_name.upper().replace(' ', '')}",
-                price_override=None,
-                stock=db_prod.stock
-            )
-            db.add(single_variant)
-            
-        db.commit()
+                vol_name = volume_mapping.get(db_prod.slug, "100ml")
+                single_variant = models.ProductVariant(
+                    product_id=db_prod.id,
+                    name=vol_name,
+                    sku_suffix=f"V{vol_name.upper().replace(' ', '')}",
+                    price_override=None,
+                    stock=db_prod.stock
+                )
+                db.add(single_variant)
+                db.commit()
+
+        if already_seeded:
+            print("Product catalog successfully synchronized with latest definitions.")
+            return
 
         # 3. Create Home Settings configuration
         homepage_config = {
