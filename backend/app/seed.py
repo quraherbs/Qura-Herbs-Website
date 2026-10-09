@@ -454,25 +454,6 @@ Formulation Highlights
                 "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg",
                 "featured": True,
                 "active": True
-            },
-            {
-                "name": "Anti-Dandruff Scalp Detox Gel",
-                "slug": "anti-dandruff-scalp-detox-gel",
-                "short_description": "Clearing scalp treatment with Tea Tree and Rosemary.",
-                "full_description": "A detoxifying scalp gel that targets itching, flaking, and buildup. Infused with Tea Tree, Rosemary, and Ginger oil, it deeply purifies scalp pores and controls dandruff microbes, boosting hair follicle health.",
-                "price": 649.0,
-                "sale_price": 649.0,
-                "SKU": "QH-HAIR-DETOX-100",
-                "stock": 25,
-                "category_id": cat_map.get("hair-care", 5),
-                "ingredients": "Tea Tree oil, Rosemary hydrosol, Aloe Vera gel base, Salicylic Acid (0.5%), Ginger root extract.",
-                "benefits": "Reduces dandruff flaking, relieves scalp itchiness, removes sebum buildup, soothes roots.",
-                "how_to_use": "Apply directly to scalp dry or damp. Message gently for 5 minutes. Leave on for 30 minutes, then shampoo out.",
-                "skin_type": "Flaky & Dry Scalp",
-                "product_images": ["https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?q=80&w=600&auto=format&fit=crop",
-                "featured": False,
-                "active": True
             }
         ]
 
@@ -484,8 +465,16 @@ Formulation Highlights
             "vitamin-c-serum": "30ml",
             "glow-radiant-plus": "35g",
             "hair-shine-serum": "50ml",
-            "anti-dandruff-scalp-detox-gel": "100g",
         }
+
+        # Purge any products no longer in products_data
+        active_slugs = [p["slug"] for p in products_data]
+        obsolete_prods = db.query(models.Product).filter(~models.Product.slug.in_(active_slugs)).all()
+        for obs_p in obsolete_prods:
+            db.query(models.ProductVariant).filter(models.ProductVariant.product_id == obs_p.id).delete()
+            db.query(models.Review).filter(models.Review.product_id == obs_p.id).delete()
+            db.delete(obs_p)
+        db.commit()
 
         for p_data in products_data:
             existing_prod = db.query(models.Product).filter(models.Product.slug == p_data["slug"]).first()
