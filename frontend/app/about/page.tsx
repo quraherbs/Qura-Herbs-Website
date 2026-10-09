@@ -52,17 +52,17 @@ There is still a long way to go, but the vision remains simple:`,
 
   const [ceoData, setCeoData] = useState<any>({
     name: "Pranavi G",
-    title: "Co-Founder & Managing Director (MD), Qura Herbs",
+    title: "Co-Founder & MD, Qura Herbs",
     image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
     quote: "This is more than building a company for me. It is about building something I can be proud to put my name behind.",
     description: `For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.
 
-As the Co-Founder & Managing Director (MD) of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
+As the Co-Founder & MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
 
 What inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.
 
 I want Qura Herbs to be a brand that feels personal—not distant or overly complicated. A brand that people can trust, relate to, and grow with.`,
-    signature: "— Pranavi G\nCo-Founder & Managing Director (MD), Qura Herbs"
+    signature: "— Pranavi G\nCo-Founder & MD, Qura Herbs"
   });
 
   const [founderImgError, setFounderImgError] = useState<boolean>(false);
@@ -491,17 +491,17 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 03 — MEET OUR CO-FOUNDER & MANAGING DIRECTOR (MD) (Pranavi G) */}
+        {/* SECTION 03 — MEET OUR CO-FOUNDER & MD (Pranavi G) */}
         {/* ================================================== */}
         <section id="ceo" className="space-y-10 animate-fade-in pb-8 scroll-mt-28">
           
           {/* Section Eyebrow & Title */}
           <div className="border-b border-brand-sand/30 pb-4">
             <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-              SECTION 03 &bull; CO-FOUNDER &amp; MANAGING DIRECTOR (MD)
+              SECTION 03 &bull; CO-FOUNDER &amp; MD
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
-              Meet Our Co-Founder &amp; Managing Director (MD)
+              Meet Our Co-Founder &amp; MD
             </h2>
           </div>
 
@@ -516,7 +516,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                   Pranavi G
                 </h3>
                 <p className="text-xs font-sans font-semibold text-brand-accent uppercase tracking-[0.2em]">
-                  Co-Founder &amp; Managing Director (MD), Qura Herbs
+                  Co-Founder &amp; MD, Qura Herbs
                 </p>
               </div>
 
@@ -526,7 +526,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                   For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.
                 </p>
                 <p>
-                  As the Co-Founder &amp; Managing Director (MD) of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
+                  As the Co-Founder &amp; MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
                 </p>
                 <p>
                   What inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.
@@ -546,7 +546,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                   <div>
                     <p className="font-serif text-sm font-medium text-brand-cream">— Pranavi G</p>
                     <p className="text-[10px] font-sans tracking-widest text-brand-accent uppercase">
-                      Co-Founder &amp; Managing Director (MD), Qura Herbs
+                      Co-Founder &amp; MD, Qura Herbs
                     </p>
                   </div>
                   <span className="text-[10px] font-sans uppercase tracking-widest text-brand-cream/50">
@@ -563,7 +563,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                 {ceoImgSrc && !ceoImgError ? (
                   <img
                     src={ceoImgSrc}
-                    alt="Pranavi G — Co-Founder &amp; Managing Director (MD)"
+                    alt="Pranavi G — Co-Founder &amp; MD"
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       if (e.currentTarget.src !== "/ceo_pranavi.jpg") {
@@ -582,7 +582,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                     <div className="space-y-1">
                       <p className="font-serif text-2xl text-brand-dark font-medium">Pranavi G</p>
                       <p className="text-xs font-sans tracking-[0.2em] text-brand-accent uppercase font-semibold">
-                        Co-Founder &amp; Managing Director (MD)
+                        Co-Founder &amp; MD
                       </p>
                       <p className="text-[11px] font-sans tracking-widest text-brand-cocoa/70 uppercase">
                         Qura Herbs
@@ -600,7 +600,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                   <div className="relative z-10 mt-auto bg-brand-cream/95 backdrop-blur-sm border border-brand-sand/50 p-4 text-center shadow-md">
                     <p className="font-serif text-xl text-brand-dark font-medium">Pranavi G</p>
                     <p className="text-[11px] tracking-widest text-brand-accent uppercase font-sans mt-0.5 font-semibold">
-                      Co-Founder &amp; Managing Director (MD), Qura Herbs
+                      Co-Founder &amp; MD, Qura Herbs
                     </p>
                   </div>
                 )}
