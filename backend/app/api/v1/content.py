@@ -185,7 +185,7 @@ def get_ceo_content(db: Session = Depends(get_db)):
             "ceo_name": "Pranavi G",
             "title": "Chief Executive Officer, Qura Herbs",
             "ceo_designation": "Chief Executive Officer, Qura Herbs",
-            "eyebrow": "THE CEO",
+            "eyebrow": "CO-FOUNDER & MANAGING DIRECTOR (MD)",
             "heading": "Meet Our CEO",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "ceo_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",

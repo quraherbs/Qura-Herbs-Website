@@ -498,7 +498,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
           {/* Section Eyebrow & Title */}
           <div className="border-b border-brand-sand/30 pb-4">
             <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-              SECTION 03 &bull; THE CEO
+              SECTION 03 &bull; CO-FOUNDER &amp; MANAGING DIRECTOR (MD)
             </span>
             <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
               Meet Our CEO
