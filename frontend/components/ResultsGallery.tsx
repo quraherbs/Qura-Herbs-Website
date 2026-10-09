@@ -9,11 +9,18 @@ import { ChevronLeft, ChevronRight, X, Sparkles, CheckCircle2, Eye } from "lucid
 interface ResultItem {
   id: number;
   image: string;
+  before_image?: string;
+  final_image?: string;
+  progress_images?: string[];
   title: string;
   description?: string;
   product_used?: string;
   customer_name?: string;
   duration?: string;
+  skin_type?: string;
+  skin_concern?: string;
+  morning_routine?: string;
+  night_routine?: string;
   active: boolean;
 }
 
@@ -21,7 +28,9 @@ export default function ResultsGallery() {
   const [items, setItems] = useState<ResultItem[]>([
     {
       id: 1,
-      image: "/uploads/product_placeholder.jpg",
+      image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg",
+      final_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg",
       title: "Overnight Hydration & Barrier Repair",
       description: "Noticeable improvement in skin texture and moisture retention after incorporating Avocado Night Cream into evening routine.",
       product_used: "Avocado Pro Nourish Night Cream",
@@ -61,7 +70,20 @@ export default function ResultsGallery() {
         if (Array.isArray(data) && data.length > 0) {
           const mapped = data.map((d: any) => ({
             ...d,
-            image: d.final_image || d.image || "/uploads/product_placeholder.jpg",
+            image:
+              d.id === 1 || d.title?.toLowerCase().includes("overnight")
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg"
+                : d.final_image || d.image || "/uploads/product_placeholder.jpg",
+            before_image:
+              d.before_image ||
+              (d.id === 1 || d.title?.toLowerCase().includes("overnight")
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
+                : undefined),
+            final_image:
+              d.final_image ||
+              (d.id === 1 || d.title?.toLowerCase().includes("overnight")
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
+                : undefined),
             description: d.routine_description || d.description,
             product_used: d.products_used || d.product_used
           }));
@@ -155,6 +177,13 @@ export default function ResultsGallery() {
                         alt={item.title}
                         className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       />
+                      {item.before_image && item.final_image && (
+                        <div className="absolute top-2.5 left-2.5 flex items-center space-x-1.5 z-10 pointer-events-none">
+                          <span className="bg-[#2C1A14]/85 backdrop-blur-xs text-[#FDFBF7] text-[9px] font-sans font-bold uppercase tracking-wider px-2.5 py-1 rounded-sm shadow-sm">
+                            Before & After
+                          </span>
+                        </div>
+                      )}
                       <div className="absolute inset-0 bg-[#2C1A14]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                         <span className="bg-[#FDFBF7] text-[#2C1A14] px-4 py-2 text-[10px] uppercase font-bold tracking-widest flex items-center space-x-1.5 shadow-md rounded-full">
                           <Eye size={12} />
@@ -211,15 +240,40 @@ export default function ResultsGallery() {
             >
               <button
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-4 right-4 text-[#3D261D]/60 hover:text-[#2C1A14] p-1"
+                className="absolute top-4 right-4 text-[#3D261D]/60 hover:text-[#2C1A14] p-1 z-10"
               >
                 <X size={22} />
               </button>
 
               <div className="space-y-4">
-                <div className="w-full aspect-[16/10] bg-[#F7F3E9] border border-[#EFE8D8] rounded-lg overflow-hidden">
-                  <img src={getImageUrl(selectedItem.image)} alt={selectedItem.title} className="w-full h-full object-cover" />
-                </div>
+                {selectedItem.before_image && selectedItem.final_image ? (
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+                    <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-[#F7F3E9] border border-[#EFE8D8] rounded-lg overflow-hidden shadow-inner">
+                      <img
+                        src={getImageUrl(selectedItem.before_image)}
+                        alt={`${selectedItem.title} - Before`}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute top-2.5 left-2.5 bg-[#2C1A14]/85 text-[#FDFBF7] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm shadow-sm backdrop-blur-xs">
+                        Before
+                      </span>
+                    </div>
+                    <div className="relative aspect-[3/4] sm:aspect-[4/5] bg-[#F7F3E9] border border-[#EFE8D8] rounded-lg overflow-hidden shadow-inner">
+                      <img
+                        src={getImageUrl(selectedItem.final_image)}
+                        alt={`${selectedItem.title} - After`}
+                        className="w-full h-full object-cover"
+                      />
+                      <span className="absolute top-2.5 left-2.5 bg-[#C5A059] text-[#2C1A14] text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-sm shadow-sm">
+                        After
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full aspect-[16/10] bg-[#F7F3E9] border border-[#EFE8D8] rounded-lg overflow-hidden">
+                    <img src={getImageUrl(selectedItem.image)} alt={selectedItem.title} className="w-full h-full object-cover" />
+                  </div>
+                )}
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs text-[#C5A059] font-sans font-bold uppercase tracking-wider">

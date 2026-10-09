@@ -86,9 +86,9 @@ def seed_initial_content():
                     night_routine="Avocado Night Cream & Moisture Lock Balm",
                     duration="4 Weeks Daily Use",
                     result_description="Noticeable improvement in skin texture and moisture retention after incorporating Avocado Night Cream into evening routine.",
-                    before_image="/uploads/product_placeholder.jpg",
-                    progress_images=["/uploads/product_placeholder.jpg"],
-                    final_image="/uploads/product_placeholder.jpg",
+                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg",
+                    progress_images=["https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg", "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"],
+                    final_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg",
                     display_order=1,
                     active=True
                 ),
