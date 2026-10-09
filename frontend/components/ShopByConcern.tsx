@@ -57,7 +57,7 @@ export default function ShopByConcern() {
         </div>
 
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
           {categories.map((cat, idx) => (
             <motion.div
               key={cat.id}
@@ -65,6 +65,7 @@ export default function ShopByConcern() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
+              className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1.5rem)] max-w-md lg:max-w-none"
             >
               <Link 
                 href={`/category/${cat.slug}`}

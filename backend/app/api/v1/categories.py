@@ -21,7 +21,15 @@ def get_category(id: int, db: Session = Depends(get_db)):
 
 @router.get("/slug/{slug}", response_model=schemas.CategoryResponse)
 def get_category_by_slug(slug: str, db: Session = Depends(get_db)):
-    category = db.query(models.Category).filter(models.Category.slug == slug).first()
+    import urllib.parse
+    clean_slug = urllib.parse.unquote(slug).strip()
+    category = db.query(models.Category).filter(
+        (models.Category.slug == slug) |
+        (models.Category.slug == clean_slug) |
+        (models.Category.slug == clean_slug.lower()) |
+        (models.Category.name.ilike(clean_slug)) |
+        (models.Category.name.ilike(clean_slug.replace("-", " ")))
+    ).first()
     if not category:
         raise HTTPException(status_code=404, detail="Category not found")
     return category

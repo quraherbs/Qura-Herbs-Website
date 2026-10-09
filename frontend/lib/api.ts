@@ -67,7 +67,7 @@ export function getImageUrl(url: string | null | undefined): string {
   }
 
   const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL || "https://slyiyvegvcefhzaeymoo.supabase.co").trim().replace(/\/$/, "");
-  const bucket = "product-images";
+  const bucket = encodeURIComponent(process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET || "Product Images");
 
   // 2. Relative Supabase storage path (e.g. "products/xxx.jpg")
   if (!cleanUrl.startsWith("/")) {

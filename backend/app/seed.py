@@ -17,38 +17,38 @@ def seed_db():
             # 1. Create Categories
             categories_data = [
                 {
-                    "name": "Oily Skin",
-                    "slug": "oily-skin",
-                    "description": "Purifying, sebum-balancing formulas to clarify pores and prevent acne & blemishes.",
-                    "image": "https://images.unsplash.com/photo-1501570889534-b3d6790757a5?q=80&w=800&auto=format&fit=crop",
+                    "name": "Hair Care",
+                    "slug": "hair-care",
+                    "description": "Nourishing remedies for healthy scalp and lustrous hair roots.",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_care_concern.jpg",
                     "display_order": 1
                 },
                 {
-                    "name": "Dry Skin",
-                    "slug": "dry-skin",
-                    "description": "Deeply replenishing botanical creams and elixirs for moisture locking and barrier repair.",
-                    "image": "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop",
+                    "name": "Oily Skin",
+                    "slug": "oily-skin",
+                    "description": "Purifying, sebum-balancing formulas to clarify pores and prevent acne & blemishes.",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/oily_skin_concern.png",
                     "display_order": 2
                 },
                 {
                     "name": "Sensitive Skin",
                     "slug": "sensitive-skin",
                     "description": "Soothing, hypoallergenic herbal formulas to calm redness and irritation.",
-                    "image": "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=800&auto=format&fit=crop",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/sensitive_skin_concern.jpg",
                     "display_order": 3
+                },
+                {
+                    "name": "Dry Skin",
+                    "slug": "dry-skin",
+                    "description": "Deeply replenishing botanical creams and elixirs for moisture locking and barrier repair.",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/dry_skin_concern.jpg",
+                    "display_order": 4
                 },
                 {
                     "name": "Combination Skin",
                     "slug": "combination-skin",
                     "description": "Harmonizing botanical care to balance T-zone oiliness while nourishing dry areas.",
-                    "image": "https://images.unsplash.com/photo-1608248597279-f99d160bfcbc?q=80&w=800&auto=format&fit=crop",
-                    "display_order": 4
-                },
-                {
-                    "name": "Hair Care",
-                    "slug": "hair-care",
-                    "description": "Nourishing remedies for healthy scalp and lustrous hair roots.",
-                    "image": "https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/combination_skin_concern.jpg",
                     "display_order": 5
                 }
             ]
@@ -291,7 +291,7 @@ Formulation Highlights
                     "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_before_after_2.jpg"
                 ],
                 "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_main.jpg",
-                "featured": True,
+                "featured": False,
                 "active": True
             },
             {
@@ -343,7 +343,7 @@ Formulation Highlights
                     "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_before_after.jpg"
                 ],
                 "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg",
-                "featured": True,
+                "featured": False,
                 "active": True
             },
             {
@@ -397,7 +397,7 @@ Formulation Highlights
                     "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_before_after.jpg"
                 ],
                 "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
-                "featured": True,
+                "featured": False,
                 "active": True
             },
             {

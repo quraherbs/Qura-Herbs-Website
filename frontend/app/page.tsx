@@ -37,7 +37,25 @@ export default function Home() {
   const [bestsellers, setBestsellers] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const BESTSELLER_SLUGS = [
+    "avocado-night-cream",
+    "glow-radiant-plus",
+    "hair-shine-serum"
+  ];
+
   const FALLBACK_FEATURED: Product[] = [
+    {
+      id: 2,
+      name: "Avocado Pro Nourish Night Cream",
+      slug: "avocado-night-cream",
+      short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
+      price: 799.0,
+      sale_price: 799.0,
+      SKU: "QH-HYD-AVONIGHT-35",
+      stock: 30,
+      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
+      skin_type: "Oily, combination, aging, dull, and normal skin types"
+    },
     {
       id: 1,
       name: "Glow Radiant Plus",
@@ -51,47 +69,34 @@ export default function Home() {
       skin_type: "All Skin Types"
     },
     {
-      id: 2,
-      name: "Avocado Pro Nourish Night Cream",
-      slug: "avocado-night-cream",
-      short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-      price: 799.0,
-      sale_price: 799.0,
-      SKU: "QH-HYD-AVONIGHT-35",
-      stock: 30,
-      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
-      skin_type: "Oily, combination, aging, dull, and normal skin types"
+      id: 7,
+      name: "Hair Shine Serum",
+      slug: "hair-shine-serum",
+      short_description: "Anti-Frizz Hair Serum for Instant Frizz Control, Smoothness & Glass-Like Shine with Argan, Jojoba & Silk Protein.",
+      price: 544.0,
+      sale_price: 544.0,
+      SKU: "QH-HAIR-SHINE-50",
+      stock: 70,
+      thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg",
+      skin_type: "All Hair Types"
     }
   ];
 
   useEffect(() => {
-    // Fetch featured products for bestsellers
-    fetch(getApiUrl("/api/v1/products/?featured=true"))
+    // Fetch products and filter specifically for the 3 curated bestsellers
+    fetch(getApiUrl("/api/v1/products/"))
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data) && data.length > 0) {
-          const mapped = data.map((p: Product) => {
-            if (p.slug === "spf-50-sunscreen" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
-              return {
-                ...p,
-                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg"
-              };
-            }
-            if (p.slug === "vitamin-c-serum" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
-              return {
-                ...p,
-                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg"
-              };
-            }
-            if (p.slug === "hair-shine-serum" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
-              return {
-                ...p,
-                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg"
-              };
-            }
-            return p;
-          });
-          setBestsellers(mapped);
+          const orderedBestsellers = BESTSELLER_SLUGS.map((slug) =>
+            data.find((p: Product) => p.slug === slug)
+          ).filter((p): p is Product => Boolean(p));
+
+          if (orderedBestsellers.length > 0) {
+            setBestsellers(orderedBestsellers);
+          } else {
+            setBestsellers(FALLBACK_FEATURED);
+          }
         } else {
           setBestsellers(FALLBACK_FEATURED);
         }
@@ -132,8 +137,8 @@ export default function Home() {
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                {[1, 2, 3, 4].map((i) => (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[1, 2, 3].map((i) => (
                   <div key={i} className="animate-pulse space-y-4">
                     <div className="bg-brand-sand/20 aspect-square w-full"></div>
                     <div className="h-4 bg-brand-sand/20 w-3/4"></div>
@@ -146,7 +151,7 @@ export default function Home() {
                 No featured products found. Please seed the database.
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {bestsellers.map((prod) => {
                   const hasDiscount = prod.sale_price !== null;
                   const activePrice = hasDiscount ? prod.sale_price : prod.price;
