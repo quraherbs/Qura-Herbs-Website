@@ -48,8 +48,8 @@ def seed_initial_content():
                 models.RealResult(
                     customer_name="Rohan M.",
                     customer_location="Bengaluru, KA",
-                    before_image="/uploads/product_placeholder.jpg",
-                    after_image="/uploads/product_placeholder.jpg",
+                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg",
+                    after_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg",
                     description="My active breakouts cleared up within days without drying out my skin. The gel texture is so soothing on irritated pores.",
                     product_used="Tea Tree Pureveil Cleanser",
                     duration="2 Weeks",
@@ -60,8 +60,8 @@ def seed_initial_content():
                 models.RealResult(
                     customer_name="Meera K.",
                     customer_location="Chennai, TN",
-                    before_image="/uploads/product_placeholder.jpg",
-                    after_image="/uploads/product_placeholder.jpg",
+                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg",
+                    after_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg",
                     description="Absolutely resolved my winter dry flakes. I wake up with very soft, bouncy, and hydrated skin every single morning.",
                     product_used="Avocado Night Cream",
                     duration="3 Weeks",

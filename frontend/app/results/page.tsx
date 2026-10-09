@@ -39,8 +39,8 @@ export default function ResultsPage() {
       skin_concern: "Acne Breakouts & Redness",
       duration: "2 Weeks",
       product_used: "Tea Tree Pureveil Cleanser",
-      before_image: "/uploads/product_placeholder.jpg",
-      after_image: "/uploads/product_placeholder.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg",
       description: "My active breakouts cleared up within days without drying out my skin. The gel texture is so soothing on irritated pores."
     },
     {
@@ -50,8 +50,8 @@ export default function ResultsPage() {
       skin_concern: "Dry Flaky Patches",
       duration: "3 Weeks",
       product_used: "Avocado Night Cream",
-      before_image: "/uploads/product_placeholder.jpg",
-      after_image: "/uploads/product_placeholder.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg",
       description: "Absolutely resolved my winter dry flakes. I wake up with very soft, bouncy, and hydrated skin every single morning."
     }
   ]);
@@ -65,13 +65,33 @@ export default function ResultsPage() {
             const isAnanya =
               item.id === 1 ||
               item.customer_name?.toLowerCase().includes("ananya");
+            const isRohan =
+              item.id === 2 ||
+              item.customer_name?.toLowerCase().includes("rohan");
+            const isMeera =
+              item.id === 3 ||
+              item.customer_name?.toLowerCase().includes("meera");
+
             return {
               ...item,
+              customer_name: isRohan
+                ? "Rohan M."
+                : isMeera
+                ? "Meera K."
+                : item.customer_name,
               before_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg"
+                : isRohan
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg"
+                : isMeera
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg"
                 : item.before_image,
               after_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg"
+                : isRohan
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg"
+                : isMeera
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg"
                 : item.after_image,
             };
           });
