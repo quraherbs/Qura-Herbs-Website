@@ -37,7 +37,16 @@ function renderFormattedContent(content: string) {
   const blocks = content.split(/\n\n+/);
 
   return blocks.map((block, idx) => {
-    const trimmed = block.trim();
+    let trimmed = block.trim();
+
+    // Skip duplicating header elements if passed in content body
+    if (
+      trimmed === "# How to Use Our Avocado Night Cream for Maximum Hydration" ||
+      trimmed === "BY QURA HERBS | SKINCARE JOURNAL" ||
+      trimmed === "Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin."
+    ) {
+      return null;
+    }
 
     // Check for H2 Heading
     if (trimmed.startsWith("## ")) {
@@ -68,7 +77,7 @@ function renderFormattedContent(content: string) {
       );
     }
 
-    // Check for Bullet List
+    // Check for Bullet List or Tips list
     if (trimmed.startsWith("- ") || trimmed.includes("\n- ")) {
       const lines = trimmed.split("\n").filter((l) => l.trim().length > 0);
       const isAllBullets = lines.every((l) => l.trim().startsWith("- "));
@@ -90,6 +99,24 @@ function renderFormattedContent(content: string) {
       }
     }
 
+    // Check for individual Skincare Tips (rendered as bullet item)
+    const isSkincareTip = [
+      "Cleanse your face before applying",
+      "Use an appropriate amount and spread",
+      "Follow your routine consistently rather",
+      "Apply broad-spectrum sunscreen during",
+      "Patch-test new skincare products before",
+    ].some((phrase) => trimmed.includes(phrase));
+
+    if (isSkincareTip) {
+      return (
+        <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-brand-cocoa/90 leading-relaxed my-2 pl-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand-accent mt-2 shrink-0"></span>
+          <span>{renderInlineMarkdown(trimmed.replace(/^-\s+/, ""))}</span>
+        </div>
+      );
+    }
+
     // Brand Tagline or Final Manifesto Callout
     if (trimmed.includes("Qura Herbs — Beauty Rooted in Care, Confidence, and Authenticity")) {
       return (
@@ -100,6 +127,17 @@ function renderFormattedContent(content: string) {
           <div className="w-10 h-0.5 bg-brand-accent mx-auto mt-2"></div>
         </div>
       );
+    }
+
+    // Ingredient descriptions formatting
+    if (trimmed.startsWith("Avocado helps")) {
+      trimmed = trimmed.replace(/^Avocado/, "**Avocado**");
+    } else if (trimmed.startsWith("Sweet Almond Oil helps")) {
+      trimmed = trimmed.replace(/^Sweet Almond Oil/, "**Sweet Almond Oil**");
+    } else if (trimmed.startsWith("Honey supports")) {
+      trimmed = trimmed.replace(/^Honey/, "**Honey**");
+    } else if (trimmed.startsWith("Seaweed, Milk Protein, and Wheat Germ Extract")) {
+      trimmed = trimmed.replace(/^Seaweed, Milk Protein, and Wheat Germ Extract/, "**Seaweed, Milk Protein, and Wheat Germ Extract**");
     }
 
     // Normal paragraph

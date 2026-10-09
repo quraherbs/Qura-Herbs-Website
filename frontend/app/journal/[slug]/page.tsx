@@ -3,8 +3,16 @@ import Navbar from "../../../components/Navbar";
 import CartDrawer from "../../../components/CartDrawer";
 import ArticleContent from "./ArticleContent";
 
+import { CANONICAL_JOURNAL_ARTICLES } from "@/lib/journal";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  return CANONICAL_JOURNAL_ARTICLES.map((article) => ({
+    slug: article.slug,
+  }));
 }
 
 export default async function JournalDetailPage({ params }: PageProps) {

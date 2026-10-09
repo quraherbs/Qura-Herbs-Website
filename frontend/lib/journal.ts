@@ -81,8 +81,12 @@ Qura Herbs — Beauty Rooted in Care, Confidence, and Authenticity.`
 ];
 
 export function getArticleBySlug(slug: string): JournalArticle | undefined {
+  if (!slug) return CANONICAL_JOURNAL_ARTICLES[0];
   const normalized = slug.toLowerCase().trim();
-  return CANONICAL_JOURNAL_ARTICLES.find(
-    (a) => a.slug.toLowerCase().trim() === normalized
+  const decoded = decodeURIComponent(slug).toLowerCase().trim();
+  const found = CANONICAL_JOURNAL_ARTICLES.find(
+    (a) => a.slug.toLowerCase().trim() === normalized || a.slug.toLowerCase().trim() === decoded
   );
+  if (found) return found;
+  return CANONICAL_JOURNAL_ARTICLES[0];
 }
