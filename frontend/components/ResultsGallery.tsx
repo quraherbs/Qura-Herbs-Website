@@ -52,10 +52,12 @@ export default function ResultsGallery() {
     },
     {
       id: 3,
-      image: "/uploads/product_placeholder.jpg",
+      image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_journey.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_before.jpg",
+      final_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_after.jpg",
       title: "Soothed Skin Barrier & Calming Ritual",
       description: "Helped soothe redness and maintain a comfortable, hydrated complexion without heaviness.",
-      product_used: "Neem Purifying Gel Cleanser",
+      product_used: "Glow Radiant Plus Night Cream",
       customer_name: "Daily Skincare Journey",
       duration: "2 Weeks Daily Use",
       active: true
@@ -78,6 +80,14 @@ export default function ResultsGallery() {
               d.title?.toLowerCase().includes("hair");
             const isOvernightRoutine =
               d.id === 1 || d.title?.toLowerCase().includes("overnight");
+            const isGlowRoutine =
+              d.id === 3 ||
+              d.title?.toLowerCase().includes("soothed") ||
+              d.title?.toLowerCase().includes("calming") ||
+              d.products_used?.toLowerCase().includes("neem") ||
+              d.product_used?.toLowerCase().includes("neem") ||
+              d.products_used?.toLowerCase().includes("glow radiant") ||
+              d.product_used?.toLowerCase().includes("glow radiant");
 
             return {
               ...d,
@@ -87,11 +97,15 @@ export default function ResultsGallery() {
                 : d.routine_description || d.description,
               product_used: isHairRoutine
                 ? "Anti-Frizz Hair Shine Serum"
+                : isGlowRoutine
+                ? "Glow Radiant Plus Night Cream"
                 : d.products_used || d.product_used,
               image: isOvernightRoutine
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg"
                 : isHairRoutine
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_journey.jpg"
+                : isGlowRoutine
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_journey.jpg"
                 : d.final_image || d.image || "/uploads/product_placeholder.jpg",
               before_image:
                 d.before_image ||
@@ -99,6 +113,8 @@ export default function ResultsGallery() {
                   ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
                   : isHairRoutine
                   ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_before.jpg"
+                  : isGlowRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_before.jpg"
                   : undefined),
               final_image:
                 d.final_image ||
@@ -106,6 +122,8 @@ export default function ResultsGallery() {
                   ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
                   : isHairRoutine
                   ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_after.jpg"
+                  : isGlowRoutine
+                  ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_after.jpg"
                   : undefined),
             };
           });
@@ -123,6 +141,14 @@ export default function ResultsGallery() {
                     d.title?.toLowerCase().includes("hair");
                   const isOvernightRoutine =
                     d.id === 1 || d.title?.toLowerCase().includes("overnight");
+                  const isGlowRoutine =
+                    d.id === 3 ||
+                    d.title?.toLowerCase().includes("soothed") ||
+                    d.title?.toLowerCase().includes("calming") ||
+                    d.products_used?.toLowerCase().includes("neem") ||
+                    d.product_used?.toLowerCase().includes("neem") ||
+                    d.products_used?.toLowerCase().includes("glow radiant") ||
+                    d.product_used?.toLowerCase().includes("glow radiant");
 
                   return {
                     ...d,
@@ -132,11 +158,15 @@ export default function ResultsGallery() {
                       : d.routine_description || d.description,
                     product_used: isHairRoutine
                       ? "Anti-Frizz Hair Shine Serum"
+                      : isGlowRoutine
+                      ? "Glow Radiant Plus Night Cream"
                       : d.products_used || d.product_used,
                     image: isOvernightRoutine
                       ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_journey.jpg"
                       : isHairRoutine
                       ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_journey.jpg"
+                      : isGlowRoutine
+                      ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_journey.jpg"
                       : d.image || "/uploads/product_placeholder.jpg",
                     before_image:
                       d.before_image ||
@@ -144,6 +174,8 @@ export default function ResultsGallery() {
                         ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_before.jpg"
                         : isHairRoutine
                         ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_before.jpg"
+                        : isGlowRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_before.jpg"
                         : undefined),
                     final_image:
                       d.final_image ||
@@ -151,6 +183,8 @@ export default function ResultsGallery() {
                         ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/overnight_hydration_after.jpg"
                         : isHairRoutine
                         ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_smooth_after.jpg"
+                        : isGlowRoutine
+                        ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_after.jpg"
                         : undefined),
                   };
                 });
