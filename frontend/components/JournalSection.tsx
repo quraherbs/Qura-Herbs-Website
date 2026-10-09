@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { getApiUrl, getImageUrl } from "@/lib/api";
+import { CANONICAL_JOURNAL_ARTICLES } from "@/lib/journal";
 
 interface Blog {
   id: number;
@@ -17,20 +18,25 @@ interface Blog {
 }
 
 export default function JournalSection() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [blogs, setBlogs] = useState<Blog[]>(CANONICAL_JOURNAL_ARTICLES as Blog[]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetch(getApiUrl("/api/v1/blogs/?published_only=true"))
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data)) {
-          setBlogs(data);
+        if (Array.isArray(data) && data.length > 0) {
+          const apiSlugs = new Set(data.map((d: any) => d.slug));
+          const missing = CANONICAL_JOURNAL_ARTICLES.filter((c) => !apiSlugs.has(c.slug));
+          setBlogs([...data, ...missing] as Blog[]);
+        } else {
+          setBlogs(CANONICAL_JOURNAL_ARTICLES as Blog[]);
         }
         setLoading(false);
       })
       .catch((err) => {
         console.log("Failed to load journal articles for landing page:", err);
+        setBlogs(CANONICAL_JOURNAL_ARTICLES as Blog[]);
         setLoading(false);
       });
   }, []);
