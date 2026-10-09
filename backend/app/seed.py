@@ -20,14 +20,14 @@ def seed_db():
                     "name": "Hair Care",
                     "slug": "hair-care",
                     "description": "Nourishing remedies for healthy scalp and lustrous hair roots.",
-                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_care_concern.jpg",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/oily_skin_concern.png",
                     "display_order": 1
                 },
                 {
                     "name": "Oily Skin",
                     "slug": "oily-skin",
                     "description": "Purifying, sebum-balancing formulas to clarify pores and prevent acne & blemishes.",
-                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/oily_skin_concern.png",
+                    "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_care_concern.jpg",
                     "display_order": 2
                 },
                 {
