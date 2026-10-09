@@ -200,19 +200,54 @@ Formulation Highlights
             {
                 "name": "Red Wine Glow Cleanser",
                 "slug": "red-wine-glow-cleanser",
-                "short_description": "Luxury antioxidant face cleanser for youthful radiance.",
-                "full_description": "Experience botanical opulence. Red Wine Glow Cleanser is infused with Resveratrol (extracted from red grape skins) and organic honey. It combats free-radical damage, washes off pollution, and leaves a visible luminous veil.",
+                "short_description": "Antioxidant-rich botanical gel cleanser with Fresh Grape Red Wine, Rice Exfoliator, and Glycerin for clear, radiant, and even-toned skin.",
+                "full_description": """Red Wine Glow Cleanser — 100ml
+
+Brightening + Hydrating Botanical Facial Cleanser
+
+Experience botanical luxury and antioxidant care. Infused with Fresh Grape Red Wine extract, gentle Rice Exfoliator, and hydrating Glycerin, this daily gel cleanser gently lifts impurities, deeply cleanses pores, helps prevent breakouts, and leaves your skin with a luminous veil.
+
+Key Benefits
+• Antioxidant Care: Combats environmental stressors and free-radical damage with rich red grape antioxidants
+• Even Tone Support: Gently refines surface texture and diminishes dullness for a brighter, balanced complexion
+• Anti-Aging Boost: Enhances skin firmness, elasticity, and youthful radiance
+• Helps Reduce Breakouts: Gently clears congested pores and blemishes without stripping skin moisture
+• Deep Cleanses Pores: Soft micro-exfoliation from natural rice exfoliator washes away daily pollution and excess sebum
+• Soothes Irritated Skin: Deeply hydrates with glycerin to leave skin refreshed, calmed, and never tight
+
+Key Ingredients
+• Fresh Grape Red Wine — rich in Resveratrol and polyphenols to revitalize dull skin, combat aging, and protect the skin barrier
+• Rice Exfoliator — delicate natural exfoliator that gently smooths rough patches, clears pore congestion, and enhances luminosity
+• Glycerin — pure humectant that binds moisture to the skin during cleansing, preventing moisture loss and irritation
+
+Suitable For
+Dull, uneven, oily, combination, normal, and dry skin types. Ideal for everyday morning and evening use.
+
+How To Use
+Apply to wet skin. Massage gently over face and neck in upward circular motions for 60 seconds. Rinse thoroughly with lukewarm or cool water. Use both morning & night for visible clarity and glow.
+
+Formulation Highlights
+• 100% Herbal & Botanical actives
+• Paraben-free & gentle on skin
+• Non-stripping antioxidant formula
+• Suitable for daily skincare ritual""",
                 "price": 399.0,
                 "sale_price": 399.0,
                 "SKU": "QH-GLOW-REDWINE-100",
                 "stock": 60,
                 "category_id": cat_map["dry-skin"],
-                "ingredients": "Red Wine Extract (Resveratrol), Organic Honey, Aloe Vera Juice, Vitamin C, Gotu Kola extract.",
-                "benefits": "Rich in antioxidants, protects against photo-aging, boosts surface glow, and softens skin.",
-                "how_to_use": "Massage onto damp face for 60 seconds. Wash off with cool water. Use twice daily.",
-                "skin_type": "Dull, Normal and Dry Skin",
-                "product_images": ["https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=600&auto=format&fit=crop",
+                "ingredients": "Fresh Grape Red Wine Extract (Resveratrol), Rice Exfoliator, Pure Glycerin, Botanical Actives.",
+                "benefits": "Antioxidant Care • Even Tone Support • Anti-Aging Boost • Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin.",
+                "how_to_use": "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
+                "skin_type": "Dull, Normal, Combination & Dry Skin",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_back.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_before_after_1.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_before_after_2.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_main.jpg",
                 "featured": True,
                 "active": True
             },

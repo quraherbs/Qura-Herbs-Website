@@ -144,6 +144,40 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setLoading(false);
           return;
         }
+        if (slug === "red-wine-glow-cleanser") {
+          const fallbackRedWine: Product = {
+            id: 4,
+            name: "Red Wine Glow Cleanser",
+            slug: "red-wine-glow-cleanser",
+            short_description: "Antioxidant-rich botanical gel cleanser with Fresh Grape Red Wine, Rice Exfoliator, and Glycerin for clear, radiant, and even-toned skin.",
+            full_description: `Red Wine Glow Cleanser — 100ml\n\nBrightening + Hydrating Botanical Facial Cleanser\n\nExperience botanical luxury and antioxidant care. Infused with Fresh Grape Red Wine extract, gentle Rice Exfoliator, and hydrating Glycerin, this daily gel cleanser gently lifts impurities, deeply cleanses pores, helps prevent breakouts, and leaves your skin with a luminous veil.\n\nKey Benefits\n• Antioxidant Care: Combats environmental stressors and free-radical damage with rich red grape antioxidants\n• Even Tone Support: Gently refines surface texture and diminishes dullness for a brighter, balanced complexion\n• Anti-Aging Boost: Enhances skin firmness, elasticity, and youthful radiance\n• Helps Reduce Breakouts: Gently clears congested pores and blemishes without stripping skin moisture\n• Deep Cleanses Pores: Soft micro-exfoliation from natural rice exfoliator washes away daily pollution and excess sebum\n• Soothes Irritated Skin: Deeply hydrates with glycerin to leave skin refreshed, calmed, and never tight\n\nKey Ingredients\n• Fresh Grape Red Wine — rich in Resveratrol and polyphenols to revitalize dull skin, combat aging, and protect the skin barrier\n• Rice Exfoliator — delicate natural exfoliator that gently smooths rough patches, clears pore congestion, and enhances luminosity\n• Glycerin — pure humectant that binds moisture to the skin during cleansing, preventing moisture loss and irritation\n\nSuitable For\nDull, uneven, oily, combination, normal, and dry skin types. Ideal for everyday morning and evening use.\n\nHow To Use\nApply to wet skin. Massage gently over face and neck in upward circular motions for 60 seconds. Rinse thoroughly with lukewarm or cool water. Use both morning & night for visible clarity and glow.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & gentle on skin\n• Non-stripping antioxidant formula\n• Suitable for daily skincare ritual`,
+            price: 399.0,
+            sale_price: 399.0,
+            SKU: "QH-GLOW-REDWINE-100",
+            stock: 60,
+            ingredients: "Fresh Grape Red Wine Extract (Resveratrol), Rice Exfoliator, Pure Glycerin, Botanical Actives.",
+            benefits: "Antioxidant Care • Even Tone Support • Anti-Aging Boost • Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin.",
+            how_to_use: "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
+            skin_type: "Dull, Normal, Combination & Dry Skin",
+            product_images: [
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_main.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_back.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_ingredients.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_before_after_1.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_before_after_2.jpg"
+            ],
+            thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/red_wine_glow_cleanser_main.jpg",
+            variants: [
+              { id: 31, product_id: 4, name: "100ml", sku_suffix: "V100ML", price_override: null, stock: 60 }
+            ]
+          };
+          setProduct(fallbackRedWine);
+          setSelectedImage(fallbackRedWine.thumbnail);
+          setSelectedVariant(fallbackRedWine.variants[0]);
+          setError(false);
+          setLoading(false);
+          return;
+        }
         setError(true);
         setLoading(false);
       });
