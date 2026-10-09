@@ -7,6 +7,7 @@ from backend.app.core.database import get_db
 from backend.app.models import models
 from backend.app.schemas import schemas
 from backend.app.services.email_service import EmailService
+from backend.app.services.google_sheets_service import GoogleSheetsService
 
 router = APIRouter()
 
@@ -183,6 +184,13 @@ def create_order(order_in: schemas.OrderCreate, background_tasks: BackgroundTask
         # Queue Admin New Order Notification Email
         background_tasks.add_task(EmailService.send_admin_new_order_email, db, db_order, customer, order_items_list)
 
+        # Synchronize order to Google Sheets
+        try:
+            GoogleSheetsService.sync_order(db, db_order, customer, order_items_list)
+        except Exception as sheet_err:
+            # Safe non-blocking catch: Database transaction has already succeeded
+            pass
+
         return db_order
     except HTTPException:
         db.rollback()
@@ -289,4 +297,38 @@ def update_order_status(id: int, payload: dict, db: Session = Depends(get_db)):
         
     db.commit()
     db.refresh(order)
+
+    # Sync updated status to Google Sheets
+    try:
+        GoogleSheetsService.update_order_status(db, order)
+    except Exception as e:
+        pass
+
     return order
+
+@router.post("/sync-sheets")
+def sync_all_pending_sheets(limit: int = 50, db: Session = Depends(get_db)):
+    """
+    Retries synchronization for all orders where google_sheets_sync_status != 'SYNCED'.
+    Also supports historical order synchronization.
+    """
+    result = GoogleSheetsService.retry_failed_syncs(db, limit=limit)
+    return result
+
+@router.post("/{id}/sync-sheet")
+def sync_single_order_sheet(id: int, db: Session = Depends(get_db)):
+    """
+    Manually triggers or retries Google Sheets synchronization for a specific order.
+    """
+    order = db.query(models.Order).filter(models.Order.id == id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    result = GoogleSheetsService.sync_order(db, order)
+    return {
+        "order_id": order.order_number,
+        "sync_status": order.google_sheets_sync_status,
+        "synced_at": order.google_sheets_synced_at,
+        "error": order.google_sheets_sync_error,
+        "details": result
+    }

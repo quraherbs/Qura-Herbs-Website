@@ -133,6 +133,9 @@ class Order(Base):
     district = Column(String(100), nullable=True)
     state = Column(String(100), nullable=True)
     pincode = Column(String(20), nullable=True)
+    google_sheets_sync_status = Column(String(20), default="PENDING")  # PENDING, SYNCED, FAILED
+    google_sheets_synced_at = Column(DateTime, nullable=True)
+    google_sheets_sync_error = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     customer = relationship("Customer", back_populates="orders")

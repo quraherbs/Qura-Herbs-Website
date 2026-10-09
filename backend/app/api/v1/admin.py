@@ -10,6 +10,7 @@ from backend.app.core.database import get_db
 from backend.app.models import models
 from backend.app.schemas import schemas
 from backend.app.core.config import settings
+from backend.app.services.google_sheets_service import GoogleSheetsService
 
 router = APIRouter()
 
@@ -236,6 +237,12 @@ def confirm_order_payment(order_id: str, background_tasks: BackgroundTasks, db: 
     if order.customer:
         background_tasks.add_task(EmailService.send_customer_confirmation_email, db, order, order.customer, items_list)
 
+    # Sync updated payment status to Google Sheets
+    try:
+        GoogleSheetsService.update_order_status(db, order)
+    except Exception as e:
+        pass
+
     return {
         "success": True,
         "order_id": order.order_number,
@@ -258,6 +265,12 @@ def reject_order_payment(order_id: str, db: Session = Depends(get_db)):
     order.order_status = "CANCELLED"
     db.commit()
     db.refresh(order)
+
+    # Sync updated status to Google Sheets
+    try:
+        GoogleSheetsService.update_order_status(db, order)
+    except Exception as e:
+        pass
 
     return {
         "success": True,
