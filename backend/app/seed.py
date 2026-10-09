@@ -403,20 +403,56 @@ Formulation Highlights
             {
                 "name": "Hair Shine Serum",
                 "slug": "hair-shine-serum",
-                "short_description": "Silky smoothing botanical serum with Moroccan Argan & Bhringraj.",
-                "full_description": "Transform dry, frizzy strands into a gloss cascade. Enriched with Moroccan Argan Oil and Bhringraj herb, this lightweight elixir forms a protective coat, seals split ends, and delivers high-shine finish.",
+                "short_description": "Anti-Frizz Hair Serum for Instant Frizz Control, Smoothness & Glass-Like Shine with Argan, Jojoba & Silk Protein.",
+                "full_description": """Anti-Frizz Hair Serum — 50ml
+
+Instant Frizz Control • Adds Smoothness & Shine • Protects Against Humidity
+
+A weightless, multi-benefit botanical hair serum expertly crafted to transform dull, coarse, and unruly strands into a silky, light-reflective cascade. Enriched with cold-pressed Argan Oil, Jojoba Oil, Almond Oil, Vitamin E, and hydrolysed Silk Protein, it tames stubborn flyaways, locks out environmental humidity, and restores lustrous shine without greasiness or buildup.
+
+Key Benefits
+• Instant Frizz & Flyaway Control: Calms rebellious texture and seals cuticles for all-day sleekness
+• Glass-Like Smoothness & Shine: Infuses strands with light-catching botanical oils for radiant, healthy gloss
+• Humidity Defense: Forms a weightless protective shield that blocks humidity-induced puffiness and frizz
+• Heat & Environmental Protection: Vitamin E and Silk Protein guard hair fibers against thermal styling stress and pollution
+• Non-Greasy & Ultra-Lightweight: Absorbs effortlessly into hair shafts without weighing down roots or strands
+
+Key Ingredients
+• Argan Oil — liquid gold rich in fatty acids and antioxidants to restore elasticity and natural shine
+• Jojoba Oil — mimics natural scalp sebum to balance moisture and nourish hair ends
+• Sweet Almond Oil — softens rough cuticles and enhances hair strength and silkiness
+• Vitamin E — defends against environmental damage and oxidative stress
+• Aloe Vera Extract — hydrates strands and calms static flyaways
+• Hydrolysed Silk Protein — locks in moisture, smooths cuticles, and provides a salon-smooth finish
+
+Suitable For
+All hair types including straight, wavy, curly, coily, colored, and chemically treated hair.
+
+How To Use
+Dispense 2-3 pumps onto palms and rub together. Work evenly through towel-dried or dry hair from mid-lengths to ends. Style as usual. Can be used before heat styling or as a finishing touch for mirror-like shine.
+
+Formulation Highlights
+• 100% Herbal & Botanical actives
+• Mineral Oil-free & Paraben-free
+• Non-sticky & Weightless formula
+• Suitable for everyday styling""",
                 "price": 544.0,
                 "sale_price": 544.0,
                 "SKU": "QH-HAIR-SHINE-50",
                 "stock": 70,
                 "category_id": cat_map.get("hair-care", 5),
-                "ingredients": "Moroccan Argan Oil, Bhringraj extract, Almond Oil, Coconut Oil fractions, Rosemary Essential Oil.",
-                "benefits": "Controls frizz instantly, gives a glossy shine, strengthens hair shafts, protects from heat styling.",
-                "how_to_use": "Take 2-3 drops on palms and distribute evenly through damp or dry hair lengths, avoiding the roots.",
+                "ingredients": "Argan Oil, Jojoba Oil, Almond Oil, Vitamin E, Aloe Vera Extract, Silk Protein, Botanical Actives.",
+                "benefits": "Controls Frizz & Flyaways • Adds Smoothness & Shine • Protects Against Humidity • Non-Greasy Finish.",
+                "how_to_use": "Take 2-3 drops on palms and distribute evenly through damp or dry hair lengths, focusing on mid-lengths to ends.",
                 "skin_type": "All Hair Types",
-                "product_images": ["https://images.unsplash.com/photo-1526947425960-945c6e72858f?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1526947425960-945c6e72858f?q=80&w=600&auto=format&fit=crop",
-                "featured": False,
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_before_after_1.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_before_after_2.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg",
+                "featured": True,
                 "active": True
             },
             {

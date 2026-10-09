@@ -92,6 +92,12 @@ export default function ShopPage() {
                 thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg"
               };
             }
+            if (p.slug === "hair-shine-serum" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
+              return {
+                ...p,
+                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/hair_shine_serum_main.jpg"
+              };
+            }
             return p;
           });
           setProducts(mapped);
