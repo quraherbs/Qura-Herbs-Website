@@ -181,19 +181,55 @@ Formulation Highlights
             {
                 "name": "Tea Tree Pureveil Cleanser",
                 "slug": "tea-tree-pureveil-cleanser",
-                "short_description": "A purifying, non-stripping face wash for acne control.",
-                "full_description": "A gentle botanical gel cleanser containing pure Australian Tea Tree oil and Neem extracts. Dissolves excess sebum and acne-causing impurities while keeping the skin barrier perfectly hydrated without tight post-wash dryness.",
+                "short_description": "A purifying, non-stripping face wash for acne control, pore refining, and bright, clear skin.",
+                "full_description": """Tea Tree Pureveil Cleanser — 100ml
+
+Reduce Acne + Brightening Botanical Gel Cleanser
+
+Clean skin, calm skin every single day. A powerfully gentle face cleanser built for skin that needs more than just cleansing. Formulated with nature's most trusted purifying botanicals, it clears congested pores, actively works to reduce breakouts, and calms irritation — all in one step. Designed for daily use without the harshness that most acne-focused cleansers carry.
+
+Skin that breaks out does not need to be punished, it needs to be rebalanced. Tea Tree Pureveil Cleanser is built on that principle, combining deep-cleansing actives with soothing, skin-respecting botanicals so your skin feels genuinely cared for after every wash, not stripped or tight.
+
+Key Benefits
+• Deeply Cleanses Pores: Clears daily buildup, pollution, and excess sebum without over-drying
+• Helps Reduce Breakouts: Targets blemish-causing impurities and helps prevent future congestion
+• Soothes Irritated Skin: Calms redness, inflammation, and reactive skin with lavender and aloe vera
+• Protects Skin Barrier: Enriched with nourishing avocado oil so cleansing never leaves skin depleted
+• Balances Moisture: Preserves natural skin hydration for a refreshed, calm, and luminous feel
+
+Key Ingredients
+• Tea Tree Extract — a well-studied purifying botanical that targets blemish-causing buildup and keeps pores clear
+• Neem & Aloe Vera — deeply purifying and soothing plant extracts that control excess sebum, heal redness, and hydrate
+• Avocado Oil — nourishes and protects the skin barrier so cleansing never leaves skin tight or dry
+• Lavender Oil — calms inflammation, soothes reactive skin, and supports natural skin repair
+
+Suitable For
+Oily, acne-prone, combination, sensitive, and all skin types. Ideal for those experiencing frequent breakouts, enlarged pores, or persistent irritation.
+
+How To Use
+Apply to wet skin. Massage gently over face and neck in circular motions for 60 seconds. Rinse thoroughly with lukewarm or cool water. Use morning and night for consistent, clear results.
+
+Formulation Highlights
+• 100% Herbal & Botanical actives
+• Paraben-free & Sulphate-free
+• Non-stripping acne control formula
+• Suitable for daily skincare ritual""",
                 "price": 399.0,
                 "sale_price": 399.0,
                 "SKU": "QH-ACNE-TEATREE-100",
                 "stock": 100,
                 "category_id": cat_map["oily-skin"],
-                "ingredients": "Tea Tree Essential Oil, Organic Neem leaf infusion, Salicylic Acid (1%), Basil Extract, Glycerin.",
-                "benefits": "Deep cleans pores, controls breakouts, reduces inflammation, and balances oil production.",
-                "how_to_use": "Pump a small amount onto damp hands. Message gently over face in circular motions, then rinse thoroughly with lukewarm water.",
-                "skin_type": "Oily and Acne-Prone Skin",
-                "product_images": ["https://images.unsplash.com/photo-1556229010-6c3f2c9ca418?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1556229010-6c3f2c9ca418?q=80&w=600&auto=format&fit=crop",
+                "ingredients": "Tea Tree Extract, Neem & Aloe Vera Extract, Avocado Oil, Lavender Oil, Botanical Actives.",
+                "benefits": "Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin • Balances Sebum • Non-Stripping.",
+                "how_to_use": "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
+                "skin_type": "Oily, Acne-Prone & Sensitive Skin",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_back.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_before_after.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_main.jpg",
                 "featured": False,
                 "active": True
             },

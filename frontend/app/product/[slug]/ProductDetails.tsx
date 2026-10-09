@@ -178,6 +178,39 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setLoading(false);
           return;
         }
+        if (slug === "tea-tree-pureveil-cleanser") {
+          const fallbackTeaTree: Product = {
+            id: 3,
+            name: "Tea Tree Pureveil Cleanser",
+            slug: "tea-tree-pureveil-cleanser",
+            short_description: "A purifying, non-stripping face wash for acne control, pore refining, and bright, clear skin.",
+            full_description: `Tea Tree Pureveil Cleanser — 100ml\n\nReduce Acne + Brightening Botanical Gel Cleanser\n\nClean skin, calm skin every single day. A powerfully gentle face cleanser built for skin that needs more than just cleansing. Formulated with nature's most trusted purifying botanicals, it clears congested pores, actively works to reduce breakouts, and calms irritation — all in one step. Designed for daily use without the harshness that most acne-focused cleansers carry.\n\nSkin that breaks out does not need to be punished, it needs to be rebalanced. Tea Tree Pureveil Cleanser is built on that principle, combining deep-cleansing actives with soothing, skin-respecting botanicals so your skin feels genuinely cared for after every wash, not stripped or tight.\n\nKey Benefits\n• Deeply Cleanses Pores: Clears daily buildup, pollution, and excess sebum without over-drying\n• Helps Reduce Breakouts: Targets blemish-causing impurities and helps prevent future congestion\n• Soothes Irritated Skin: Calms redness, inflammation, and reactive skin with lavender and aloe vera\n• Protects Skin Barrier: Enriched with nourishing avocado oil so cleansing never leaves skin depleted\n• Balances Moisture: Preserves natural skin hydration for a refreshed, calm, and luminous feel\n\nKey Ingredients\n• Tea Tree Extract — a well-studied purifying botanical that targets blemish-causing buildup and keeps pores clear\n• Neem & Aloe Vera — deeply purifying and soothing plant extracts that control excess sebum, heal redness, and hydrate\n• Avocado Oil — nourishes and protects the skin barrier so cleansing never leaves skin tight or dry\n• Lavender Oil — calms inflammation, soothes reactive skin, and supports natural skin repair\n\nSuitable For\nOily, acne-prone, combination, sensitive, and all skin types. Ideal for those experiencing frequent breakouts, enlarged pores, or persistent irritation.\n\nHow To Use\nApply to wet skin. Massage gently over face and neck in circular motions for 60 seconds. Rinse thoroughly with lukewarm or cool water. Use morning and night for consistent, clear results.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Sulphate-free\n• Non-stripping acne control formula\n• Suitable for daily skincare ritual`,
+            price: 399.0,
+            sale_price: 399.0,
+            SKU: "QH-ACNE-TEATREE-100",
+            stock: 100,
+            ingredients: "Tea Tree Extract, Neem & Aloe Vera Extract, Avocado Oil, Lavender Oil, Botanical Actives.",
+            benefits: "Deep Cleanses Pores • Helps Reduce Breakouts • Soothes Irritated Skin • Balances Sebum • Non-Stripping.",
+            how_to_use: "Apply to wet skin, massage gently, and rinse off. Use morning & night.",
+            skin_type: "Oily, Acne-Prone & Sensitive Skin",
+            product_images: [
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_main.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_back.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_ingredients.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_before_after.jpg"
+            ],
+            thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/tea_tree_pureveil_cleanser_main.jpg",
+            variants: [
+              { id: 30, product_id: 3, name: "100ml", sku_suffix: "V100ML", price_override: null, stock: 100 }
+            ]
+          };
+          setProduct(fallbackTeaTree);
+          setSelectedImage(fallbackTeaTree.thumbnail);
+          setSelectedVariant(fallbackTeaTree.variants[0]);
+          setError(false);
+          setLoading(false);
+          return;
+        }
         setError(true);
         setLoading(false);
       });
