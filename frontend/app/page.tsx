@@ -77,6 +77,12 @@ export default function Home() {
                 thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_main.jpg"
               };
             }
+            if (p.slug === "vitamin-c-serum" && (p.thumbnail?.includes("unsplash") || !p.thumbnail)) {
+              return {
+                ...p,
+                thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg"
+              };
+            }
             return p;
           });
           setBestsellers(mapped);

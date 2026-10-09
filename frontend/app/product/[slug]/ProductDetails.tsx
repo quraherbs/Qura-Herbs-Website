@@ -69,6 +69,14 @@ export default function ProductDetails({ slug }: { slug: string }) {
             "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/spf_50_sunscreen_before_after.jpg"
           ];
         }
+        if (data.slug === "vitamin-c-serum" && (data.thumbnail?.includes("unsplash") || !data.product_images || data.product_images.length < 3)) {
+          data.thumbnail = "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg";
+          data.product_images = [
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_ingredients.jpg",
+            "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_before_after.jpg"
+          ];
+        }
         setProduct(data);
         setSelectedImage(data.thumbnail);
         if (data.variants && data.variants.length > 0) {
@@ -249,6 +257,38 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setProduct(fallbackSPF);
           setSelectedImage(fallbackSPF.thumbnail);
           setSelectedVariant(fallbackSPF.variants[0]);
+          setError(false);
+          setLoading(false);
+          return;
+        }
+        if (slug === "vitamin-c-serum") {
+          const fallbackVitC: Product = {
+            id: 6,
+            name: "Vitamin C Serum",
+            slug: "vitamin-c-serum",
+            short_description: "Advanced Face Serum with Vitamin C+, E+, Niacinamide, and Hyaluronic Acid for radiant brightness and antioxidant defense.",
+            full_description: `Advanced Face Serum (Vitamin C+, E+) — 30ml\n\nBrightens Skin Tone • Overnight Radiance • Antioxidant Protection\n\nAn advanced botanical face elixir crafted with potent Vitamin C, Vitamin E, Niacinamide, and Hyaluronic Acid. Designed to defend against environmental stressors, fade stubborn dark spots and acne marks, boost cellular collagen synthesis, and unveil a revitalized, luminous complexion.\n\nKey Benefits\n• Brightens Skin Tone: Clinically inspired botanical actives fade post-acne blemishes, hyperpigmentation, and sun damage\n• Overnight Radiance: Illuminates fatigued, dull skin for an effortlessly refreshed, lit-from-within morning glow\n• Antioxidant Protection: Synergistic Vitamin C + Vitamin E shield dermal layers from photo-aging and oxidative stress\n• Deep Hydration & Plumping: Hyaluronic Acid and Glycerin deeply infuse moisture, smoothing fine lines and texture\n• Calming & Barrier Support: Niacinamide and pure Aloe Vera extract calm redness, balance sebum, and minimize pore congestion\n\nKey Ingredients\n• Vitamin C — potent antioxidant that illuminates skin tone and promotes firm elasticity\n• Vitamin E — defends against free radicals and reinforces lipid barrier recovery\n• Niacinamide (Vitamin B3) — refines pores, fades dark marks, and evens out tone\n• Hyaluronic Acid — deep-hydration magnet that plumps skin and maintains moisture elasticity\n• Aloe Vera Extract — soothes irritation and cools reactive skin\n• Glycerin — locks in weightless hydration throughout the day and night\n\nSuitable For\nAll skin types including dull, sensitive, combination, and acne-prone skin.\n\nHow To Use\nDispense 3-4 drops onto clean fingertips. Gently press and smooth across cleansed face and neck until absorbed. Follow with moisturizer and always apply SPF during daytime.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Non-sticky formulation\n• Fast-absorbing lightweight serum\n• Suitable for day and night rituals`,
+            price: 599.0,
+            sale_price: 599.0,
+            SKU: "QH-GLOW-VITC-30",
+            stock: 60,
+            ingredients: "Vitamin C, Vitamin E, Niacinamide, Hyaluronic Acid, Aloe Vera Extract, Glycerin, Botanical Actives.",
+            benefits: "Brightens Skin Tone • Overnight Radiance • Antioxidant Protection • Fades Blemishes & Dark Spots • Deep Hydration.",
+            how_to_use: "Apply 3-4 drops to cleansed face and neck morning and evening. Follow with moisturizer and SPF during daytime.",
+            skin_type: "All Skin Types",
+            product_images: [
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_ingredients.jpg",
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_before_after.jpg"
+            ],
+            thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
+            variants: [
+              { id: 25, product_id: 6, name: "30ml", sku_suffix: "V30ML", price_override: null, stock: 60 }
+            ]
+          };
+          setProduct(fallbackVitC);
+          setSelectedImage(fallbackVitC.thumbnail);
+          setSelectedVariant(fallbackVitC.variants[0]);
           setError(false);
           setLoading(false);
           return;

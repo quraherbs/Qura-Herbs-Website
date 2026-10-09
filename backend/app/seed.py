@@ -349,20 +349,55 @@ Formulation Highlights
             {
                 "name": "Vitamin C Serum",
                 "slug": "vitamin-c-serum",
-                "short_description": "15% Kakadu Plum Vitamin C for luminous skin defense.",
-                "full_description": "A high-potency serum featuring 15% Vitamin C from natural Kakadu Plum extract and Ferulic Acid. Provides advanced environmental protection, brightens hyperpigmentation, and stimulates natural collagen synthesis.",
+                "short_description": "Advanced Face Serum with Vitamin C+, E+, Niacinamide, and Hyaluronic Acid for radiant brightness and antioxidant defense.",
+                "full_description": """Advanced Face Serum (Vitamin C+, E+) — 30ml
+
+Brightens Skin Tone • Overnight Radiance • Antioxidant Protection
+
+An advanced botanical face elixir crafted with potent Vitamin C, Vitamin E, Niacinamide, and Hyaluronic Acid. Designed to defend against environmental stressors, fade stubborn dark spots and acne marks, boost cellular collagen synthesis, and unveil a revitalized, luminous complexion.
+
+Key Benefits
+• Brightens Skin Tone: Clinically inspired botanical actives fade post-acne blemishes, hyperpigmentation, and sun damage
+• Overnight Radiance: Illuminates fatigued, dull skin for an effortlessly refreshed, lit-from-within morning glow
+• Antioxidant Protection: Synergistic Vitamin C + Vitamin E shield dermal layers from photo-aging and oxidative stress
+• Deep Hydration & Plumping: Hyaluronic Acid and Glycerin deeply infuse moisture, smoothing fine lines and texture
+• Calming & Barrier Support: Niacinamide and pure Aloe Vera extract calm redness, balance sebum, and minimize pore congestion
+
+Key Ingredients
+• Vitamin C — potent antioxidant that illuminates skin tone and promotes firm elasticity
+• Vitamin E — defends against free radicals and reinforces lipid barrier recovery
+• Niacinamide (Vitamin B3) — refines pores, fades dark marks, and evens out tone
+• Hyaluronic Acid — deep-hydration magnet that plumps skin and maintains moisture elasticity
+• Aloe Vera Extract — soothes irritation and cools reactive skin
+• Glycerin — locks in weightless hydration throughout the day and night
+
+Suitable For
+All skin types including dull, sensitive, combination, and acne-prone skin.
+
+How To Use
+Dispense 3-4 drops onto clean fingertips. Gently press and smooth across cleansed face and neck until absorbed. Follow with moisturizer and always apply SPF during daytime.
+
+Formulation Highlights
+• 100% Herbal & Botanical actives
+• Paraben-free & Non-sticky formulation
+• Fast-absorbing lightweight serum
+• Suitable for day and night rituals""",
                 "price": 599.0,
                 "sale_price": 599.0,
                 "SKU": "QH-GLOW-VITC-30",
-                "stock": 50,
+                "stock": 60,
                 "category_id": cat_map.get("sensitive-skin", 3),
-                "ingredients": "Kakadu Plum extract (15% Vitamin C), Ferulic Acid, Hyaluronic Acid, Vitamin E, Sweet Orange Oil.",
-                "benefits": "Reduces fine lines, clears skin tone, repairs UV damage, and hydrates.",
-                "how_to_use": "Smooth 2-3 drops onto face after cleansing and toning. Always follow with SPF during daytime.",
-                "skin_type": "Sensitive & All Skin Types",
-                "product_images": ["https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=600&auto=format&fit=crop"],
-                "thumbnail": "https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=600&auto=format&fit=crop",
-                "featured": False,
+                "ingredients": "Vitamin C, Vitamin E, Niacinamide, Hyaluronic Acid, Aloe Vera Extract, Glycerin, Botanical Actives.",
+                "benefits": "Brightens Skin Tone • Overnight Radiance • Antioxidant Protection • Fades Blemishes & Dark Spots • Deep Hydration.",
+                "how_to_use": "Apply 3-4 drops to cleansed face and neck morning and evening. Follow with moisturizer and SPF during daytime.",
+                "skin_type": "All Skin Types",
+                "product_images": [
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_ingredients.jpg",
+                    "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_before_after.jpg"
+                ],
+                "thumbnail": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/vitamin_c_serum_main.jpg",
+                "featured": True,
                 "active": True
             },
             {
