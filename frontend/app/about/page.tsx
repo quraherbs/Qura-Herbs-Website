@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import CartDrawer from "../../components/CartDrawer";
 import Link from "next/link";
-import { Leaf, UserCheck, Briefcase, Calendar, MapPin, Sparkles, HeartHandshake, ShieldCheck } from "lucide-react";
+import { Leaf, UserCheck, Briefcase, Calendar, Sparkles } from "lucide-react";
 
 function AboutPageContent() {
   const searchParams = useSearchParams();
@@ -70,7 +70,6 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
 
   const [founderImgError, setFounderImgError] = useState<boolean>(false);
   const [ceoImgError, setCeoImgError] = useState<boolean>(false);
-  const [brandImgError, setBrandImgError] = useState<boolean>(false);
 
   useEffect(() => {
     // Fetch About Page Content
@@ -182,10 +181,6 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
     ceoData.image || ceoData.ceo_image
       ? getImageUrl(ceoData.image || ceoData.ceo_image)
       : "/ceo_pranavi.jpg";
-  const brandImgSrc =
-    aboutData.hero_image || aboutData.image
-      ? getImageUrl(aboutData.hero_image || aboutData.image)
-      : "";
 
   return (
     <div className="flex flex-col min-h-screen bg-brand-cream text-brand-dark font-sans selection:bg-brand-accent/20">
@@ -270,151 +265,63 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         {/* ================================================== */}
         <section
           id="brand"
-          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+          className="space-y-8 md:space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
         >
           {/* Section Eyebrow & Title */}
-          <div className="flex items-center justify-between border-b border-brand-sand/30 pb-4">
-            <div className="space-y-1">
+          <div className="space-y-3 border-b border-brand-sand/30 pb-6">
+            <div className="flex flex-wrap items-center justify-between gap-3">
               <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
                 SECTION 01 &bull; OUR STORY
               </span>
-              <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
-                Skin That Feels Like You.
-              </h2>
+              <div className="hidden sm:flex items-center gap-2 text-xs font-sans text-brand-cocoa/60 uppercase tracking-widest bg-brand-light px-3 py-1.5 border border-brand-sand/30 rounded-sm">
+                <Calendar size={13} className="text-brand-accent" />
+                <span>Coimbatore &bull; 2025</span>
+              </div>
             </div>
-            <div className="hidden sm:flex items-center gap-2 text-xs font-sans text-brand-cocoa/60 uppercase tracking-widest bg-brand-light px-3 py-1.5 border border-brand-sand/30 rounded-sm">
-              <Calendar size={13} className="text-brand-accent" />
-              <span>Coimbatore &bull; 2025</span>
-            </div>
+
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark tracking-tight leading-tight">
+              Skin That Feels Like You.
+            </h2>
           </div>
 
-          {/* Editorial Two-Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* LEFT COLUMN: Narrative Story Content */}
-            <div className="lg:col-span-7 space-y-6 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
-              <p>
-                Qura Herbs is a skincare and haircare brand built around a
-                simple belief{" "}
+          {/* Editorial Story Layout */}
+          <div className="max-w-4xl space-y-6 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
+            <p>
+              Qura Herbs is a skincare and haircare brand built around a
+              simple belief{" "}
+              <strong className="font-semibold text-brand-dark">
+                people should feel comfortable and confident in their own skin.
+              </strong>
+            </p>
+            <p>
+              Founded in Coimbatore - 2025, Qura Herbs began with a personal
+              skin journey and has grown through real customer experiences,
+              offline connections, and now an expanding online community of{" "}
+              <strong className="font-semibold text-brand-dark">
+                300+ customers
+              </strong>
+              .
+            </p>
+            <p>
+              We bring together skincare and haircare products made with{" "}
+              <strong className="font-semibold text-brand-dark">
+                herbal and botanical ingredients
+              </strong>
+              , selected with care for everyday skin and hair concerns. Our
+              focus is on thoughtful products, honest communication, and
+              routines that are simple enough to become part of everyday life.
+            </p>
+
+            {/* Highlight Callout Box */}
+            <div className="mt-8 bg-brand-light border-l-4 border-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-3">
+              <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed">
+                What began with a small circle of customers is now growing into
+                a brand with a larger purpose{" "}
                 <strong className="font-semibold text-brand-dark">
-                  people should feel comfortable and confident in their own skin.
+                  helping people care for their skin and hair without feeling the
+                  need to change who they are.
                 </strong>
               </p>
-              <p>
-                Founded in Coimbatore - 2025, Qura Herbs began with a personal
-                skin journey and has grown through real customer experiences,
-                offline connections, and now an expanding online community of{" "}
-                <strong className="font-semibold text-brand-dark">
-                  300+ customers
-                </strong>
-                .
-              </p>
-              <p>
-                We bring together skincare and haircare products made with{" "}
-                <strong className="font-semibold text-brand-dark">
-                  herbal and botanical ingredients
-                </strong>
-                , selected with care for everyday skin and hair concerns. Our
-                focus is on thoughtful products, honest communication, and
-                routines that are simple enough to become part of everyday life.
-              </p>
-
-              {/* Highlight Callout Box */}
-              <div className="mt-8 bg-brand-light border-l-4 border-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-3">
-                <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed">
-                  What began with a small circle of customers is now growing into
-                  a brand with a larger purpose{" "}
-                  <strong className="font-semibold text-brand-dark">
-                    helping people care for their skin and hair without feeling the
-                    need to change who they are.
-                  </strong>
-                </p>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: Brand Philosophy & Storytelling Visual Card */}
-            <div className="lg:col-span-5 space-y-6">
-              <div className="bg-brand-dark text-brand-cream p-8 md:p-10 space-y-8 rounded-sm shadow-xl relative overflow-hidden">
-                {/* Delicate background watermark accent */}
-                <div className="absolute -right-10 -bottom-10 opacity-5 pointer-events-none text-brand-cream">
-                  <Leaf size={240} />
-                </div>
-
-                <div className="space-y-3 border-b border-brand-cream/15 pb-6">
-                  <span className="text-[11px] tracking-[0.25em] font-sans font-semibold text-brand-accent uppercase block">
-                    THE QURA FOUNDATION
-                  </span>
-                  <h3 className="font-serif text-2xl font-light leading-snug">
-                    Comfort &bull; Confidence &bull; Care
-                  </h3>
-                </div>
-
-                <div className="space-y-6">
-                  <div className="flex gap-4 items-start">
-                    <div className="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-accent shrink-0 border border-brand-cream/20 mt-0.5">
-                      <MapPin size={18} />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">
-                        Origin &amp; Roots
-                      </h4>
-                      <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        Founded in Coimbatore - 2025. Born from a personal skin
-                        journey and real customer experiences.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 items-start">
-                    <div className="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-accent shrink-0 border border-brand-cream/20 mt-0.5">
-                      <Sparkles size={18} />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">
-                        Herbal &amp; Botanical Ingredients
-                      </h4>
-                      <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        Thoughtful skincare and haircare made with botanical
-                        ingredients selected with care for everyday concerns.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 items-start">
-                    <div className="w-9 h-9 rounded-full bg-brand-cream/10 flex items-center justify-center text-brand-accent shrink-0 border border-brand-cream/20 mt-0.5">
-                      <HeartHandshake size={18} />
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">
-                        300+ Growing Community
-                      </h4>
-                      <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        Grown through offline connections and an expanding online
-                        community of people embracing their natural beauty.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Optional uploaded image display if available */}
-                {brandImgSrc && !brandImgError && (
-                  <div className="pt-2">
-                    <div className="relative aspect-[16/9] w-full overflow-hidden rounded-sm border border-brand-cream/20">
-                      <img
-                        src={brandImgSrc}
-                        alt="Qura Herbs Brand"
-                        className="w-full h-full object-cover"
-                        onError={() => setBrandImgError(true)}
-                      />
-                    </div>
-                  </div>
-                )}
-
-                <div className="pt-4 border-t border-brand-cream/15 text-center">
-                  <p className="text-[11px] font-sans text-brand-accent tracking-widest uppercase font-medium">
-                    Skin That Feels Like You &bull; Qura Herbs
-                  </p>
-                </div>
-              </div>
             </div>
           </div>
         </section>
