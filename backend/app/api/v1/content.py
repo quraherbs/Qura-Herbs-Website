@@ -138,17 +138,18 @@ def get_founder_content(db: Session = Depends(get_db)):
         return {
             "name": "Nandavel V",
             "founder_name": "Nandavel V",
-            "title": "Founder & CEO, Qura Herbs",
-            "founder_designation": "Founder & CEO, Qura Herbs",
-            "eyebrow": "THE FOUNDER",
-            "heading": "Meet Our Founder",
+            "title": "Founder, Qura Herbs",
+            "founder_designation": "Founder, Qura Herbs",
+            "eyebrow": "SECTION 02 • THE FOUNDER",
+            "heading": "MEET THE FOUNDER",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
             "founder_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
-            "quote": "Build Qura Herbs with purpose. Grow it with people. And never lose the reason we started.",
-            "founder_quote": "Build Qura Herbs with purpose. Grow it with people. And never lose the reason we started.",
-            "description": "Qura Herbs started with an idea that was personal to me: people deserve skincare that understands their concerns instead of making them feel like they need to change who they are.\n\nWhen I started Qura Herbs on January 13, 2025, in Coimbatore, I didn't see it as simply starting another beauty brand. I wanted to build something that could genuinely connect with people, understand their individual skin and hair concerns, and become a trusted part of their everyday routine.\n\nBeing involved in Qura from the beginning has meant being part of everything—from understanding customer concerns and developing products to building the brand, creating content, managing operations, and listening to every piece of feedback we receive.\n\nWhat means the most to me is not simply seeing Qura grow. It is seeing someone trust our brand, share their experience, and come back because they believe in what we are building.\n\nThere is still a long way to go, but the vision remains simple:",
-            "founder_bio": "Qura Herbs started with an idea that was personal to me: people deserve skincare that understands their concerns instead of making them feel like they need to change who they are.\n\nWhen I started Qura Herbs on January 13, 2025, in Coimbatore, I didn't see it as simply starting another beauty brand. I wanted to build something that could genuinely connect with people, understand their individual skin and hair concerns, and become a trusted part of their everyday routine.\n\nBeing involved in Qura from the beginning has meant being part of everything—from understanding customer concerns and developing products to building the brand, creating content, managing operations, and listening to every piece of feedback we receive.\n\nWhat means the most to me is not simply seeing Qura grow. It is seeing someone trust our brand, share their experience, and come back because they believe in what we are building.\n\nThere is still a long way to go, but the vision remains simple:",
-            "signature": "— Nandavel V\nFounder & CEO, Qura Herbs"
+            "headline": "Qura Herbs began with Nandavel's own skin journey.",
+            "quote": "“Qura Herbs started with my own skin journey. I wanted to bring that experience to people who were going through something similar and help them feel more comfortable in their own skin.”",
+            "founder_quote": "“Qura Herbs started with my own skin journey. I wanted to bring that experience to people who were going through something similar and help them feel more comfortable in their own skin.”",
+            "description": "Having experienced skin concerns himself, he understood the insecurity and frustration that can come with trying to find the right care. His personal experience with skincare and herbal ingredients eventually inspired him to build something that could reach people facing similar concerns.\n\nHis vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.\n\nFrom understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.",
+            "founder_bio": "Having experienced skin concerns himself, he understood the insecurity and frustration that can come with trying to find the right care. His personal experience with skincare and herbal ingredients eventually inspired him to build something that could reach people facing similar concerns.\n\nHis vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.\n\nFrom understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.",
+            "signature": "— Nandavel V\nFounder, Qura Herbs"
         }
     return setting.value
 
@@ -181,19 +182,20 @@ def get_ceo_content(db: Session = Depends(get_db)):
     setting = db.query(models.Setting).filter(models.Setting.key == "ceo_story").first()
     if not setting:
         return {
-            "name": "Pranavi G",
-            "ceo_name": "Pranavi G",
-            "title": "Co-Founder & MD, Qura Herbs",
-            "ceo_designation": "Co-Founder & MD, Qura Herbs",
-            "eyebrow": "SECTION 03 • CO-FOUNDER & MD",
-            "heading": "Meet Our Co-Founder & MD",
+            "name": "Pranavi GY",
+            "ceo_name": "Pranavi GY",
+            "title": "Co-Founder & CEO, Qura Herbs",
+            "ceo_designation": "Co-Founder & CEO, Qura Herbs",
+            "eyebrow": "SECTION 03 • CO-FOUNDER & CEO",
+            "heading": "MEET THE CO-FOUNDER & CEO",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "ceo_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
-            "quote": "This is more than building a company for me. It is about building something I can be proud to put my name behind.",
-            "ceo_quote": "This is more than building a company for me. It is about building something I can be proud to put my name behind.",
-            "description": "For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.\n\nAs the Co-Founder & MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.\n\nWhat inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.\n\nI want Qura Herbs to be a brand that feels personal—not distant or overly complicated. A brand that people can trust, relate to, and grow with.",
-            "ceo_bio": "For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.\n\nAs the Co-Founder & MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.\n\nWhat inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.\n\nI want Qura Herbs to be a brand that feels personal—not distant or overly complicated. A brand that people can trust, relate to, and grow with.",
-            "signature": "— Pranavi G\nCo-Founder & MD, Qura Herbs"
+            "headline": "Pranavi believed everyone deserved to feel confident in their own skin.",
+            "quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
+            "ceo_quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
+            "description": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
+            "ceo_bio": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
+            "signature": "— Pranavi GY\nCo-Founder & CEO, Qura Herbs"
         }
     return setting.value
 
@@ -226,17 +228,18 @@ def get_about_content(db: Session = Depends(get_db)):
     setting = db.query(models.Setting).filter(models.Setting.key == "about_page").first()
     if not setting:
         return {
+            "brand_name": "QURA HERBS",
+            "tagline": "Skin That Feels Like You.",
             "subtitle": "OUR STORY",
-            "title": "Care That Begins With Understanding",
-            "hero_heading": "Care That Begins With Understanding",
-            "hero_paragraph1": "Founded on January 13, 2025, in Coimbatore, Tamil Nadu, India, Qura Herbs was created with a simple belief: skincare should begin with understanding, not comparison.\n\nEvery person has different skin, different concerns, and a different journey. That is why we believe there is no single routine that works for everyone. Qura Herbs focuses on creating purposeful skincare and haircare designed around real everyday concerns—with thoughtful formulations, botanical ingredients, and carefully selected active ingredients.",
-            "hero_paragraph2": "But Qura is about more than what goes inside a bottle.\n\nIt is about listening to our customers, understanding their concerns, helping them build consistent routines, and being there throughout their journey. Every product, conversation, and experience is part of our effort to make personal care more intentional and easier to understand.\n\nWe are building Qura Herbs for people who want to care for their skin and hair without unrealistic standards or unnecessary promises.",
-            "closing_statement": "Real concerns. Thoughtful care. Consistent routines.\n\nThat is the Qura way.",
-            "hero_image": "",
-            "founder_name": "Nandavel V",
-            "founder_designation": "Founder & CEO, Qura Herbs",
-            "ceo_name": "Pranavi G",
-            "ceo_designation": "Chief Executive Officer, Qura Herbs"
+            "title": "Skin That Feels Like You.",
+            "hero_heading": "Skin That Feels Like You.",
+            "hero_paragraph1": "Qura Herbs is a skincare and haircare brand built around a simple belief people should feel comfortable and confident in their own skin.\n\nFounded in Coimbatore - 2025, Qura Herbs began with a personal skin journey and has grown through real customer experiences, offline connections, and now an expanding online community of 300+ customers.",
+            "hero_paragraph2": "We bring together skincare and haircare products made with herbal and botanical ingredients, selected with care for everyday skin and hair concerns. Our focus is on thoughtful products, honest communication, and routines that are simple enough to become part of everyday life.\n\nWhat began with a small circle of customers is now growing into a brand with a larger purpose helping people care for their skin and hair without feeling the need to change who they are.",
+            "purpose_heading": "GROWING WITH PURPOSE",
+            "purpose_paragraph": "As an authorised reseller, we continue to grow through customer feedback, thoughtful product selection, and a commitment to presenting trusted skincare and haircare with transparency.",
+            "purpose_quote": "Beauty isn't about changing who you are. It's about caring for who you are.",
+            "hero_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/d5dbde14da8c48a5ab796d080b563d42.jpg",
+            "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/d5dbde14da8c48a5ab796d080b563d42.jpg"
         }
     return setting.value
 

@@ -1,7 +1,6 @@
 "use client";
 
 import { getApiUrl, getImageUrl } from "@/lib/api";
-
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AnnouncementBar from "../../components/AnnouncementBar";
@@ -18,51 +17,55 @@ function AboutPageContent() {
   const [activeTab, setActiveTab] = useState<string>("brand");
 
   const [aboutData, setAboutData] = useState<any>({
+    brand_name: "QURA HERBS",
+    tagline: "Skin That Feels Like You.",
     subtitle: "OUR STORY",
-    title: "Care That Begins With Understanding",
-    hero_heading: "Care That Begins With Understanding",
-    hero_paragraph1: `Founded on January 13, 2025, in Coimbatore, Tamil Nadu, India, Qura Herbs was created with a simple belief: skincare should begin with understanding, not comparison.
-
-Every person has different skin, different concerns, and a different journey. That is why we believe there is no single routine that works for everyone. Qura Herbs focuses on creating purposeful skincare and haircare designed around real everyday concerns—with thoughtful formulations, botanical ingredients, and carefully selected active ingredients.`,
-    hero_paragraph2: `But Qura is about more than what goes inside a bottle.
-
-It is about listening to our customers, understanding their concerns, helping them build consistent routines, and being there throughout their journey. Every product, conversation, and experience is part of our effort to make personal care more intentional and easier to understand.
-
-We are building Qura Herbs for people who want to care for their skin and hair without unrealistic standards or unnecessary promises.`,
-    closing_statement: `Real concerns. Thoughtful care. Consistent routines.\n\nThat is the Qura way.`,
-    hero_image: ""
+    title: "Skin That Feels Like You.",
+    hero_paragraph1:
+      "Qura Herbs is a skincare and haircare brand built around a simple belief people should feel comfortable and confident in their own skin.",
+    hero_paragraph2:
+      "Founded in Coimbatore - 2025, Qura Herbs began with a personal skin journey and has grown through real customer experiences, offline connections, and now an expanding online community of 300+ customers.",
+    hero_paragraph3:
+      "We bring together skincare and haircare products made with herbal and botanical ingredients, selected with care for everyday skin and hair concerns. Our focus is on thoughtful products, honest communication, and routines that are simple enough to become part of everyday life.",
+    hero_paragraph4:
+      "What began with a small circle of customers is now growing into a brand with a larger purpose helping people care for their skin and hair without feeling the need to change who they are.",
+    purpose_heading: "GROWING WITH PURPOSE",
+    purpose_paragraph:
+      "As an authorised reseller, we continue to grow through customer feedback, thoughtful product selection, and a commitment to presenting trusted skincare and haircare with transparency.",
+    purpose_quote:
+      "Beauty isn't about changing who you are. It's about caring for who you are.",
+    hero_image:
+      "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/d5dbde14da8c48a5ab796d080b563d42.jpg",
+    image:
+      "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/product-images/d5dbde14da8c48a5ab796d080b563d42.jpg",
   });
 
   const [founderData, setFounderData] = useState<any>({
     name: "Nandavel V",
-    title: "Founder & CEO, Qura Herbs",
-    image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
-    quote: "Build Qura Herbs with purpose. Grow it with people. And never lose the reason we started.",
-    description: `Qura Herbs started with an idea that was personal to me: people deserve skincare that understands their concerns instead of making them feel like they need to change who they are.
+    title: "Founder, Qura Herbs",
+    image:
+      "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
+    quote:
+      "“Qura Herbs started with my own skin journey. I wanted to bring that experience to people who were going through something similar and help them feel more comfortable in their own skin.”",
+    description: `Having experienced skin concerns himself, he understood the insecurity and frustration that can come with trying to find the right care. His personal experience with skincare and herbal ingredients eventually inspired him to build something that could reach people facing similar concerns.
 
-When I started Qura Herbs on January 13, 2025, in Coimbatore, I didn't see it as simply starting another beauty brand. I wanted to build something that could genuinely connect with people, understand their individual skin and hair concerns, and become a trusted part of their everyday routine.
+His vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.
 
-Being involved in Qura from the beginning has meant being part of everything—from understanding customer concerns and developing products to building the brand, creating content, managing operations, and listening to every piece of feedback we receive.
-
-What means the most to me is not simply seeing Qura grow. It is seeing someone trust our brand, share their experience, and come back because they believe in what we are building.
-
-There is still a long way to go, but the vision remains simple:`,
-    signature: "— Nandavel V\nFounder & CEO, Qura Herbs"
+From understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.`,
+    signature: "— Nandavel V\nFounder, Qura Herbs",
   });
 
   const [ceoData, setCeoData] = useState<any>({
-    name: "Pranavi G",
-    title: "Co-Founder & MD, Qura Herbs",
-    image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
-    quote: "This is more than building a company for me. It is about building something I can be proud to put my name behind.",
-    description: `For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.
+    name: "Pranavi GY",
+    title: "Co-Founder & CEO, Qura Herbs",
+    image:
+      "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
+    quote:
+      "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
+    description: `As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.
 
-As the Co-Founder & MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
-
-What inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.
-
-I want Qura Herbs to be a brand that feels personal—not distant or overly complicated. A brand that people can trust, relate to, and grow with.`,
-    signature: "— Pranavi G\nCo-Founder & MD, Qura Herbs"
+With a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.`,
+    signature: "— Pranavi GY\nCo-Founder & CEO, Qura Herbs",
   });
 
   const [founderImgError, setFounderImgError] = useState<boolean>(false);
@@ -98,7 +101,11 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
           setCeoData((prev: any) => ({
             ...prev,
             ...data,
-            image: data.image || data.ceo_image || prev.image || "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg"
+            image:
+              data.image ||
+              data.ceo_image ||
+              prev.image ||
+              "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
           }));
         }
       })
@@ -110,11 +117,12 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
     const element = document.getElementById(sectionId);
     if (element) {
       const offset = 120;
-      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      const elementPosition =
+        element.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - offset;
       window.scrollTo({
         top: offsetPosition,
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
     router.replace(`/about?tab=${sectionId}`, { scroll: false });
@@ -133,10 +141,10 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
       rootMargin: "-20% 0px -50% 0px",
-      threshold: 0
+      threshold: 0,
     });
 
-    const sections = ["brand", "founder", "ceo"];
+    const sections = ["brand", "founder", "ceo", "purpose"];
     sections.forEach((id) => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -147,17 +155,18 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
 
   // Handle initial tab scroll from URL query param if present
   useEffect(() => {
-    if (tabParam && ["brand", "founder", "ceo"].includes(tabParam)) {
+    if (tabParam && ["brand", "founder", "ceo", "purpose"].includes(tabParam)) {
       setActiveTab(tabParam);
       const timer = setTimeout(() => {
         const element = document.getElementById(tabParam);
         if (element) {
           const offset = 120;
-          const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+          const elementPosition =
+            element.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - offset;
           window.scrollTo({
             top: offsetPosition,
-            behavior: "smooth"
+            behavior: "smooth",
           });
         }
       }, 150);
@@ -165,9 +174,18 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
     }
   }, [tabParam]);
 
-  const founderImgSrc = (founderData.image || founderData.founder_image) ? getImageUrl(founderData.image || founderData.founder_image) : "";
-  const ceoImgSrc = (ceoData.image || ceoData.ceo_image) ? getImageUrl(ceoData.image || ceoData.ceo_image) : "/ceo_pranavi.jpg";
-  const brandImgSrc = (aboutData.hero_image || aboutData.image) ? getImageUrl(aboutData.hero_image || aboutData.image) : "";
+  const founderImgSrc =
+    founderData.image || founderData.founder_image
+      ? getImageUrl(founderData.image || founderData.founder_image)
+      : "/founder_nandavel.jpg";
+  const ceoImgSrc =
+    ceoData.image || ceoData.ceo_image
+      ? getImageUrl(ceoData.image || ceoData.ceo_image)
+      : "/ceo_pranavi.jpg";
+  const brandImgSrc =
+    aboutData.hero_image || aboutData.image
+      ? getImageUrl(aboutData.hero_image || aboutData.image)
+      : "";
 
   return (
     <div className="flex flex-col min-h-screen bg-brand-cream text-brand-dark font-sans selection:bg-brand-accent/20">
@@ -175,66 +193,85 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
       <Navbar />
 
       <main className="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20 space-y-16 md:space-y-24">
-        
         {/* Editorial Header */}
         <header className="text-center space-y-4 max-w-3xl mx-auto animate-fade-in">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 bg-brand-light border border-brand-sand/40 rounded-full text-[11px] font-sans font-semibold text-brand-accent tracking-[0.25em] uppercase">
-            <span>OUR STORY & LEADERSHIP</span>
+            <span>ABOUT OUR BRAND &amp; LEADERSHIP</span>
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-brand-dark tracking-tight leading-tight">
-            The World of Qura Herbs
+
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-6xl font-bold text-brand-dark tracking-tight leading-tight uppercase">
+            QURA HERBS
           </h1>
+
+          <p className="font-serif text-xl sm:text-2xl md:text-3xl text-brand-dark font-normal italic tracking-wide">
+            Skin That Feels Like You.
+          </p>
+
           <p className="text-xs sm:text-sm text-brand-cocoa/70 font-sans tracking-widest uppercase font-light">
-            Coimbatore, Tamil Nadu &bull; Founded January 13, 2025
+            Coimbatore - 2025 &bull; Botanical Skincare &amp; Haircare
           </p>
           <div className="w-16 h-[1px] bg-brand-accent/40 mx-auto pt-1"></div>
         </header>
 
-        {/* 3 Story Navigation Tabs */}
-        <nav className="sticky top-20 sm:top-24 z-30 flex justify-center items-center gap-1.5 sm:gap-3 bg-brand-light/95 p-1.5 sm:p-2 border border-brand-sand/40 rounded-full max-w-xl mx-auto shadow-sm backdrop-blur-md transition-all">
+        {/* 4 Story Navigation Tabs */}
+        <nav className="sticky top-20 sm:top-24 z-30 flex justify-center items-center gap-1 sm:gap-2 bg-brand-light/95 p-1.5 sm:p-2 border border-brand-sand/40 rounded-full max-w-2xl mx-auto shadow-sm backdrop-blur-md transition-all overflow-x-auto scrollbar-none">
           <button
             type="button"
             onClick={() => scrollToSection("brand")}
-            className={`px-3.5 sm:px-6 py-1.5 sm:py-2 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
+            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
               activeTab === "brand"
                 ? "bg-brand-dark text-brand-cream shadow-md"
                 : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
             }`}
           >
-            <Leaf size={14} className="text-brand-accent shrink-0" />
+            <Leaf size={13} className="text-brand-accent shrink-0" />
             <span>Brand Story</span>
           </button>
           <button
             type="button"
             onClick={() => scrollToSection("founder")}
-            className={`px-3.5 sm:px-6 py-1.5 sm:py-2 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
+            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
               activeTab === "founder"
                 ? "bg-brand-dark text-brand-cream shadow-md"
                 : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
             }`}
           >
-            <UserCheck size={14} className="text-brand-accent shrink-0" />
+            <UserCheck size={13} className="text-brand-accent shrink-0" />
             <span>The Founder</span>
           </button>
           <button
             type="button"
             onClick={() => scrollToSection("ceo")}
-            className={`px-3.5 sm:px-6 py-1.5 sm:py-2 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
+            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
               activeTab === "ceo"
                 ? "bg-brand-dark text-brand-cream shadow-md"
                 : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
             }`}
           >
-            <Briefcase size={14} className="text-brand-accent shrink-0" />
-            <span>Co-Founder &amp; MD</span>
+            <Briefcase size={13} className="text-brand-accent shrink-0" />
+            <span>Co-Founder &amp; CEO</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollToSection("purpose")}
+            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
+              activeTab === "purpose"
+                ? "bg-brand-dark text-brand-cream shadow-md"
+                : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
+            }`}
+          >
+            <Sparkles size={13} className="text-brand-accent shrink-0" />
+            <span>Growing With Purpose</span>
           </button>
         </nav>
 
         {/* ================================================== */}
-        {/* SECTION 01 — ABOUT QURA HERBS (Brand Story) */}
+        {/* SECTION 01 — BRAND INTRODUCTION (Brand Story) */}
         {/* ================================================== */}
-        <section id="brand" className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28">
-          
+        <section
+          id="brand"
+          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+        >
           {/* Section Eyebrow & Title */}
           <div className="flex items-center justify-between border-b border-brand-sand/30 pb-4">
             <div className="space-y-1">
@@ -242,47 +279,54 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                 SECTION 01 &bull; OUR STORY
               </span>
               <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
-                Care That Begins With Understanding
+                Skin That Feels Like You.
               </h2>
             </div>
             <div className="hidden sm:flex items-center gap-2 text-xs font-sans text-brand-cocoa/60 uppercase tracking-widest bg-brand-light px-3 py-1.5 border border-brand-sand/30 rounded-sm">
               <Calendar size={13} className="text-brand-accent" />
-              <span>Est. Jan 13, 2025</span>
+              <span>Coimbatore &bull; 2025</span>
             </div>
           </div>
 
           {/* Editorial Two-Column Layout */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            
             {/* LEFT COLUMN: Narrative Story Content */}
             <div className="lg:col-span-7 space-y-6 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
               <p>
-                Founded on <span className="font-normal text-brand-dark border-b border-brand-accent/50 pb-0.5">January 13, 2025</span>, in Coimbatore, Tamil Nadu, India, Qura Herbs was created with a simple belief: skincare should begin with understanding, not comparison.
+                Qura Herbs is a skincare and haircare brand built around a
+                simple belief{" "}
+                <strong className="font-semibold text-brand-dark">
+                  people should feel comfortable and confident in their own skin.
+                </strong>
               </p>
               <p>
-                Every person has different skin, different concerns, and a different journey. That is why we believe there is no single routine that works for everyone. Qura Herbs focuses on creating purposeful skincare and haircare designed around real everyday concerns—with thoughtful formulations, botanical ingredients, and carefully selected active ingredients.
+                Founded in Coimbatore - 2025, Qura Herbs began with a personal
+                skin journey and has grown through real customer experiences,
+                offline connections, and now an expanding online community of{" "}
+                <strong className="font-semibold text-brand-dark">
+                  300+ customers
+                </strong>
+                .
               </p>
-              
-              <div className="py-2">
-                <p className="font-serif text-xl md:text-2xl text-brand-dark font-normal italic border-l-2 border-brand-accent pl-5">
-                  &ldquo;But Qura is about more than what goes inside a bottle.&rdquo;
-                </p>
-              </div>
+              <p>
+                We bring together skincare and haircare products made with{" "}
+                <strong className="font-semibold text-brand-dark">
+                  herbal and botanical ingredients
+                </strong>
+                , selected with care for everyday skin and hair concerns. Our
+                focus is on thoughtful products, honest communication, and
+                routines that are simple enough to become part of everyday life.
+              </p>
 
-              <p>
-                It is about listening to our customers, understanding their concerns, helping them build consistent routines, and being there throughout their journey. Every product, conversation, and experience is part of our effort to make personal care more intentional and easier to understand.
-              </p>
-              <p>
-                We are building Qura Herbs for people who want to care for their skin and hair without unrealistic standards or unnecessary promises.
-              </p>
-
-              {/* Closing Signature Statement */}
+              {/* Highlight Callout Box */}
               <div className="mt-8 bg-brand-light border-l-4 border-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-3">
-                <p className="font-serif text-xl md:text-2xl text-brand-dark font-light leading-relaxed">
-                  Real concerns. Thoughtful care. Consistent routines.
-                </p>
-                <p className="font-sans text-xs uppercase font-bold tracking-[0.25em] text-brand-accent">
-                  That is the Qura way.
+                <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed">
+                  What began with a small circle of customers is now growing into
+                  a brand with a larger purpose{" "}
+                  <strong className="font-semibold text-brand-dark">
+                    helping people care for their skin and hair without feeling the
+                    need to change who they are.
+                  </strong>
                 </p>
               </div>
             </div>
@@ -300,7 +344,7 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                     THE QURA FOUNDATION
                   </span>
                   <h3 className="font-serif text-2xl font-light leading-snug">
-                    Purposeful Care & Intentional Routines
+                    Comfort &bull; Confidence &bull; Care
                   </h3>
                 </div>
 
@@ -310,9 +354,12 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                       <MapPin size={18} />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">Origin & Roots</h4>
+                      <h4 className="font-serif text-base text-brand-cream font-medium">
+                        Origin &amp; Roots
+                      </h4>
                       <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        Founded in Coimbatore, Tamil Nadu, India on January 13, 2025. Inspired by rich botanical heritage and real customer needs.
+                        Founded in Coimbatore - 2025. Born from a personal skin
+                        journey and real customer experiences.
                       </p>
                     </div>
                   </div>
@@ -322,9 +369,12 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                       <Sparkles size={18} />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">Thoughtful Formulations</h4>
+                      <h4 className="font-serif text-base text-brand-cream font-medium">
+                        Herbal &amp; Botanical Ingredients
+                      </h4>
                       <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        Combining botanical extracts with targeted active ingredients, created around individual skin & hair concerns.
+                        Thoughtful skincare and haircare made with botanical
+                        ingredients selected with care for everyday concerns.
                       </p>
                     </div>
                   </div>
@@ -334,9 +384,12 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                       <HeartHandshake size={18} />
                     </div>
                     <div className="space-y-1">
-                      <h4 className="font-serif text-base text-brand-cream font-medium">Listening First</h4>
+                      <h4 className="font-serif text-base text-brand-cream font-medium">
+                        300+ Growing Community
+                      </h4>
                       <p className="text-xs text-brand-cream/75 font-sans leading-relaxed">
-                        No single routine works for everyone. We listen, guide, and support your personal journey without unrealistic promises.
+                        Grown through offline connections and an expanding online
+                        community of people embracing their natural beauty.
                       </p>
                     </div>
                   </div>
@@ -358,58 +411,64 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
 
                 <div className="pt-4 border-t border-brand-cream/15 text-center">
                   <p className="text-[11px] font-sans text-brand-accent tracking-widest uppercase font-medium">
-                    Understanding over comparison &bull; Qura Herbs
+                    Skin That Feels Like You &bull; Qura Herbs
                   </p>
                 </div>
               </div>
             </div>
-
           </div>
-
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 02 — MEET OUR FOUNDER (Nandavel V) */}
+        {/* SECTION 02 — MEET THE FOUNDER (Nandavel V) */}
         {/* ================================================== */}
-        <section id="founder" className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28">
-          
+        <section
+          id="founder"
+          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+        >
           {/* Section Eyebrow & Title */}
           <div className="border-b border-brand-sand/30 pb-4">
             <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
               SECTION 02 &bull; THE FOUNDER
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
-              Meet Our Founder
+            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
+              MEET THE FOUNDER
             </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            
-            {/* LEFT COLUMN: Founder Image or Refined Profile Card */}
+            {/* LEFT COLUMN: Founder Image Card */}
             <div className="lg:col-span-5 space-y-4">
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-light border border-brand-sand/40 rounded-sm shadow-lg flex flex-col justify-between p-6">
                 {founderImgSrc && !founderImgError ? (
                   <img
                     src={founderImgSrc}
-                    alt="Nandavel V — Founder & CEO"
+                    alt="Nandavel V — Founder, Qura Herbs"
                     className="absolute inset-0 w-full h-full object-cover"
-                    onError={() => setFounderImgError(true)}
+                    onError={(e) => {
+                      if (e.currentTarget.src !== "/founder_nandavel.jpg") {
+                        e.currentTarget.src = "/founder_nandavel.jpg";
+                      } else {
+                        setFounderImgError(true);
+                      }
+                    }}
                   />
                 ) : (
-                  /* Refined Editorial Profile Placeholder Area (No fake stock images generated) */
                   <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4 bg-gradient-to-b from-brand-light via-brand-cream to-brand-sand/20">
                     <div className="w-24 h-24 rounded-full bg-brand-dark text-brand-cream flex items-center justify-center font-serif text-3xl font-light tracking-wider shadow-inner border-2 border-brand-accent/40">
                       NV
                     </div>
                     <div className="space-y-1">
-                      <p className="font-serif text-2xl text-brand-dark font-medium">Nandavel V</p>
+                      <p className="font-serif text-2xl text-brand-dark font-medium">
+                        Nandavel V
+                      </p>
                       <p className="text-xs font-sans tracking-[0.2em] text-brand-accent uppercase font-semibold">
-                        Founder & CEO, Qura Herbs
+                        Founder, Qura Herbs
                       </p>
                     </div>
                     <div className="w-12 h-[1px] bg-brand-accent/40 my-2"></div>
                     <p className="text-xs font-sans text-brand-cocoa/70 italic max-w-xs">
-                      Coimbatore, Tamil Nadu &bull; Est. Jan 13, 2025
+                      Coimbatore, Tamil Nadu &bull; Founded 2025
                     </p>
                   </div>
                 )}
@@ -417,153 +476,178 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                 {/* Profile Overlay Badge when photo is present */}
                 {founderImgSrc && !founderImgError && (
                   <div className="relative z-10 mt-auto bg-brand-cream/95 backdrop-blur-sm border border-brand-sand/50 p-4 text-center shadow-md">
-                    <p className="font-serif text-xl text-brand-dark font-medium">Nandavel V</p>
+                    <p className="font-serif text-xl text-brand-dark font-medium">
+                      Nandavel V
+                    </p>
                     <p className="text-[11px] tracking-widest text-brand-accent uppercase font-sans mt-0.5 font-semibold">
-                      Founder & CEO, Qura Herbs
+                      Founder, Qura Herbs
                     </p>
                   </div>
                 )}
               </div>
 
               <div className="bg-brand-light p-4 border border-brand-sand/30 text-center space-y-1 rounded-sm">
-                <p className="font-serif text-xs font-medium text-brand-dark">Origin & Ownership</p>
+                <p className="font-serif text-xs font-medium text-brand-dark">
+                  Origin &amp; Direction
+                </p>
                 <p className="text-[11px] text-brand-cocoa/70 font-sans">
-                  Founded Qura Herbs on January 13, 2025 in Coimbatore
+                  Founded Qura Herbs in Coimbatore - 2025
                 </p>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Personal Founder Story & Manifesto */}
+            {/* RIGHT COLUMN: Personal Founder Story */}
             <div className="lg:col-span-7 space-y-6">
-              
               {/* Founder Headline */}
               <div className="space-y-2">
                 <h3 className="font-serif text-2xl md:text-3xl text-brand-dark font-light leading-snug">
                   Nandavel V
                 </h3>
                 <p className="text-xs font-sans font-semibold text-brand-accent uppercase tracking-[0.2em]">
-                  Founder & CEO, Qura Herbs
+                  Founder, Qura Herbs
                 </p>
               </div>
 
-              {/* Founder Copy */}
+              {/* Bold Section Anchor */}
+              <p className="font-serif text-xl sm:text-2xl text-brand-dark font-semibold leading-snug">
+                Qura Herbs began with Nandavel&apos;s own skin journey.
+              </p>
+
+              {/* Founder Narrative */}
               <div className="space-y-5 text-brand-cocoa/90 font-sans font-light text-base leading-relaxed">
                 <p>
-                  Qura Herbs started with an idea that was personal to me: people deserve skincare that understands their concerns instead of making them feel like they need to change who they are.
+                  Having experienced skin concerns himself, he understood the
+                  insecurity and frustration that can come with trying to find
+                  the right care. His personal experience with skincare and
+                  herbal ingredients eventually inspired him to build something
+                  that could reach people facing similar concerns.
                 </p>
                 <p>
-                  When I started Qura Herbs on January 13, 2025, in Coimbatore, I didn't see it as simply starting another beauty brand. I wanted to build something that could genuinely connect with people, understand their individual skin and hair concerns, and become a trusted part of their everyday routine.
+                  His vision was simple, to make people feel more confident in
+                  their own skin through better care, not through unrealistic
+                  standards of beauty.
                 </p>
                 <p>
-                  Being involved in Qura from the beginning has meant being part of everything—from understanding customer concerns and developing products to building the brand, creating content, managing operations, and listening to every piece of feedback we receive.
-                </p>
-                <p>
-                  What means the most to me is not simply seeing Qura grow. It is seeing someone trust our brand, share their experience, and come back because they believe in what we are building.
-                </p>
-                <p className="font-medium text-brand-dark">
-                  There is still a long way to go, but the vision remains simple:
+                  From understanding customer concerns and exploring ingredients
+                  to selecting products and shaping the brand, Nandavel continues
+                  to be closely involved in the foundation and direction of Qura
+                  Herbs.
                 </p>
               </div>
 
-              {/* Visually Distinctive Closing Manifesto */}
+              {/* Distinctive Italic Quotation Box */}
               <div className="bg-gradient-to-br from-brand-light via-brand-cream to-brand-sand/30 border border-brand-accent/30 border-l-4 border-l-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-4">
-                <p className="font-serif text-xl sm:text-2xl text-brand-dark font-light leading-relaxed italic">
-                  &ldquo;Build Qura Herbs with purpose. Grow it with people. And never lose the reason we started.&rdquo;
+                <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed italic">
+                  &ldquo;Qura Herbs started with my own skin journey. I wanted to
+                  bring that experience to people who were going through
+                  something similar and help them feel more comfortable in their
+                  own skin.&rdquo;
                 </p>
-                
+
                 <div className="pt-2 border-t border-brand-sand/40 flex items-center justify-between">
                   <div>
-                    <p className="font-serif text-sm font-medium text-brand-dark">— Nandavel V</p>
+                    <p className="font-serif text-sm font-medium text-brand-dark">
+                      — Nandavel V
+                    </p>
                     <p className="text-[10px] font-sans tracking-widest text-brand-accent uppercase">
-                      Founder & CEO, Qura Herbs
+                      Founder, Qura Herbs
                     </p>
                   </div>
                   <span className="text-[10px] font-sans uppercase tracking-widest text-brand-cocoa/50">
-                    Founder Manifesto
+                    Founder Voice
                   </span>
                 </div>
               </div>
-
             </div>
-
           </div>
-
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 03 — MEET OUR CO-FOUNDER & MD (Pranavi G) */}
+        {/* SECTION 03 — MEET THE CO-FOUNDER & CEO (Pranavi GY) */}
         {/* ================================================== */}
-        <section id="ceo" className="space-y-10 animate-fade-in pb-8 scroll-mt-28">
-          
+        <section
+          id="ceo"
+          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+        >
           {/* Section Eyebrow & Title */}
           <div className="border-b border-brand-sand/30 pb-4">
             <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-              SECTION 03 &bull; CO-FOUNDER &amp; MD
+              SECTION 03 &bull; CO-FOUNDER &amp; CEO
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark">
-              Meet Our Co-Founder &amp; MD
+            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
+              MEET THE CO-FOUNDER &amp; CEO
             </h2>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            
             {/* LEFT COLUMN: Narrative Story */}
             <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
-              
               {/* Headline */}
               <div className="space-y-2">
                 <h3 className="font-serif text-2xl md:text-3xl text-brand-dark font-light leading-snug">
-                  Pranavi G
+                  Pranavi GY
                 </h3>
                 <p className="text-xs font-sans font-semibold text-brand-accent uppercase tracking-[0.2em]">
-                  Co-Founder &amp; MD, Qura Herbs
+                  Co-Founder &amp; CEO, Qura Herbs
                 </p>
               </div>
 
-              {/* Story Copy */}
+              {/* Bold Section Anchor */}
+              <p className="font-serif text-xl sm:text-2xl text-brand-dark font-semibold leading-snug">
+                Pranavi believed everyone deserved to feel confident in their own
+                skin.
+              </p>
+
+              {/* Story Narrative */}
               <div className="space-y-5 text-brand-cocoa/90 font-sans font-light text-base leading-relaxed">
                 <p>
-                  For me, Qura Herbs is more than a business. It is something I genuinely care about building—one customer, one product, and one experience at a time.
+                  As Qura Herbs continued to take shape, Pranavi became part of
+                  the journey, bringing her own perspective, creativity, and
+                  ideas to the brand.
                 </p>
                 <p>
-                  As the Co-Founder &amp; MD of Qura Herbs, I am closely involved in shaping the brand, understanding what our customers truly need, and making sure every part of their experience feels thoughtful and meaningful. I believe a beauty brand should listen before it speaks, understand before it promises, and always put people before trends.
-                </p>
-                <p>
-                  What inspires me most is seeing Qura grow from an idea into a brand that people choose to bring into their everyday routines. Every message from a customer, every piece of feedback, and every small milestone reminds me why we started.
-                </p>
-                <p>
-                  I want Qura Herbs to be a brand that feels personal—not distant or overly complicated. A brand that people can trust, relate to, and grow with.
+                  With a strong eye for aesthetics, creativity, and
+                  communication, Pranavi brings a distinct perspective to Qura
+                  Herbs. As someone who genuinely values self-care, she believes
+                  that taking care of your skin and yourself should be a
+                  positive and empowering experience. Her ideas and creative
+                  direction shape Qura&apos;s visual identity, presentation, and
+                  voice, bringing this belief into the way the brand expresses
+                  itself.
                 </p>
               </div>
 
-              {/* Visually Emphasized Closing Statement */}
+              {/* Emphasized Closing Quotation */}
               <div className="bg-brand-dark text-brand-cream p-6 md:p-8 rounded-sm shadow-xl space-y-4">
-                <p className="font-serif text-xl sm:text-2xl font-light leading-relaxed">
-                  &ldquo;This is more than building a company for me. It is about building something I can be proud to put my name behind.&rdquo;
+                <p className="font-serif text-lg sm:text-xl font-light leading-relaxed italic text-brand-cream">
+                  &ldquo;For me, Qura is more than a business. It is a feeling that
+                  deserves to be experienced, expressed, and carried
+                  forward.&rdquo;
                 </p>
-                
+
                 <div className="pt-3 border-t border-brand-cream/15 flex items-center justify-between">
                   <div>
-                    <p className="font-serif text-sm font-medium text-brand-cream">— Pranavi G</p>
+                    <p className="font-serif text-sm font-medium text-brand-cream">
+                      — Pranavi GY
+                    </p>
                     <p className="text-[10px] font-sans tracking-widest text-brand-accent uppercase">
-                      Co-Founder &amp; MD, Qura Herbs
+                      Co-Founder &amp; CEO, Qura Herbs
                     </p>
                   </div>
                   <span className="text-[10px] font-sans uppercase tracking-widest text-brand-cream/50">
-                    Leadership Commitment
+                    Executive Direction
                   </span>
                 </div>
               </div>
-
             </div>
 
-            {/* RIGHT COLUMN: Image or Refined Executive Profile Card */}
+            {/* RIGHT COLUMN: Profile Image Card */}
             <div className="lg:col-span-5 space-y-4 order-1 lg:order-2">
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-light border border-brand-sand/40 rounded-sm shadow-lg flex flex-col justify-between p-6">
                 {ceoImgSrc && !ceoImgError ? (
                   <img
                     src={ceoImgSrc}
-                    alt="Pranavi G — Co-Founder &amp; MD"
+                    alt="Pranavi GY — Co-Founder &amp; CEO"
                     className="absolute inset-0 w-full h-full object-cover"
                     onError={(e) => {
                       if (e.currentTarget.src !== "/ceo_pranavi.jpg") {
@@ -574,15 +658,16 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                     }}
                   />
                 ) : (
-                  /* Refined Profile Placeholder Area */
                   <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-4 bg-gradient-to-b from-brand-light via-brand-cream to-brand-sand/20">
                     <div className="w-24 h-24 rounded-full bg-brand-accent text-brand-cream flex items-center justify-center font-serif text-3xl font-light tracking-wider shadow-inner border-2 border-brand-dark/20">
                       PG
                     </div>
                     <div className="space-y-1">
-                      <p className="font-serif text-2xl text-brand-dark font-medium">Pranavi G</p>
+                      <p className="font-serif text-2xl text-brand-dark font-medium">
+                        Pranavi GY
+                      </p>
                       <p className="text-xs font-sans tracking-[0.2em] text-brand-accent uppercase font-semibold">
-                        Co-Founder &amp; MD
+                        Co-Founder &amp; CEO
                       </p>
                       <p className="text-[11px] font-sans tracking-widest text-brand-cocoa/70 uppercase">
                         Qura Herbs
@@ -590,38 +675,78 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
                     </div>
                     <div className="w-12 h-[1px] bg-brand-accent/40 my-2"></div>
                     <p className="text-xs font-sans text-brand-cocoa/70 italic max-w-xs">
-                      Executive Leadership & Brand Strategy
+                      Aesthetics, Creative Direction &amp; Brand Voice
                     </p>
                   </div>
                 )}
 
-                {/* Overlay Badge when photo is uploaded */}
+                {/* Overlay Badge when photo is present */}
                 {ceoImgSrc && !ceoImgError && (
                   <div className="relative z-10 mt-auto bg-brand-cream/95 backdrop-blur-sm border border-brand-sand/50 p-4 text-center shadow-md">
-                    <p className="font-serif text-xl text-brand-dark font-medium">Pranavi G</p>
+                    <p className="font-serif text-xl text-brand-dark font-medium">
+                      Pranavi GY
+                    </p>
                     <p className="text-[11px] tracking-widest text-brand-accent uppercase font-sans mt-0.5 font-semibold">
-                      Co-Founder &amp; MD, Qura Herbs
+                      Co-Founder &amp; CEO, Qura Herbs
                     </p>
                   </div>
                 )}
               </div>
 
               <div className="bg-brand-light p-4 border border-brand-sand/30 text-center space-y-1 rounded-sm">
-                <p className="font-serif text-xs font-medium text-brand-dark">Executive Leadership</p>
+                <p className="font-serif text-xs font-medium text-brand-dark">
+                  Creative Direction &amp; Aesthetics
+                </p>
                 <p className="text-[11px] text-brand-cocoa/70 font-sans">
-                  Building a customer-first beauty brand with intention
+                  Shaping the visual identity and voice of Qura Herbs
                 </p>
               </div>
             </div>
+          </div>
+        </section>
 
+        {/* ================================================== */}
+        {/* SECTION 04 — GROWING WITH PURPOSE */}
+        {/* ================================================== */}
+        <section
+          id="purpose"
+          className="space-y-8 animate-fade-in pb-8 scroll-mt-28"
+        >
+          {/* Section Eyebrow & Title */}
+          <div className="border-b border-brand-sand/30 pb-4 text-center">
+            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block mb-1">
+              SECTION 04 &bull; PURPOSE &amp; TRANSPARENCY
+            </span>
+            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
+              GROWING WITH PURPOSE
+            </h2>
           </div>
 
+          <div className="max-w-3xl mx-auto space-y-6 text-center">
+            <p className="text-base sm:text-lg md:text-xl text-brand-cocoa/90 font-sans font-light leading-relaxed">
+              As an authorised reseller, we continue to grow through customer
+              feedback, thoughtful product selection, and a commitment to
+              presenting trusted skincare and haircare with transparency.
+            </p>
+
+            {/* Distinctive Philosophy Callout Banner */}
+            <div className="bg-gradient-to-br from-brand-dark via-brand-cocoa to-brand-dark text-brand-cream p-8 sm:p-10 md:p-12 text-center rounded-sm shadow-xl space-y-4">
+              <p className="font-serif text-2xl sm:text-3xl md:text-4xl font-normal leading-relaxed text-brand-cream">
+                Beauty isn&apos;t about changing who you are. It&apos;s about caring
+                for who you are.
+              </p>
+              <div className="w-16 h-[1px] bg-brand-accent/60 mx-auto"></div>
+              <p className="text-xs font-sans tracking-[0.25em] text-brand-accent uppercase font-semibold">
+                Qura Herbs &bull; Coimbatore - 2025
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Footer Brand CTA */}
         <div className="text-center max-w-2xl mx-auto space-y-6 pt-8 border-t border-brand-sand/30">
-          <p className="font-serif text-xl text-brand-dark font-light leading-relaxed">
-            Real concerns. Thoughtful care. Consistent routines.
+          <p className="font-serif text-xl sm:text-2xl text-brand-dark font-light leading-relaxed italic">
+            Skin That Feels Like You.
           </p>
 
           <div className="pt-2">
@@ -633,7 +758,6 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
             </Link>
           </div>
         </div>
-
       </main>
 
       <Footer />
@@ -644,11 +768,13 @@ I want Qura Herbs to be a brand that feels personal—not distant or overly comp
 
 export default function AboutPage() {
   return (
-    <Suspense fallback={
-      <div className="flex min-h-screen items-center justify-center bg-brand-cream text-brand-dark text-xs font-sans font-bold uppercase tracking-widest">
-        Loading Qura Story...
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center bg-brand-cream text-brand-dark text-xs font-sans font-bold uppercase tracking-widest">
+          Loading Qura Story...
+        </div>
+      }
+    >
       <AboutPageContent />
     </Suspense>
   );
