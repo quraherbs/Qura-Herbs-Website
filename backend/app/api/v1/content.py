@@ -184,10 +184,10 @@ def get_ceo_content(db: Session = Depends(get_db)):
         return {
             "name": "Pranavi GY",
             "ceo_name": "Pranavi GY",
-            "title": "Co-Founder & CEO, Qura Herbs",
-            "ceo_designation": "Co-Founder & CEO, Qura Herbs",
-            "eyebrow": "SECTION 03 • CO-FOUNDER & CEO",
-            "heading": "MEET THE CO-FOUNDER & CEO",
+            "title": "Co-Founder & MD, Qura Herbs",
+            "ceo_designation": "Co-Founder & MD, Qura Herbs",
+            "eyebrow": "SECTION 03 • CO-FOUNDER & MD",
+            "heading": "MEET THE CO-FOUNDER & MD",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "ceo_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "headline": "Pranavi believed everyone deserved to feel confident in their own skin.",
@@ -195,7 +195,7 @@ def get_ceo_content(db: Session = Depends(get_db)):
             "ceo_quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
             "description": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
             "ceo_bio": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
-            "signature": "— Pranavi GY\nCo-Founder & CEO, Qura Herbs"
+            "signature": "— Pranavi GY\nCo-Founder & MD, Qura Herbs"
         }
     return setting.value
 

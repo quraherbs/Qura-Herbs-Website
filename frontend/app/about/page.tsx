@@ -42,7 +42,7 @@ function AboutPageContent() {
 
   const [founderData, setFounderData] = useState<any>({
     name: "Nandavel V",
-    title: "Founder, Qura Herbs",
+    title: "Founder & CEO, Qura Herbs",
     image:
       "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
     quote:
@@ -52,12 +52,12 @@ function AboutPageContent() {
 His vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.
 
 From understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.`,
-    signature: "— Nandavel V\nFounder, Qura Herbs",
+    signature: "— Nandavel V\nFounder & CEO, Qura Herbs",
   });
 
   const [ceoData, setCeoData] = useState<any>({
     name: "Pranavi GY",
-    title: "Co-Founder & CEO, Qura Herbs",
+    title: "Co-Founder & MD, Qura Herbs",
     image:
       "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
     quote:
@@ -65,7 +65,7 @@ From understanding customer concerns and exploring ingredients to selecting prod
     description: `As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.
 
 With a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.`,
-    signature: "— Pranavi GY\nCo-Founder & CEO, Qura Herbs",
+    signature: "— Pranavi GY\nCo-Founder & MD, Qura Herbs",
   });
 
   const [founderImgError, setFounderImgError] = useState<boolean>(false);
@@ -249,7 +249,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
             }`}
           >
             <Briefcase size={13} className="text-brand-accent shrink-0" />
-            <span>Co-Founder &amp; CEO</span>
+            <span>Co-Founder &amp; MD</span>
           </button>
           <button
             type="button"
@@ -424,27 +424,18 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         {/* ================================================== */}
         <section
           id="founder"
-          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+          className="space-y-8 md:space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
         >
-          {/* Section Eyebrow & Title */}
-          <div className="border-b border-brand-sand/30 pb-4">
-            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-              SECTION 02 &bull; THE FOUNDER
-            </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
-              MEET THE FOUNDER
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* LEFT COLUMN: Founder Image Card */}
+          {/* Two-Column Editorial Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+            {/* LEFT COLUMN: Founder Portrait & Identity directly below image */}
             <div className="lg:col-span-5 space-y-4">
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-light border border-brand-sand/40 rounded-sm shadow-lg flex flex-col justify-between p-6">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-brand-light border border-brand-sand/30 shadow-md">
                 {founderImgSrc && !founderImgError ? (
                   <img
                     src={founderImgSrc}
-                    alt="Nandavel V — Founder, Qura Herbs"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    alt="Nandavel V — Founder & CEO, Qura Herbs"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-105"
                     onError={(e) => {
                       if (e.currentTarget.src !== "/founder_nandavel.jpg") {
                         e.currentTarget.src = "/founder_nandavel.jpg";
@@ -458,63 +449,51 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                     <div className="w-24 h-24 rounded-full bg-brand-dark text-brand-cream flex items-center justify-center font-serif text-3xl font-light tracking-wider shadow-inner border-2 border-brand-accent/40">
                       NV
                     </div>
-                    <div className="space-y-1">
-                      <p className="font-serif text-2xl text-brand-dark font-medium">
-                        Nandavel V
-                      </p>
-                      <p className="text-xs font-sans tracking-[0.2em] text-brand-accent uppercase font-semibold">
-                        Founder, Qura Herbs
-                      </p>
-                    </div>
-                    <div className="w-12 h-[1px] bg-brand-accent/40 my-2"></div>
-                    <p className="text-xs font-sans text-brand-cocoa/70 italic max-w-xs">
-                      Coimbatore, Tamil Nadu &bull; Founded 2025
-                    </p>
-                  </div>
-                )}
-
-                {/* Profile Overlay Badge when photo is present */}
-                {founderImgSrc && !founderImgError && (
-                  <div className="relative z-10 mt-auto bg-brand-cream/95 backdrop-blur-sm border border-brand-sand/50 p-4 text-center shadow-md">
-                    <p className="font-serif text-xl text-brand-dark font-medium">
-                      Nandavel V
-                    </p>
-                    <p className="text-[11px] tracking-widest text-brand-accent uppercase font-sans mt-0.5 font-semibold">
-                      Founder, Qura Herbs
-                    </p>
                   </div>
                 )}
               </div>
 
-              <div className="bg-brand-light p-4 border border-brand-sand/30 text-center space-y-1 rounded-sm">
-                <p className="font-serif text-xs font-medium text-brand-dark">
-                  Origin &amp; Direction
-                </p>
-                <p className="text-[11px] text-brand-cocoa/70 font-sans">
-                  Founded Qura Herbs in Coimbatore - 2025
+              {/* Name & Position directly below founder's image only */}
+              <div className="pt-1 text-left space-y-1">
+                <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-brand-dark tracking-tight">
+                  Nandavel V
+                </h3>
+                <p className="text-xs sm:text-sm font-sans tracking-widest text-brand-accent uppercase font-medium">
+                  Founder &amp; CEO, Qura Herbs
                 </p>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Personal Founder Story */}
-            <div className="lg:col-span-7 space-y-6">
-              {/* Founder Headline */}
-              <div className="space-y-2">
-                <h3 className="font-serif text-2xl md:text-3xl text-brand-dark font-light leading-snug">
-                  Nandavel V
-                </h3>
-                <p className="text-xs font-sans font-semibold text-brand-accent uppercase tracking-[0.2em]">
-                  Founder, Qura Herbs
-                </p>
+            {/* RIGHT COLUMN: Founder Introduction, Story, & Quotation */}
+            <div className="lg:col-span-7 space-y-6 pt-2 lg:pt-0">
+              {/* Section Title & Editorial Header */}
+              <div className="space-y-3 border-b border-brand-sand/30 pb-4">
+                <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
+                  SECTION 02 &bull; THE FOUNDER
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl md:text-[40px] font-light text-brand-dark tracking-tight">
+                  Founder&apos;s Note
+                </h2>
               </div>
 
-              {/* Bold Section Anchor */}
-              <p className="font-serif text-xl sm:text-2xl text-brand-dark font-semibold leading-snug">
-                Qura Herbs began with Nandavel&apos;s own skin journey.
-              </p>
+              {/* Subtle Quote Mark Icon */}
+              <div className="text-brand-accent/60">
+                <svg
+                  className="w-8 h-8 fill-current"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
 
-              {/* Founder Narrative */}
-              <div className="space-y-5 text-brand-cocoa/90 font-sans font-light text-base leading-relaxed">
+              {/* Anchor Headline */}
+              <h4 className="font-serif text-xl sm:text-2xl text-brand-dark font-medium leading-snug">
+                Qura Herbs began with Nandavel&apos;s own skin journey.
+              </h4>
+
+              {/* Story Narrative */}
+              <div className="space-y-4 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
                 <p>
                   Having experienced skin concerns himself, he understood the
                   insecurity and frustration that can come with trying to find
@@ -535,71 +514,59 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                 </p>
               </div>
 
-              {/* Distinctive Italic Quotation Box */}
-              <div className="bg-gradient-to-br from-brand-light via-brand-cream to-brand-sand/30 border border-brand-accent/30 border-l-4 border-l-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-4">
-                <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed italic">
+              {/* Quotation */}
+              <div className="pt-6 border-t border-brand-sand/40">
+                <blockquote className="font-serif text-lg sm:text-xl text-brand-dark font-light italic leading-relaxed pl-5 border-l-2 border-brand-accent">
                   &ldquo;Qura Herbs started with my own skin journey. I wanted to
                   bring that experience to people who were going through
                   something similar and help them feel more comfortable in their
                   own skin.&rdquo;
-                </p>
-
-                <div className="pt-2 border-t border-brand-sand/40 flex items-center justify-between">
-                  <div>
-                    <p className="font-serif text-sm font-medium text-brand-dark">
-                      — Nandavel V
-                    </p>
-                    <p className="text-[10px] font-sans tracking-widest text-brand-accent uppercase">
-                      Founder, Qura Herbs
-                    </p>
-                  </div>
-                  <span className="text-[10px] font-sans uppercase tracking-widest text-brand-cocoa/50">
-                    Founder Voice
-                  </span>
-                </div>
+                </blockquote>
               </div>
             </div>
           </div>
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 03 — MEET THE CO-FOUNDER & CEO (Pranavi GY) */}
+        {/* SECTION 03 — CO-FOUNDER SECTION (Pranavi GY) */}
         {/* ================================================== */}
         <section
           id="ceo"
-          className="space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
+          className="space-y-8 md:space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
         >
-          {/* Section Eyebrow & Title */}
-          <div className="border-b border-brand-sand/30 pb-4">
-            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-              SECTION 03 &bull; CO-FOUNDER &amp; CEO
-            </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
-              MEET THE CO-FOUNDER &amp; CEO
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
-            {/* LEFT COLUMN: Narrative Story */}
-            <div className="lg:col-span-7 space-y-6 order-2 lg:order-1">
-              {/* Headline */}
-              <div className="space-y-2">
-                <h3 className="font-serif text-2xl md:text-3xl text-brand-dark font-light leading-snug">
-                  Pranavi GY
-                </h3>
-                <p className="text-xs font-sans font-semibold text-brand-accent uppercase tracking-[0.2em]">
-                  Co-Founder &amp; CEO, Qura Herbs
-                </p>
+          {/* Two-Column Editorial Layout (Alternating on Desktop, Image first on Mobile) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
+            {/* TEXT COLUMN: Co-Founder Story & Quotation (Left on Desktop, Below on Mobile) */}
+            <div className="lg:col-span-7 space-y-6 pt-2 lg:pt-0 order-2 lg:order-1">
+              {/* Section Title & Editorial Header */}
+              <div className="space-y-3 border-b border-brand-sand/30 pb-4">
+                <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
+                  SECTION 03 &bull; CO-FOUNDER &amp; MD
+                </span>
+                <h2 className="font-serif text-3xl sm:text-4xl md:text-[40px] font-light text-brand-dark tracking-tight">
+                  Co-Founder&apos;s Note
+                </h2>
               </div>
 
-              {/* Bold Section Anchor */}
-              <p className="font-serif text-xl sm:text-2xl text-brand-dark font-semibold leading-snug">
+              {/* Subtle Quote Mark Icon */}
+              <div className="text-brand-accent/60">
+                <svg
+                  className="w-8 h-8 fill-current"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                </svg>
+              </div>
+
+              {/* Anchor Headline */}
+              <h4 className="font-serif text-xl sm:text-2xl text-brand-dark font-medium leading-snug">
                 Pranavi believed everyone deserved to feel confident in their own
                 skin.
-              </p>
+              </h4>
 
               {/* Story Narrative */}
-              <div className="space-y-5 text-brand-cocoa/90 font-sans font-light text-base leading-relaxed">
+              <div className="space-y-4 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
                 <p>
                   As Qura Herbs continued to take shape, Pranavi became part of
                   the journey, bringing her own perspective, creativity, and
@@ -617,38 +584,24 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                 </p>
               </div>
 
-              {/* Emphasized Closing Quotation */}
-              <div className="bg-brand-dark text-brand-cream p-6 md:p-8 rounded-sm shadow-xl space-y-4">
-                <p className="font-serif text-lg sm:text-xl font-light leading-relaxed italic text-brand-cream">
+              {/* Quotation */}
+              <div className="pt-6 border-t border-brand-sand/40">
+                <blockquote className="font-serif text-lg sm:text-xl text-brand-dark font-light italic leading-relaxed pl-5 border-l-2 border-brand-accent">
                   &ldquo;For me, Qura is more than a business. It is a feeling that
                   deserves to be experienced, expressed, and carried
                   forward.&rdquo;
-                </p>
-
-                <div className="pt-3 border-t border-brand-cream/15 flex items-center justify-between">
-                  <div>
-                    <p className="font-serif text-sm font-medium text-brand-cream">
-                      — Pranavi GY
-                    </p>
-                    <p className="text-[10px] font-sans tracking-widest text-brand-accent uppercase">
-                      Co-Founder &amp; CEO, Qura Herbs
-                    </p>
-                  </div>
-                  <span className="text-[10px] font-sans uppercase tracking-widest text-brand-cream/50">
-                    Executive Direction
-                  </span>
-                </div>
+                </blockquote>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Profile Image Card */}
+            {/* PORTRAIT COLUMN: Co-Founder Portrait & Identity directly below image (Right on Desktop, First on Mobile) */}
             <div className="lg:col-span-5 space-y-4 order-1 lg:order-2">
-              <div className="relative aspect-[4/5] w-full overflow-hidden bg-brand-light border border-brand-sand/40 rounded-sm shadow-lg flex flex-col justify-between p-6">
+              <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-brand-light border border-brand-sand/30 shadow-md">
                 {ceoImgSrc && !ceoImgError ? (
                   <img
                     src={ceoImgSrc}
-                    alt="Pranavi GY — Co-Founder &amp; CEO"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    alt="Pranavi GY — Co-Founder & MD, Qura Herbs"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 hover:scale-105"
                     onError={(e) => {
                       if (e.currentTarget.src !== "/ceo_pranavi.jpg") {
                         e.currentTarget.src = "/ceo_pranavi.jpg";
@@ -662,43 +615,17 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                     <div className="w-24 h-24 rounded-full bg-brand-accent text-brand-cream flex items-center justify-center font-serif text-3xl font-light tracking-wider shadow-inner border-2 border-brand-dark/20">
                       PG
                     </div>
-                    <div className="space-y-1">
-                      <p className="font-serif text-2xl text-brand-dark font-medium">
-                        Pranavi GY
-                      </p>
-                      <p className="text-xs font-sans tracking-[0.2em] text-brand-accent uppercase font-semibold">
-                        Co-Founder &amp; CEO
-                      </p>
-                      <p className="text-[11px] font-sans tracking-widest text-brand-cocoa/70 uppercase">
-                        Qura Herbs
-                      </p>
-                    </div>
-                    <div className="w-12 h-[1px] bg-brand-accent/40 my-2"></div>
-                    <p className="text-xs font-sans text-brand-cocoa/70 italic max-w-xs">
-                      Aesthetics, Creative Direction &amp; Brand Voice
-                    </p>
-                  </div>
-                )}
-
-                {/* Overlay Badge when photo is present */}
-                {ceoImgSrc && !ceoImgError && (
-                  <div className="relative z-10 mt-auto bg-brand-cream/95 backdrop-blur-sm border border-brand-sand/50 p-4 text-center shadow-md">
-                    <p className="font-serif text-xl text-brand-dark font-medium">
-                      Pranavi GY
-                    </p>
-                    <p className="text-[11px] tracking-widest text-brand-accent uppercase font-sans mt-0.5 font-semibold">
-                      Co-Founder &amp; CEO, Qura Herbs
-                    </p>
                   </div>
                 )}
               </div>
 
-              <div className="bg-brand-light p-4 border border-brand-sand/30 text-center space-y-1 rounded-sm">
-                <p className="font-serif text-xs font-medium text-brand-dark">
-                  Creative Direction &amp; Aesthetics
-                </p>
-                <p className="text-[11px] text-brand-cocoa/70 font-sans">
-                  Shaping the visual identity and voice of Qura Herbs
+              {/* Name & Position directly below co-founder's image only */}
+              <div className="pt-1 text-left space-y-1">
+                <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-brand-dark tracking-tight">
+                  Pranavi GY
+                </h3>
+                <p className="text-xs sm:text-sm font-sans tracking-widest text-brand-accent uppercase font-medium">
+                  Co-Founder &amp; MD, Qura Herbs
                 </p>
               </div>
             </div>
