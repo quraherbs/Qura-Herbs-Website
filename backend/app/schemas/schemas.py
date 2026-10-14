@@ -264,6 +264,7 @@ class ReviewResponse(ReviewBase):
     approved: bool
     created_at: datetime
     customer_name: Optional[str] = None
+    customer_city: Optional[str] = None
     product_name: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)

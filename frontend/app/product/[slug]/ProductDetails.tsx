@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
-import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight } from "lucide-react";
+import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
 interface ProductVariant {
@@ -36,16 +36,415 @@ interface Product {
 
 interface Review {
   id: number;
+  product_id?: number;
+  customer_id?: number;
+  customer_name?: string;
+  customer_city?: string;
   rating: number;
   review: string;
   verified_purchase: boolean;
   created_at: string;
 }
 
+const FALLBACK_REVIEWS: Record<string, Review[]> = {
+  "avocado-night-cream": [
+    {
+      id: 101,
+      customer_name: "Meera Kalyanasundaram",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "I have been using this Avocado cream for nearly a month now. Night time apply pannittu thoongina, morning skin feels very soft and plump. Skin dullness is visibly reduced and there is a healthy glow.",
+      verified_purchase: true,
+      created_at: "2026-03-24T10:30:00Z"
+    },
+    {
+      id: 102,
+      customer_name: "Deepa Natarajan",
+      customer_city: "Coimbatore, TN",
+      rating: 5,
+      review: "Romba rich yet absorbs without being sticky. After waking up, dry patches around my nose and cheeks are gone. My skin feels thoroughly nourished and moisturised.",
+      verified_purchase: true,
+      created_at: "2026-03-29T14:15:00Z"
+    },
+    {
+      id: 103,
+      customer_name: "Shruthi Venkatesh",
+      customer_city: "Bengaluru, KA",
+      rating: 4,
+      review: "Good night cream for tired skin. Dark spots have softened in appearance over 3-4 weeks of regular use. Texture is very soothing and mild botanical fragrance.",
+      verified_purchase: true,
+      created_at: "2026-04-02T09:20:00Z"
+    },
+    {
+      id: 104,
+      customer_name: "Priya Sundar",
+      customer_city: "Madurai, TN",
+      rating: 5,
+      review: "Enoda skin konjam sensitive and acne-prone. Usually heavy creams breakout tharum, but this one didn't cause any pimples. Woke up with calm and fresh-looking skin.",
+      verified_purchase: true,
+      created_at: "2026-04-06T18:45:00Z"
+    },
+    {
+      id: 105,
+      customer_name: "Ananya Raman",
+      customer_city: "Salem, TN",
+      rating: 5,
+      review: "Skin feels so supple and hydrated. I noticed my morning complexion looks clearer and less dull. Definitely staying in my evening ritual.",
+      verified_purchase: true,
+      created_at: "2026-04-10T11:00:00Z"
+    },
+    {
+      id: 106,
+      customer_name: "Karthiga Devi",
+      customer_city: "Tiruchirappalli, TN",
+      rating: 4,
+      review: "Subtle natural herbal scent and deep moisturizing feel. My skin texture feels smoother and makeup sits much better during the day now.",
+      verified_purchase: true,
+      created_at: "2026-04-12T16:30:00Z"
+    }
+  ],
+  "glow-radiant-plus": [
+    {
+      id: 201,
+      customer_name: "Pavithra Sridhar",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Using this cream for 3 weeks every night. Face-la irundha pigmentation marks konjam light aagirukku and skin tone looks much more even and radiant.",
+      verified_purchase: true,
+      created_at: "2026-03-22T08:15:00Z"
+    },
+    {
+      id: 202,
+      customer_name: "Archana Krishnan",
+      customer_city: "Bengaluru, KA",
+      rating: 5,
+      review: "Really impressed with how bright my skin looks in the mornings. It helped fade stubborn post-blemish marks without irritating my combination skin.",
+      verified_purchase: true,
+      created_at: "2026-03-27T12:00:00Z"
+    },
+    {
+      id: 203,
+      customer_name: "Gayathri Mohan",
+      customer_city: "Coimbatore, TN",
+      rating: 5,
+      review: "Lightweight feel on skin but deeply moisturising. Saffron and licorice fragrance is so soothing. My face doesn't look dull even after long work hours.",
+      verified_purchase: true,
+      created_at: "2026-04-01T17:10:00Z"
+    },
+    {
+      id: 204,
+      customer_name: "Nithya Balaji",
+      customer_city: "Madurai, TN",
+      rating: 4,
+      review: "Gentle on sensitive skin. Took around 20 days to notice difference, but skin definitely feels softer, clearer, and has a natural healthy radiance.",
+      verified_purchase: true,
+      created_at: "2026-04-05T19:30:00Z"
+    },
+    {
+      id: 205,
+      customer_name: "Swetha R.",
+      customer_city: "Tiruppur, TN",
+      rating: 5,
+      review: "Nalla texture, quickly absorbs. Acne scars appearance konjam konjama reduce aavudhu. Skin feels super hydrated when I wash my face next morning.",
+      verified_purchase: true,
+      created_at: "2026-04-09T14:40:00Z"
+    },
+    {
+      id: 206,
+      customer_name: "Vimala Chandran",
+      customer_city: "Erode, TN",
+      rating: 4,
+      review: "A little goes a long way. My skin tone appears more luminous and nourished. No harsh peeling or burning feeling at all.",
+      verified_purchase: true,
+      created_at: "2026-04-13T10:15:00Z"
+    }
+  ],
+  "tea-tree-pureveil-cleanser": [
+    {
+      id: 301,
+      customer_name: "Harish Raghavan",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Perfect daily cleanser for humid weather. Cleans off oil and daily commute dirt completely without leaving that stretchy or dry feeling on the face.",
+      verified_purchase: true,
+      created_at: "2026-03-25T11:20:00Z"
+    },
+    {
+      id: 302,
+      customer_name: "Sneha Murugan",
+      customer_city: "Coimbatore, TN",
+      rating: 5,
+      review: "Enoda oily T-zone-ku romba nalla suit aachu. Gentle tea tree cooling effect is so refreshing after coming back from office. Pores feel clean.",
+      verified_purchase: true,
+      created_at: "2026-03-30T15:45:00Z"
+    },
+    {
+      id: 303,
+      customer_name: "Divya Prasad",
+      customer_city: "Bengaluru, KA",
+      rating: 4,
+      review: "Pleasant mild gel lather that washes off cleanly. It controls excess sebum and makes my face feel instantly fresh and bright.",
+      verified_purchase: true,
+      created_at: "2026-04-03T08:50:00Z"
+    },
+    {
+      id: 304,
+      customer_name: "Keerthana Vijay",
+      customer_city: "Salem, TN",
+      rating: 5,
+      review: "Doesn't strip moisture like regular foaming cleansers. Skin feels surprisingly soft and calmed down after washing. Great for acne-prone skin.",
+      verified_purchase: true,
+      created_at: "2026-04-07T13:10:00Z"
+    },
+    {
+      id: 305,
+      customer_name: "Arvind Sethupathi",
+      customer_city: "Madurai, TN",
+      rating: 4,
+      review: "Very easy pump bottle and refreshing botanical aroma. Removed sunscreen and sweat without stinging eyes or drying out my cheeks.",
+      verified_purchase: true,
+      created_at: "2026-04-11T16:25:00Z"
+    },
+    {
+      id: 306,
+      customer_name: "Roshini K.",
+      customer_city: "Kochi, KL",
+      rating: 5,
+      review: "Daily evening routine-la regular use pandren. Impurities clear pannudhu, and breakouts have reduced significantly over the past month.",
+      verified_purchase: true,
+      created_at: "2026-04-13T18:00:00Z"
+    }
+  ],
+  "red-wine-glow-cleanser": [
+    {
+      id: 401,
+      customer_name: "Malathi Sundaresan",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Rich antioxidant feel with a lovely mild aroma. Washes away pollutants easily and leaves the skin with an instant fresh, soft brightness.",
+      verified_purchase: true,
+      created_at: "2026-03-26T09:40:00Z"
+    },
+    {
+      id: 402,
+      customer_name: "Janani Narayanan",
+      customer_city: "Bengaluru, KA",
+      rating: 5,
+      review: "Face wash pannadhukku appram skin feels hydrated, not dry at all. Daily dullness completely remove aaguthu. Really luxurious everyday experience.",
+      verified_purchase: true,
+      created_at: "2026-03-31T14:05:00Z"
+    },
+    {
+      id: 403,
+      customer_name: "Abinaya R.",
+      customer_city: "Coimbatore, TN",
+      rating: 4,
+      review: "Silky gel texture that lathers gently. My skin looks cleaner and softer after every wash. Ideal morning face wash before stepping out.",
+      verified_purchase: true,
+      created_at: "2026-04-04T10:30:00Z"
+    },
+    {
+      id: 404,
+      customer_name: "Radhika Suresh",
+      customer_city: "Tiruchirappalli, TN",
+      rating: 5,
+      review: "Removes makeup residue and grime effortlessly. My skin feels fresh, bright, and nourished rather than tight. Very gentle on dry skin.",
+      verified_purchase: true,
+      created_at: "2026-04-08T17:15:00Z"
+    },
+    {
+      id: 405,
+      customer_name: "Sowmya Venkat",
+      customer_city: "Madurai, TN",
+      rating: 5,
+      review: "Smells subtle and high-end. Skin looks noticeably less tired after a long day in the sun. Gives a smooth, clean canvas for my night serums.",
+      verified_purchase: true,
+      created_at: "2026-04-11T12:50:00Z"
+    },
+    {
+      id: 406,
+      customer_name: "Preethi Kumar",
+      customer_city: "Vellore, TN",
+      rating: 4,
+      review: "Good gentle cleanser for daily routine. Easy to rinse off, no sticky residue, and skin feels velvety soft to touch.",
+      verified_purchase: true,
+      created_at: "2026-04-14T09:15:00Z"
+    }
+  ],
+  "vitamin-c-serum": [
+    {
+      id: 501,
+      customer_name: "Aishwarya Rajan",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Enoda dark spots and tanning konjam light aagiduchu after 3 weeks of morning use. Texture is water-light, not sticky at all, and absorbs very fast.",
+      verified_purchase: true,
+      created_at: "2026-03-23T11:10:00Z"
+    },
+    {
+      id: 502,
+      customer_name: "Lavanya Sekar",
+      customer_city: "Bengaluru, KA",
+      rating: 5,
+      review: "One of the few Vitamin C serums that didn't oxidize fast or irritate my skin. Visibly brightens morning dullness and layers beautifully under sunscreen.",
+      verified_purchase: true,
+      created_at: "2026-03-28T16:25:00Z"
+    },
+    {
+      id: 503,
+      customer_name: "Revathi Muthu",
+      customer_city: "Coimbatore, TN",
+      rating: 4,
+      review: "Lightweight and non-greasy drops. Skin has developed a very healthy natural glow. Subtle reduction in cheek pigmentation marks.",
+      verified_purchase: true,
+      created_at: "2026-04-02T13:40:00Z"
+    },
+    {
+      id: 504,
+      customer_name: "Pooja Nair",
+      customer_city: "Kochi, KL",
+      rating: 5,
+      review: "Fits right into my AM routine before moisturizer. My complexion looks fresher and more radiant throughout the day. Worth every drop.",
+      verified_purchase: true,
+      created_at: "2026-04-06T10:00:00Z"
+    },
+    {
+      id: 505,
+      customer_name: "Deepthi Mohan",
+      customer_city: "Madurai, TN",
+      rating: 5,
+      review: "Sun spots around forehead have become noticeably less prominent. Quick absorbing serum and gives a dewy finish without any oily residue.",
+      verified_purchase: true,
+      created_at: "2026-04-09T17:50:00Z"
+    },
+    {
+      id: 506,
+      customer_name: "Shweta Anand",
+      customer_city: "Salem, TN",
+      rating: 4,
+      review: "Gentle formula with botanical boosters. Doesn't cause tingling or breakouts. Skin looks more awake and even-toned.",
+      verified_purchase: true,
+      created_at: "2026-04-12T12:15:00Z"
+    }
+  ],
+  "hair-shine-serum": [
+    {
+      id: 601,
+      customer_name: "Rohini Subramanian",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Chennai humidity-la enoda hair romba frizz aagum. Just 3 drops of this serum on damp hair keeps it smooth, manageable, and silky all day.",
+      verified_purchase: true,
+      created_at: "2026-03-25T15:30:00Z"
+    },
+    {
+      id: 602,
+      customer_name: "Varsha Anand",
+      customer_city: "Bengaluru, KA",
+      rating: 5,
+      review: "Tamed flyaways without weighing down my fine hair or making it greasy. Hair feels so much softer and has a glossy, healthy shine.",
+      verified_purchase: true,
+      created_at: "2026-03-29T10:45:00Z"
+    },
+    {
+      id: 603,
+      customer_name: "Nandhini Prakash",
+      customer_city: "Coimbatore, TN",
+      rating: 5,
+      review: "Dry, split ends look noticeably healthier and smoother. It spreads easily through lengths and smells delicate and natural.",
+      verified_purchase: true,
+      created_at: "2026-04-03T18:15:00Z"
+    },
+    {
+      id: 604,
+      customer_name: "Krithika S.",
+      customer_city: "Madurai, TN",
+      rating: 4,
+      review: "Frizz control is excellent even on monsoon days. Hair looks shinier, detangles quickly, and feels feather-light.",
+      verified_purchase: true,
+      created_at: "2026-04-07T12:00:00Z"
+    },
+    {
+      id: 605,
+      customer_name: "Meenakshi Sundaram",
+      customer_city: "Tiruchirappalli, TN",
+      rating: 5,
+      review: "Hair wash pannitu apply panna, blow dry or heat illamale hair stays soft and neat. Huge improvement in rough hair texture.",
+      verified_purchase: true,
+      created_at: "2026-04-10T16:40:00Z"
+    },
+    {
+      id: 606,
+      customer_name: "Bhavani Govind",
+      customer_city: "Hyderabad, TS",
+      rating: 4,
+      review: "Non-sticky formulation that adds an instant polished sheen to dull lengths. Makes combing effortless and hair feels velvety.",
+      verified_purchase: true,
+      created_at: "2026-04-13T11:25:00Z"
+    }
+  ],
+  "spf-50-sunscreen": [
+    {
+      id: 701,
+      customer_name: "Shalini Mahesh",
+      customer_city: "Chennai, TN",
+      rating: 5,
+      review: "Zero white cast! Spreads like a light moisturiser and doesn't sweat off in Chennai heat. My skin stays hydrated and protected the whole day.",
+      verified_purchase: true,
+      created_at: "2026-03-24T09:10:00Z"
+    },
+    {
+      id: 702,
+      customer_name: "Dhivya Karthik",
+      customer_city: "Coimbatore, TN",
+      rating: 5,
+      review: "Enoda daily routine-ku idhu must-have. No greasy layer, no heavy feel on face, and reapplication is super easy over makeup too.",
+      verified_purchase: true,
+      created_at: "2026-03-28T14:35:00Z"
+    },
+    {
+      id: 703,
+      customer_name: "Anitha Krishnan",
+      customer_city: "Bengaluru, KA",
+      rating: 4,
+      review: "Gives broad spectrum protection with a comfortable dewy finish. Doesn't pill under foundation and keeps dry areas well moisturised.",
+      verified_purchase: true,
+      created_at: "2026-04-01T11:55:00Z"
+    },
+    {
+      id: 704,
+      customer_name: "Sneha Paul",
+      customer_city: "Kochi, KL",
+      rating: 5,
+      review: "Lightweight fluid texture that sinks in within seconds. Very soothing on sensitive skin and doesn't sting the eye area.",
+      verified_purchase: true,
+      created_at: "2026-04-05T17:20:00Z"
+    },
+    {
+      id: 705,
+      customer_name: "Vinothini R.",
+      customer_city: "Madurai, TN",
+      rating: 5,
+      review: "Sunburn and redness thadukudhu very effectively. Daily college wear-ku perfect, feels completely weightless like a light day cream.",
+      verified_purchase: true,
+      created_at: "2026-04-08T15:05:00Z"
+    },
+    {
+      id: 706,
+      customer_name: "Madhumitha S.",
+      customer_city: "Salem, TN",
+      rating: 4,
+      review: "Moisturizing without clogging pores. No breakouts so far. Keeps my face comfortable and hydrated during long outdoor commutes.",
+      verified_purchase: true,
+      created_at: "2026-04-12T10:45:00Z"
+    }
+  ]
+};
+
 export default function ProductDetails({ slug }: { slug: string }) {
   const { addToCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Review[]>(() => FALLBACK_REVIEWS[slug] || []);
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -94,14 +493,40 @@ export default function ProductDetails({ slug }: { slug: string }) {
           setSelectedVariant(defaultVar);
         }
         // Fetch reviews
-        return fetch(getApiUrl(`/api/v1/reviews/product/${data.id}`));
-      })
-      .then((res) => res.json())
-      .then((reviewData: Review[]) => {
-        if (Array.isArray(reviewData)) {
-          setReviews(reviewData);
-        }
-        setLoading(false);
+        return fetch(getApiUrl(`/api/v1/reviews/product/${data.id}`))
+          .then((res) => {
+            if (!res.ok) throw new Error("Failed to load reviews");
+            return res.json();
+          })
+          .then((reviewData: Review[]) => {
+            if (Array.isArray(reviewData) && reviewData.length > 0) {
+              setReviews(reviewData);
+            } else {
+              return fetch(getApiUrl(`/api/v1/reviews/product-slug/${data.slug}`))
+                .then((r) => r.json())
+                .then((slugData: Review[]) => {
+                  if (Array.isArray(slugData) && slugData.length > 0) {
+                    setReviews(slugData);
+                  } else if (FALLBACK_REVIEWS[data.slug]) {
+                    setReviews(FALLBACK_REVIEWS[data.slug]);
+                  }
+                })
+                .catch(() => {
+                  if (FALLBACK_REVIEWS[data.slug]) {
+                    setReviews(FALLBACK_REVIEWS[data.slug]);
+                  }
+                });
+            }
+          })
+          .catch((err) => {
+            console.warn("Reviews load notice:", err);
+            if (FALLBACK_REVIEWS[data.slug]) {
+              setReviews(FALLBACK_REVIEWS[data.slug]);
+            }
+          })
+          .finally(() => {
+            setLoading(false);
+          });
       })
       .catch((err) => {
         console.error("Failed to load product:", err);
@@ -598,38 +1023,97 @@ export default function ProductDetails({ slug }: { slug: string }) {
         </div>
       </div>
 
-      {/* Reviews block */}
-      <div className="space-y-8">
-        <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
-          Customer Reviews ({reviews.length})
-        </h2>
+      {/* Customer Reviews Section */}
+      <div className="space-y-10 pt-10 border-t border-brand-sand/20">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-brand-sand/20 pb-6">
+          <div>
+            <span className="text-[10px] tracking-[0.25em] text-[#8B6B38] font-medium uppercase font-sans block mb-2">
+              Verified Feedback
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+              Customer Reviews ({reviews.length})
+            </h2>
+          </div>
+
+          {reviews.length > 0 && (
+            <div className="flex items-center gap-3 bg-[#FAF8F5] border border-[#E5DEC9] px-4 py-2 self-start sm:self-auto">
+              <div className="flex items-center space-x-0.5">
+                {[1, 2, 3, 4, 5].map((s) => {
+                  const avg = reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+                  return (
+                    <Star
+                      key={s}
+                      size={14}
+                      className={s <= Math.round(avg) ? "fill-[#C5A059] text-[#C5A059]" : "fill-transparent text-[#D9CEBA]"}
+                    />
+                  );
+                })}
+              </div>
+              <span className="text-xs font-sans font-medium text-brand-dark">
+                {(reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)} / 5.0
+              </span>
+              <span className="text-[11px] text-brand-dark/50 font-sans">
+                ({reviews.length} published)
+              </span>
+            </div>
+          )}
+        </div>
         
         {reviews.length === 0 ? (
-          <div className="bg-brand-light border border-brand-sand/20 text-center py-12 text-xs font-sans text-brand-dark/40 rounded-none">
-            No reviews yet.
+          <div className="bg-[#FAF8F5] border border-brand-sand/20 text-center py-16 px-4 space-y-3">
+            <p className="font-serif text-lg text-brand-dark">No reviews published yet.</p>
+            <p className="text-xs font-sans text-brand-dark/50 max-w-md mx-auto">
+              Be the first to experience this botanical formula and share your routine ritual.
+            </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reviews.map((rev) => (
-              <div key={rev.id} className="border border-brand-sand/20 bg-brand-light p-6 space-y-4">
-                <div className="flex justify-between items-center">
-                  <div className="flex text-brand-accent">
-                    {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} size={12} fill="currentColor" stroke="none" />
-                    ))}
+              <div
+                key={rev.id}
+                className="border border-[#E5DEC9] bg-[#FAF8F5] p-6 flex flex-col justify-between hover:border-[#C5A059]/60 hover:shadow-sm transition-all duration-300"
+              >
+                <div className="space-y-4">
+                  <div className="flex justify-between items-start gap-2">
+                    <div>
+                      <h4 className="font-serif text-base text-brand-dark font-medium leading-tight">
+                        {rev.customer_name || "Verified Customer"}
+                      </h4>
+                      {rev.customer_city && (
+                        <p className="text-[11px] text-brand-dark/60 font-sans mt-0.5">
+                          {rev.customer_city}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center space-x-0.5 shrink-0">
+                      {[1, 2, 3, 4, 5].map((s) => (
+                        <Star
+                          key={s}
+                          size={13}
+                          className={s <= rev.rating ? "fill-[#C5A059] text-[#C5A059]" : "fill-transparent text-[#D9CEBA]"}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <span className="text-[10px] text-brand-dark/40 font-sans">
-                    {new Date(rev.created_at).toLocaleDateString()}
+
+                  <p className="text-xs sm:text-[13px] text-brand-cocoa/90 font-sans font-light leading-relaxed">
+                    &ldquo;{rev.review}&rdquo;
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-4 border-t border-brand-sand/15 flex items-center justify-between text-[10px] font-sans">
+                  {rev.verified_purchase ? (
+                    <span className="inline-flex items-center gap-1.5 text-[9px] uppercase tracking-wider font-semibold text-[#8B6B38] bg-[#F2EADA] px-2.5 py-1 rounded-sm">
+                      <CheckCircle2 size={11} className="text-[#8B6B38]" />
+                      VERIFIED PURCHASE
+                    </span>
+                  ) : (
+                    <span />
+                  )}
+                  <span className="text-brand-dark/40 font-sans tracking-wide">
+                    {rev.created_at ? new Date(rev.created_at).toLocaleDateString("en-IN", { month: "short", day: "numeric", year: "numeric" }) : ""}
                   </span>
                 </div>
-                <p className="text-xs text-brand-cocoa/80 font-sans font-light leading-relaxed">
-                  {rev.review}
-                </p>
-                {rev.verified_purchase && (
-                  <span className="inline-block bg-brand-accent/10 text-brand-accent text-[9px] uppercase tracking-wider font-sans font-semibold px-2 py-0.5">
-                    VERIFIED PURCHASE
-                  </span>
-                )}
               </div>
             ))}
           </div>

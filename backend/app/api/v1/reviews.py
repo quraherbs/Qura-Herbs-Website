@@ -14,6 +14,16 @@ def get_product_reviews(product_id: int, db: Session = Depends(get_db)):
         models.Review.approved == True
     ).order_by(models.Review.created_at.desc()).all()
 
+@router.get("/product-slug/{slug}", response_model=List[schemas.ReviewResponse])
+def get_reviews_by_product_slug(slug: str, db: Session = Depends(get_db)):
+    product = db.query(models.Product).filter(models.Product.slug == slug).first()
+    if not product:
+        return []
+    return db.query(models.Review).filter(
+        models.Review.product_id == product.id,
+        models.Review.approved == True
+    ).order_by(models.Review.created_at.desc()).all()
+
 @router.post("", response_model=schemas.ReviewResponse, status_code=status.HTTP_201_CREATED)
 @router.post("/", response_model=schemas.ReviewResponse, status_code=status.HTTP_201_CREATED, include_in_schema=False)
 def create_review(review_in: schemas.ReviewCreate, db: Session = Depends(get_db)):

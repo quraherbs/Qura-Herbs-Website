@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "../context/CartContext";
 import { Menu, X, ShoppingBag, Search, User, Heart } from "lucide-react";
@@ -8,6 +8,11 @@ import { Menu, X, ShoppingBag, Search, User, Heart } from "lucide-react";
 export default function Navbar() {
   const { cartCount, setIsCartOpen } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <>
@@ -95,7 +100,7 @@ export default function Navbar() {
                 aria-label="Cart"
               >
                 <ShoppingBag size={20} strokeWidth={1.5} />
-                {cartCount > 0 && (
+                {mounted && cartCount > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-[#C5A059] text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold font-sans shadow-sm">
                     {cartCount}
                   </span>

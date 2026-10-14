@@ -239,6 +239,10 @@ class Review(Base):
         return self.customer.name if self.customer else "Unknown Customer"
 
     @property
+    def customer_city(self) -> str:
+        return self.customer.city if self.customer and self.customer.city else ""
+
+    @property
     def product_name(self) -> str:
         return self.product.name if self.product else "Unknown Product"
 
