@@ -229,14 +229,14 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         </header>
 
         {/* 4 Story Navigation Tabs */}
-        <div className="sticky top-20 sm:top-24 z-30 w-full py-2 bg-brand-cream/85 backdrop-blur-md transition-all">
+        <div className="sticky top-20 sm:top-24 z-30 w-full py-2 bg-brand-cream/90 backdrop-blur-md transition-all">
           <div
-            className="w-full max-w-4xl mx-auto overflow-x-auto scrollbar-none px-2 sm:px-4"
+            className="w-full max-w-5xl mx-auto overflow-x-auto scrollbar-none px-4 sm:px-6"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <nav
               aria-label="About Page Sections"
-              className="inline-flex md:flex items-center justify-start md:justify-center gap-1.5 sm:gap-2.5 p-1.5 rounded-full border border-brand-sand/35 bg-transparent min-w-max md:min-w-0 mx-auto"
+              className="flex items-center justify-start sm:justify-center gap-1.5 sm:gap-2 md:gap-3 py-1 min-w-max sm:min-w-0 mx-auto"
             >
               {navTabs.map((tab) => {
                 const Icon = tab.icon;
@@ -249,13 +249,13 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                     }}
                     type="button"
                     onClick={() => scrollToSection(tab.id)}
-                    className={`px-3.5 sm:px-4 md:px-5 py-2 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                    className={`px-3 sm:px-3.5 md:px-5 py-1.5 sm:py-2 text-[10px] sm:text-[11px] md:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 md:gap-2 whitespace-nowrap shrink-0 ${
                       isActive
-                        ? "bg-brand-dark text-brand-cream shadow-md"
-                        : "text-brand-dark/75 hover:text-brand-dark hover:bg-brand-sand/20"
+                        ? "bg-brand-dark text-brand-cream shadow-sm"
+                        : "text-brand-dark/75 hover:text-brand-dark hover:bg-brand-sand/25 border border-brand-sand/35 bg-brand-sand/10"
                     }`}
                   >
-                    <Icon size={14} className="text-brand-accent shrink-0" />
+                    <Icon size={13} className="text-brand-accent shrink-0" />
                     <span>{tab.label}</span>
                   </button>
                 );
