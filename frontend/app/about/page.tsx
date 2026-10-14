@@ -1,7 +1,7 @@
 "use client";
 
 import { getApiUrl, getImageUrl } from "@/lib/api";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState, useRef, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
@@ -173,6 +173,26 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
     }
   }, [tabParam]);
 
+  const tabButtonRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
+
+  useEffect(() => {
+    const activeBtn = tabButtonRefs.current[activeTab];
+    if (activeBtn) {
+      activeBtn.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "center",
+      });
+    }
+  }, [activeTab]);
+
+  const navTabs = [
+    { id: "brand", label: "Brand Story", icon: Leaf },
+    { id: "founder", label: "The Founder", icon: UserCheck },
+    { id: "ceo", label: "Co-Founder & MD", icon: Briefcase },
+    { id: "purpose", label: "Growing with Purpose", icon: Sparkles },
+  ];
+
   const founderImgSrc =
     founderData.image || founderData.founder_image
       ? getImageUrl(founderData.image || founderData.founder_image)
@@ -209,56 +229,40 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         </header>
 
         {/* 4 Story Navigation Tabs */}
-        <nav className="sticky top-20 sm:top-24 z-30 flex justify-center items-center gap-1 sm:gap-2 bg-brand-light/95 p-1.5 sm:p-2 border border-brand-sand/40 rounded-full max-w-2xl mx-auto shadow-sm backdrop-blur-md transition-all overflow-x-auto scrollbar-none">
-          <button
-            type="button"
-            onClick={() => scrollToSection("brand")}
-            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
-              activeTab === "brand"
-                ? "bg-brand-dark text-brand-cream shadow-md"
-                : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
-            }`}
+        <div className="sticky top-20 sm:top-24 z-30 w-full py-2 bg-brand-cream/85 backdrop-blur-md transition-all">
+          <div
+            className="w-full max-w-4xl mx-auto overflow-x-auto scrollbar-none px-2 sm:px-4"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            <Leaf size={13} className="text-brand-accent shrink-0" />
-            <span>Brand Story</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection("founder")}
-            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
-              activeTab === "founder"
-                ? "bg-brand-dark text-brand-cream shadow-md"
-                : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
-            }`}
-          >
-            <UserCheck size={13} className="text-brand-accent shrink-0" />
-            <span>The Founder</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection("ceo")}
-            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
-              activeTab === "ceo"
-                ? "bg-brand-dark text-brand-cream shadow-md"
-                : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
-            }`}
-          >
-            <Briefcase size={13} className="text-brand-accent shrink-0" />
-            <span>Co-Founder &amp; MD</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => scrollToSection("purpose")}
-            className={`px-3 sm:px-5 py-1.5 sm:py-2 text-[10px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1 sm:gap-1.5 whitespace-nowrap ${
-              activeTab === "purpose"
-                ? "bg-brand-dark text-brand-cream shadow-md"
-                : "text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20"
-            }`}
-          >
-            <Sparkles size={13} className="text-brand-accent shrink-0" />
-            <span>Growing With Purpose</span>
-          </button>
-        </nav>
+            <nav
+              aria-label="About Page Sections"
+              className="inline-flex md:flex items-center justify-start md:justify-center gap-1.5 sm:gap-2.5 p-1.5 rounded-full border border-brand-sand/35 bg-transparent min-w-max md:min-w-0 mx-auto"
+            >
+              {navTabs.map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    ref={(el) => {
+                      tabButtonRefs.current[tab.id] = el;
+                    }}
+                    type="button"
+                    onClick={() => scrollToSection(tab.id)}
+                    className={`px-3.5 sm:px-4 md:px-5 py-2 text-[11px] sm:text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all duration-300 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 ${
+                      isActive
+                        ? "bg-brand-dark text-brand-cream shadow-md"
+                        : "text-brand-dark/75 hover:text-brand-dark hover:bg-brand-sand/20"
+                    }`}
+                  >
+                    <Icon size={14} className="text-brand-accent shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
+        </div>
 
         {/* ================================================== */}
         {/* SECTION 01 — BRAND INTRODUCTION (Brand Story) */}
