@@ -31,47 +31,107 @@ except Exception as err:
 def seed_initial_content():
     db = SessionLocal()
     try:
-        if db.query(models.RealResult).count() == 0:
-            initial_real_results = [
-                models.RealResult(
-                    customer_name="Ananya S.",
-                    customer_location="Coimbatore, TN",
-                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg",
-                    after_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg",
-                    description="My dark spots faded dramatically and my overall complexion got an intense radiant boost. The saffron formulation feels so luxury.",
-                    product_used="Glow Radiant Plus",
-                    duration="4 Weeks",
-                    skin_concern="Hyperpigmentation & Dullness",
-                    display_order=1,
-                    active=True
-                ),
-                models.RealResult(
-                    customer_name="Rohan M.",
-                    customer_location="Bengaluru, KA",
-                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg",
-                    after_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg",
-                    description="My active breakouts cleared up within days without drying out my skin. The gel texture is so soothing on irritated pores.",
-                    product_used="Tea Tree Pureveil Cleanser",
-                    duration="2 Weeks",
-                    skin_concern="Acne Breakouts & Redness",
-                    display_order=2,
-                    active=True
-                ),
-                models.RealResult(
-                    customer_name="Meera K.",
-                    customer_location="Chennai, TN",
-                    before_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg",
-                    after_image="https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg",
-                    description="Absolutely resolved my winter dry flakes. I wake up with very soft, bouncy, and hydrated skin every single morning.",
-                    product_used="Avocado Night Cream",
-                    duration="3 Weeks",
-                    skin_concern="Dry Flaky Patches",
-                    display_order=3,
-                    active=True
-                )
-            ]
-            db.add_all(initial_real_results)
-            db.commit()
+        desired_real_results = [
+            {
+                "id": 1,
+                "customer_name": "Ananya S.",
+                "customer_location": "Coimbatore, TN",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg",
+                "description": "My dark spots faded dramatically and my overall complexion got an intense radiant boost. The saffron formulation feels so luxury.",
+                "product_used": "Glow Radiant Plus",
+                "duration": "4 Weeks",
+                "skin_concern": "Hyperpigmentation & Dullness",
+                "display_order": 1,
+                "active": True
+            },
+            {
+                "id": 2,
+                "customer_name": "Rohan M.",
+                "customer_location": "Bengaluru, KA",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg",
+                "description": "My active breakouts cleared up within days without drying out my skin. The gel texture is so soothing on irritated pores.",
+                "product_used": "Tea Tree Pureveil Cleanser",
+                "duration": "2 Weeks",
+                "skin_concern": "Acne Breakouts & Redness",
+                "display_order": 2,
+                "active": True
+            },
+            {
+                "id": 3,
+                "customer_name": "Meera K.",
+                "customer_location": "Chennai, TN",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg",
+                "description": "Absolutely resolved my winter dry flakes. I wake up with very soft, bouncy, and hydrated skin every single morning.",
+                "product_used": "Avocado Night Cream",
+                "duration": "3 Weeks",
+                "skin_concern": "Dry Flaky Patches",
+                "display_order": 3,
+                "active": True
+            },
+            {
+                "id": 4,
+                "customer_name": "Verified Customer",
+                "customer_location": "Tamil Nadu",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_after.jpg",
+                "description": "Noticeable reduction in acne marks and visible redness. My cheek area looks remarkably clearer and healthier.",
+                "product_used": "Glow Radiant Plus Night Cream",
+                "duration": "4 Weeks",
+                "skin_concern": "Blemishes & Post-Acne Marks",
+                "display_order": 4,
+                "active": True
+            },
+            {
+                "id": 5,
+                "customer_name": "Verified Customer",
+                "customer_location": "Karnataka",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_after.jpg",
+                "description": "The deep hydration helped soothe my under-eye fatigue and brought a natural, refreshed brightness to my entire complexion.",
+                "product_used": "Avocado Pro Nourish Night Cream",
+                "duration": "3 Weeks",
+                "skin_concern": "Under-Eye Dark Circles & Dullness",
+                "display_order": 5,
+                "active": True
+            },
+            {
+                "id": 6,
+                "customer_name": "Verified Customer",
+                "customer_location": "Kerala",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_after.jpg",
+                "description": "My skin texture smoothed out significantly with daily nighttime use, leaving behind a smooth, radiant glow.",
+                "product_used": "Glow Radiant Plus Night Cream",
+                "duration": "4 Weeks",
+                "skin_concern": "Uneven Texture & Rough Skin",
+                "display_order": 6,
+                "active": True
+            },
+            {
+                "id": 7,
+                "customer_name": "Verified Customer",
+                "customer_location": "Tamil Nadu",
+                "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_before.jpg",
+                "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_after.jpg",
+                "description": "Calmed down the stubborn bumps on my cheek within two weeks without any greasy feel or dryness.",
+                "product_used": "Avocado Pro Nourish Night Cream",
+                "duration": "2 Weeks",
+                "skin_concern": "Active Breakouts & Irritation",
+                "display_order": 7,
+                "active": True
+            }
+        ]
+        for item_data in desired_real_results:
+            existing = db.query(models.RealResult).filter(models.RealResult.id == item_data["id"]).first()
+            if not existing:
+                db.add(models.RealResult(**item_data))
+            else:
+                for k, v in item_data.items():
+                    setattr(existing, k, v)
+        db.commit()
 
         if db.query(models.BotanicalJourney).count() == 0:
             initial_journeys = [

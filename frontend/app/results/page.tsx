@@ -62,8 +62,8 @@ export default function ResultsPage() {
       skin_concern: "Blemishes & Post-Acne Marks",
       duration: "4 Weeks",
       product_used: "Glow Radiant Plus Night Cream",
-      before_image: "/results/customer_4_before.jpg",
-      after_image: "/results/customer_4_after.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_after.jpg",
       description: "Noticeable reduction in acne marks and visible redness. My cheek area looks remarkably clearer and healthier."
     },
     {
@@ -73,8 +73,8 @@ export default function ResultsPage() {
       skin_concern: "Under-Eye Dark Circles & Dullness",
       duration: "3 Weeks",
       product_used: "Avocado Pro Nourish Night Cream",
-      before_image: "/results/customer_5_before.jpg",
-      after_image: "/results/customer_5_after.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_after.jpg",
       description: "The deep hydration helped soothe my under-eye fatigue and brought a natural, refreshed brightness to my entire complexion."
     },
     {
@@ -84,8 +84,8 @@ export default function ResultsPage() {
       skin_concern: "Uneven Texture & Rough Skin",
       duration: "4 Weeks",
       product_used: "Glow Radiant Plus Night Cream",
-      before_image: "/results/customer_6_before.jpg",
-      after_image: "/results/customer_6_after.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_after.jpg",
       description: "My skin texture smoothed out significantly with daily nighttime use, leaving behind a smooth, radiant glow."
     },
     {
@@ -95,8 +95,8 @@ export default function ResultsPage() {
       skin_concern: "Active Breakouts & Irritation",
       duration: "2 Weeks",
       product_used: "Avocado Pro Nourish Night Cream",
-      before_image: "/results/customer_7_before.jpg",
-      after_image: "/results/customer_7_after.jpg",
+      before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_before.jpg",
+      after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_after.jpg",
       description: "Calmed down the stubborn bumps on my cheek within two weeks without any greasy feel or dryness."
     }
   ]);
@@ -135,13 +135,13 @@ export default function ResultsPage() {
                 : isMeera
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg"
                 : isCustomer4
-                ? "/results/customer_4_before.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_before.jpg"
                 : isCustomer5
-                ? "/results/customer_5_before.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_before.jpg"
                 : isCustomer6
-                ? "/results/customer_6_before.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_before.jpg"
                 : isCustomer7
-                ? "/results/customer_7_before.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_before.jpg"
                 : item.before_image,
               after_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg"
@@ -150,17 +150,21 @@ export default function ResultsPage() {
                 : isMeera
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg"
                 : isCustomer4
-                ? "/results/customer_4_after.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_after.jpg"
                 : isCustomer5
-                ? "/results/customer_5_after.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_after.jpg"
                 : isCustomer6
-                ? "/results/customer_6_after.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_after.jpg"
                 : isCustomer7
-                ? "/results/customer_7_after.jpg"
+                ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_after.jpg"
                 : item.after_image,
             };
           });
-          setTransformations(mapped);
+          setTransformations((prev) => {
+            const mappedIds = new Set(mapped.map((m: ResultCard) => m.id));
+            const remaining = prev.filter((p) => !mappedIds.has(p.id));
+            return [...mapped, ...remaining].sort((a, b) => a.id - b.id);
+          });
         }
       })
       .catch((err) => console.log("Failed to load real results:", err));
