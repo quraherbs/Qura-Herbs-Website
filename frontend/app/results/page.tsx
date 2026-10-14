@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { getApiUrl, getImageUrl } from "@/lib/api";
 import AnnouncementBar from "../../components/AnnouncementBar";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import CartDrawer from "../../components/CartDrawer";
 import { Star } from "lucide-react";
 
@@ -53,6 +54,50 @@ export default function ResultsPage() {
       before_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg",
       after_image: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg",
       description: "Absolutely resolved my winter dry flakes. I wake up with very soft, bouncy, and hydrated skin every single morning."
+    },
+    {
+      id: 4,
+      customer_name: "Verified Customer",
+      customer_location: "Tamil Nadu",
+      skin_concern: "Blemishes & Post-Acne Marks",
+      duration: "4 Weeks",
+      product_used: "Glow Radiant Plus Night Cream",
+      before_image: "/results/customer_4_before.jpg",
+      after_image: "/results/customer_4_after.jpg",
+      description: "Noticeable reduction in acne marks and visible redness. My cheek area looks remarkably clearer and healthier."
+    },
+    {
+      id: 5,
+      customer_name: "Verified Customer",
+      customer_location: "Karnataka",
+      skin_concern: "Under-Eye Dark Circles & Dullness",
+      duration: "3 Weeks",
+      product_used: "Avocado Pro Nourish Night Cream",
+      before_image: "/results/customer_5_before.jpg",
+      after_image: "/results/customer_5_after.jpg",
+      description: "The deep hydration helped soothe my under-eye fatigue and brought a natural, refreshed brightness to my entire complexion."
+    },
+    {
+      id: 6,
+      customer_name: "Verified Customer",
+      customer_location: "Kerala",
+      skin_concern: "Uneven Texture & Rough Skin",
+      duration: "4 Weeks",
+      product_used: "Glow Radiant Plus Night Cream",
+      before_image: "/results/customer_6_before.jpg",
+      after_image: "/results/customer_6_after.jpg",
+      description: "My skin texture smoothed out significantly with daily nighttime use, leaving behind a smooth, radiant glow."
+    },
+    {
+      id: 7,
+      customer_name: "Verified Customer",
+      customer_location: "Tamil Nadu",
+      skin_concern: "Active Breakouts & Irritation",
+      duration: "2 Weeks",
+      product_used: "Avocado Pro Nourish Night Cream",
+      before_image: "/results/customer_7_before.jpg",
+      after_image: "/results/customer_7_after.jpg",
+      description: "Calmed down the stubborn bumps on my cheek within two weeks without any greasy feel or dryness."
     }
   ]);
 
@@ -71,6 +116,10 @@ export default function ResultsPage() {
             const isMeera =
               item.id === 3 ||
               item.customer_name?.toLowerCase().includes("meera");
+            const isCustomer4 = item.id === 4;
+            const isCustomer5 = item.id === 5;
+            const isCustomer6 = item.id === 6;
+            const isCustomer7 = item.id === 7;
 
             return {
               ...item,
@@ -78,13 +127,21 @@ export default function ResultsPage() {
                 ? "Rohan M."
                 : isMeera
                 ? "Meera K."
-                : item.customer_name,
+                : item.customer_name || "Verified Customer",
               before_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg"
                 : isRohan
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_before.jpg"
                 : isMeera
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_before.jpg"
+                : isCustomer4
+                ? "/results/customer_4_before.jpg"
+                : isCustomer5
+                ? "/results/customer_5_before.jpg"
+                : isCustomer6
+                ? "/results/customer_6_before.jpg"
+                : isCustomer7
+                ? "/results/customer_7_before.jpg"
                 : item.before_image,
               after_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_after.jpg"
@@ -92,6 +149,14 @@ export default function ResultsPage() {
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/rohan_m_after.jpg"
                 : isMeera
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/meera_k_after.jpg"
+                : isCustomer4
+                ? "/results/customer_4_after.jpg"
+                : isCustomer5
+                ? "/results/customer_5_after.jpg"
+                : isCustomer6
+                ? "/results/customer_6_after.jpg"
+                : isCustomer7
+                ? "/results/customer_7_after.jpg"
                 : item.after_image,
             };
           });
@@ -180,6 +245,7 @@ export default function ResultsPage() {
         </div>
       </main>
 
+      <Footer />
       <CartDrawer />
     </div>
   );
