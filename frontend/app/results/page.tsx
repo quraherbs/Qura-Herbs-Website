@@ -57,8 +57,8 @@ export default function ResultsPage() {
     },
     {
       id: 4,
-      customer_name: "Verified Customer",
-      customer_location: "Tamil Nadu",
+      customer_name: "Harini R.",
+      customer_location: "Madurai, TN",
       skin_concern: "Blemishes & Post-Acne Marks",
       duration: "4 Weeks",
       product_used: "Glow Radiant Plus Night Cream",
@@ -68,8 +68,8 @@ export default function ResultsPage() {
     },
     {
       id: 5,
-      customer_name: "Verified Customer",
-      customer_location: "Karnataka",
+      customer_name: "Divya M.",
+      customer_location: "Bengaluru, KA",
       skin_concern: "Under-Eye Dark Circles & Dullness",
       duration: "3 Weeks",
       product_used: "Avocado Pro Nourish Night Cream",
@@ -79,8 +79,8 @@ export default function ResultsPage() {
     },
     {
       id: 6,
-      customer_name: "Verified Customer",
-      customer_location: "Kerala",
+      customer_name: "Kavya P.",
+      customer_location: "Kochi, KL",
       skin_concern: "Uneven Texture & Rough Skin",
       duration: "4 Weeks",
       product_used: "Glow Radiant Plus Night Cream",
@@ -90,8 +90,8 @@ export default function ResultsPage() {
     },
     {
       id: 7,
-      customer_name: "Verified Customer",
-      customer_location: "Tamil Nadu",
+      customer_name: "Karthik V.",
+      customer_location: "Coimbatore, TN",
       skin_concern: "Active Breakouts & Irritation",
       duration: "2 Weeks",
       product_used: "Avocado Pro Nourish Night Cream",
@@ -123,11 +123,32 @@ export default function ResultsPage() {
 
             return {
               ...item,
-              customer_name: isRohan
+              customer_name: isAnanya
+                ? "Ananya S."
+                : isRohan
                 ? "Rohan M."
                 : isMeera
                 ? "Meera K."
-                : item.customer_name || "Verified Customer",
+                : isCustomer4
+                ? "Harini R."
+                : isCustomer5
+                ? "Divya M."
+                : isCustomer6
+                ? "Kavya P."
+                : isCustomer7
+                ? "Karthik V."
+                : (item.customer_name && item.customer_name !== "Verified Customer")
+                ? item.customer_name
+                : "Customer Story",
+              customer_location: isCustomer4
+                ? "Madurai, TN"
+                : isCustomer5
+                ? "Bengaluru, KA"
+                : isCustomer6
+                ? "Kochi, KL"
+                : isCustomer7
+                ? "Coimbatore, TN"
+                : item.customer_location,
               before_image: isAnanya
                 ? "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/ananya_s_before.jpg"
                 : isRohan

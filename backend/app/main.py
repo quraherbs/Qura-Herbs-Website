@@ -73,8 +73,8 @@ def seed_initial_content():
             },
             {
                 "id": 4,
-                "customer_name": "Verified Customer",
-                "customer_location": "Tamil Nadu",
+                "customer_name": "Harini R.",
+                "customer_location": "Madurai, TN",
                 "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_before.jpg",
                 "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_4_after.jpg",
                 "description": "Noticeable reduction in acne marks and visible redness. My cheek area looks remarkably clearer and healthier.",
@@ -86,8 +86,8 @@ def seed_initial_content():
             },
             {
                 "id": 5,
-                "customer_name": "Verified Customer",
-                "customer_location": "Karnataka",
+                "customer_name": "Divya M.",
+                "customer_location": "Bengaluru, KA",
                 "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_before.jpg",
                 "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_5_after.jpg",
                 "description": "The deep hydration helped soothe my under-eye fatigue and brought a natural, refreshed brightness to my entire complexion.",
@@ -99,8 +99,8 @@ def seed_initial_content():
             },
             {
                 "id": 6,
-                "customer_name": "Verified Customer",
-                "customer_location": "Kerala",
+                "customer_name": "Kavya P.",
+                "customer_location": "Kochi, KL",
                 "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_before.jpg",
                 "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_6_after.jpg",
                 "description": "My skin texture smoothed out significantly with daily nighttime use, leaving behind a smooth, radiant glow.",
@@ -112,8 +112,8 @@ def seed_initial_content():
             },
             {
                 "id": 7,
-                "customer_name": "Verified Customer",
-                "customer_location": "Tamil Nadu",
+                "customer_name": "Karthik V.",
+                "customer_location": "Coimbatore, TN",
                 "before_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_before.jpg",
                 "after_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/customer_7_after.jpg",
                 "description": "Calmed down the stubborn bumps on my cheek within two weeks without any greasy feel or dryness.",
