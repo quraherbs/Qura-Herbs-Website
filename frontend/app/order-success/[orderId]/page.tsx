@@ -254,12 +254,20 @@ export default function OrderSuccessDynamicPage({ params }: { params: Promise<{ 
                     <span className="text-[#3D261D]/70">Subtotal</span>
                     <span>₹{order.subtotal.toLocaleString("en-IN")}</span>
                   </div>
+                  {order.discount > 0 && (
+                    <div className="flex justify-between text-green-700 font-medium">
+                      <span>Voucher Discount</span>
+                      <span>-₹{order.discount.toLocaleString("en-IN")}</span>
+                    </div>
+                  )}
                   <div className="flex justify-between font-medium">
                     <span className="text-[#3D261D]/70">Shipping</span>
-                    <span className="text-[#C5A059] font-bold uppercase text-[10px]">FREE</span>
+                    <span className="text-[#C5A059] font-bold text-xs">
+                      {order.shipping === 0 ? "FREE" : `₹${order.shipping.toLocaleString("en-IN")}`}
+                    </span>
                   </div>
                   <div className="flex justify-between font-serif font-bold text-base text-[#2C1A14] pt-2 border-t border-[#EFE8D8]">
-                    <span>Total Paid</span>
+                    <span>Total</span>
                     <span>₹{order.total.toLocaleString("en-IN")}</span>
                   </div>
                 </div>

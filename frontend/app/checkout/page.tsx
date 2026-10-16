@@ -247,7 +247,7 @@ export default function CheckoutPage() {
       }
 
       // 1. Create or update customer profile
-      let customerId = 1;
+      let customerId: number | null = null;
       try {
         const customerRes = await fetch(getApiUrl("/api/v1/customers/"), {
           method: "POST",
@@ -270,11 +270,24 @@ export default function CheckoutPage() {
             const customerData = await customerRes.json();
             if (customerData && customerData.id) {
               customerId = customerData.id;
+              // Save customer in localStorage so account dashboard reflects this customer
+              try {
+                localStorage.setItem("qura_customer", JSON.stringify(customerData));
+              } catch (e) {
+                // Ignore storage quota
+              }
             }
           }
+        } else {
+          const errData = await customerRes.json().catch(() => ({}));
+          console.error("Customer creation response not ok:", errData);
         }
       } catch (custErr) {
-        console.warn("Customer creation non-blocking warning:", custErr);
+        console.error("Customer creation network error:", custErr);
+      }
+
+      if (!customerId) {
+        throw new Error("Unable to save customer details. Please verify your contact and shipping information.");
       }
 
       setLoadingStep("Placing your secure order...");
@@ -373,7 +386,17 @@ export default function CheckoutPage() {
         } catch (e) {
           console.error("Popup blocked by browser", e);
         }
-        
+
+        try {
+          const recentOrders = JSON.parse(localStorage.getItem("qura_recent_orders") || "[]");
+          if (!recentOrders.includes(orderData.order_number)) {
+            recentOrders.unshift(orderData.order_number);
+            localStorage.setItem("qura_recent_orders", JSON.stringify(recentOrders.slice(0, 10)));
+          }
+        } catch (e) {
+          // ignore storage error
+        }
+
         clearCart();
         router.push(`/order-success/${orderData.order_number}`);
       } else {

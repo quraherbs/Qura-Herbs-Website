@@ -89,6 +89,7 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-accent">Support</h4>
             <ul className="space-y-2.5 text-xs text-brand-cream/60 font-sans font-light">
+              <li><Link href="/account" className="hover:text-brand-accent transition-colors">Track Order & Account</Link></li>
               <li><Link href="/shipping" className="hover:text-brand-accent transition-colors">Shipping & Delivery</Link></li>
               <li><Link href="/refund" className="hover:text-brand-accent transition-colors">Returns & Refunds</Link></li>
               <li><Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy Policy</Link></li>

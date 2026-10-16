@@ -40,16 +40,34 @@ def create_or_get_customer(customer_in: schemas.CustomerCreate, db: Session = De
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Failed to create customer: {str(e)}")
 
-@router.get("/{id}", response_model=schemas.CustomerResponse)
-def get_customer(id: int, db: Session = Depends(get_db)):
-    customer = db.query(models.Customer).filter(models.Customer.id == id).first()
+@router.get("/lookup/{identifier}", response_model=schemas.CustomerResponse)
+def lookup_customer(identifier: str, db: Session = Depends(get_db)):
+    clean_id = identifier.strip()
+    customer = db.query(models.Customer).filter(
+        (models.Customer.email.ilike(clean_id)) | (models.Customer.phone == clean_id)
+    ).order_by(models.Customer.id.desc()).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return customer
+
+@router.get("/phone/{phone}", response_model=schemas.CustomerResponse)
+def get_customer_by_phone(phone: str, db: Session = Depends(get_db)):
+    clean_phone = phone.strip()
+    customer = db.query(models.Customer).filter(models.Customer.phone == clean_phone).order_by(models.Customer.id.desc()).first()
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found")
     return customer
 
 @router.get("/email/{email}", response_model=schemas.CustomerResponse)
 def get_customer_by_email(email: str, db: Session = Depends(get_db)):
-    customer = db.query(models.Customer).filter(models.Customer.email == email).first()
+    customer = db.query(models.Customer).filter(models.Customer.email.ilike(email.strip())).first()
+    if not customer:
+        raise HTTPException(status_code=404, detail="Customer not found")
+    return customer
+
+@router.get("/{id}", response_model=schemas.CustomerResponse)
+def get_customer(id: int, db: Session = Depends(get_db)):
+    customer = db.query(models.Customer).filter(models.Customer.id == id).first()
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found")
     return customer
