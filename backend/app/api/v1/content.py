@@ -138,10 +138,10 @@ def get_founder_content(db: Session = Depends(get_db)):
         return {
             "name": "Nandavel V",
             "founder_name": "Nandavel V",
-            "title": "Founder, Qura Herbs",
-            "founder_designation": "Founder, Qura Herbs",
+            "title": "Founder & CEO, Qura Herbs",
+            "founder_designation": "Founder & CEO, Qura Herbs",
             "eyebrow": "SECTION 02 • THE FOUNDER",
-            "heading": "MEET THE FOUNDER",
+            "heading": "Meet the Founder & CEO",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
             "founder_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/nandavel_founder.jpg",
             "headline": "Qura Herbs began with Nandavel's own skin journey.",
@@ -149,7 +149,7 @@ def get_founder_content(db: Session = Depends(get_db)):
             "founder_quote": "“Qura Herbs started with my own skin journey. I wanted to bring that experience to people who were going through something similar and help them feel more comfortable in their own skin.”",
             "description": "Having experienced skin concerns himself, he understood the insecurity and frustration that can come with trying to find the right care. His personal experience with skincare and herbal ingredients eventually inspired him to build something that could reach people facing similar concerns.\n\nHis vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.\n\nFrom understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.",
             "founder_bio": "Having experienced skin concerns himself, he understood the insecurity and frustration that can come with trying to find the right care. His personal experience with skincare and herbal ingredients eventually inspired him to build something that could reach people facing similar concerns.\n\nHis vision was simple, to make people feel more confident in their own skin through better care, not through unrealistic standards of beauty.\n\nFrom understanding customer concerns and exploring ingredients to selecting products and shaping the brand, Nandavel continues to be closely involved in the foundation and direction of Qura Herbs.",
-            "signature": "— Nandavel V\nFounder, Qura Herbs"
+            "signature": "— Nandavel V\nFounder & CEO, Qura Herbs"
         }
     return setting.value
 
@@ -187,12 +187,12 @@ def get_ceo_content(db: Session = Depends(get_db)):
             "title": "Co-Founder & MD, Qura Herbs",
             "ceo_designation": "Co-Founder & MD, Qura Herbs",
             "eyebrow": "SECTION 03 • CO-FOUNDER & MD",
-            "heading": "MEET THE CO-FOUNDER & MD",
+            "heading": "Meet the Co-Founder & MD",
             "image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "ceo_image": "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
             "headline": "Pranavi believed everyone deserved to feel confident in their own skin.",
-            "quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
-            "ceo_quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
+            "quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward”",
+            "ceo_quote": "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward”",
             "description": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
             "ceo_bio": "As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.\n\nWith a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.",
             "signature": "— Pranavi GY\nCo-Founder & MD, Qura Herbs"

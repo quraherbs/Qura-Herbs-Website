@@ -8,7 +8,7 @@ import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 import CartDrawer from "../../components/CartDrawer";
 import Link from "next/link";
-import { Leaf, UserCheck, Briefcase, Calendar, Sparkles } from "lucide-react";
+import { Leaf, UserCheck, Briefcase, Sparkles } from "lucide-react";
 
 function AboutPageContent() {
   const searchParams = useSearchParams();
@@ -61,7 +61,7 @@ From understanding customer concerns and exploring ingredients to selecting prod
     image:
       "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/About/ceo_pranavi.jpg",
     quote:
-      "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward.”",
+      "“For me, Qura is more than a business. It is a feeling that deserves to be experienced, expressed, and carried forward”",
     description: `As Qura Herbs continued to take shape, Pranavi became part of the journey, bringing her own perspective, creativity, and ideas to the brand.
 
 With a strong eye for aesthetics, creativity, and communication, Pranavi brings a distinct perspective to Qura Herbs. As someone who genuinely values self-care, she believes that taking care of your skin and yourself should be a positive and empowering experience. Her ideas and creative direction shape Qura's visual identity, presentation, and voice, bringing this belief into the way the brand expresses itself.`,
@@ -265,7 +265,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         </div>
 
         {/* ================================================== */}
-        {/* SECTION 01 — BRAND INTRODUCTION (Brand Story) */}
+        {/* SECTION 01 — OUR STORY */}
         {/* ================================================== */}
         <section
           id="brand"
@@ -273,22 +273,15 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         >
           {/* Section Eyebrow & Title */}
           <div className="space-y-3 border-b border-brand-sand/30 pb-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
-                SECTION 01 &bull; OUR STORY
-              </span>
-              <div className="hidden sm:flex items-center gap-2 text-xs font-sans text-brand-cocoa/60 uppercase tracking-widest bg-brand-light px-3 py-1.5 border border-brand-sand/30 rounded-sm">
-                <Calendar size={13} className="text-brand-accent" />
-                <span>Coimbatore &bull; 2025</span>
-              </div>
-            </div>
-
+            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
+              SECTION 01 &bull; OUR STORY
+            </span>
             <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark tracking-tight leading-tight">
               Skin That Feels Like You.
             </h2>
           </div>
 
-          {/* Editorial Story Layout */}
+          {/* Editorial Story Layout — Spacious, readable content area */}
           <div className="max-w-4xl space-y-6 text-brand-cocoa/90 font-sans font-light text-base md:text-lg leading-relaxed">
             <p>
               Qura Herbs is a skincare and haircare brand built around a
@@ -315,23 +308,19 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
               focus is on thoughtful products, honest communication, and
               routines that are simple enough to become part of everyday life.
             </p>
-
-            {/* Highlight Callout Box */}
-            <div className="mt-8 bg-brand-light border-l-4 border-brand-accent p-6 md:p-8 rounded-r-md shadow-sm space-y-3">
-              <p className="font-serif text-lg sm:text-xl text-brand-dark font-light leading-relaxed">
-                What began with a small circle of customers is now growing into
-                a brand with a larger purpose{" "}
-                <strong className="font-semibold text-brand-dark">
-                  helping people care for their skin and hair without feeling the
-                  need to change who they are.
-                </strong>
-              </p>
-            </div>
+            <p>
+              What began with a small circle of customers is now growing into
+              a brand with a larger purpose{" "}
+              <strong className="font-semibold text-brand-dark">
+                helping people care for their skin and hair without feeling the
+                need to change who they are.
+              </strong>
+            </p>
           </div>
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 02 — MEET THE FOUNDER (Nandavel V) */}
+        {/* SECTION 02 — THE FOUNDER */}
         {/* ================================================== */}
         <section
           id="founder"
@@ -375,7 +364,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Founder Introduction, Story, & Quotation */}
+            {/* RIGHT COLUMN: Founder Biography & Quotation */}
             <div className="lg:col-span-7 space-y-6 pt-2 lg:pt-0">
               {/* Section Title & Editorial Header */}
               <div className="space-y-3 border-b border-brand-sand/30 pb-4">
@@ -383,19 +372,8 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                   SECTION 02 &bull; THE FOUNDER
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl md:text-[40px] font-light text-brand-dark tracking-tight">
-                  Founder&apos;s Note
+                  Meet the Founder &amp; CEO
                 </h2>
-              </div>
-
-              {/* Subtle Quote Mark Icon */}
-              <div className="text-brand-accent/60">
-                <svg
-                  className="w-8 h-8 fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
               </div>
 
               {/* Anchor Headline */}
@@ -439,15 +417,15 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         </section>
 
         {/* ================================================== */}
-        {/* SECTION 03 — CO-FOUNDER SECTION (Pranavi GY) */}
+        {/* SECTION 03 — CO-FOUNDER & MD */}
         {/* ================================================== */}
         <section
           id="ceo"
           className="space-y-8 md:space-y-10 animate-fade-in border-b border-brand-sand/30 pb-16 md:pb-24 scroll-mt-28"
         >
-          {/* Two-Column Editorial Layout (Alternating on Desktop, Image first on Mobile) */}
+          {/* Two-Column Editorial Layout (Complementary layout: Biography left, Image right on desktop; stacked neatly on mobile) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
-            {/* TEXT COLUMN: Co-Founder Story & Quotation (Left on Desktop, Below on Mobile) */}
+            {/* TEXT COLUMN: Co-Founder Biography & Quotation (Left on Desktop, Below on Mobile) */}
             <div className="lg:col-span-7 space-y-6 pt-2 lg:pt-0 order-2 lg:order-1">
               {/* Section Title & Editorial Header */}
               <div className="space-y-3 border-b border-brand-sand/30 pb-4">
@@ -455,19 +433,8 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
                   SECTION 03 &bull; CO-FOUNDER &amp; MD
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl md:text-[40px] font-light text-brand-dark tracking-tight">
-                  Co-Founder&apos;s Note
+                  Meet the Co-Founder &amp; MD
                 </h2>
-              </div>
-
-              {/* Subtle Quote Mark Icon */}
-              <div className="text-brand-accent/60">
-                <svg
-                  className="w-8 h-8 fill-current"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
               </div>
 
               {/* Anchor Headline */}
@@ -499,8 +466,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
               <div className="pt-6 border-t border-brand-sand/40">
                 <blockquote className="font-serif text-lg sm:text-xl text-brand-dark font-light italic leading-relaxed pl-5 border-l-2 border-brand-accent">
                   &ldquo;For me, Qura is more than a business. It is a feeling that
-                  deserves to be experienced, expressed, and carried
-                  forward.&rdquo;
+                  deserves to be experienced, expressed, and carried forward&rdquo;
                 </blockquote>
               </div>
             </div>
@@ -548,34 +514,30 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         {/* ================================================== */}
         <section
           id="purpose"
-          className="space-y-8 animate-fade-in pb-8 scroll-mt-28"
+          className="space-y-8 md:space-y-10 animate-fade-in pb-12 scroll-mt-28"
         >
           {/* Section Eyebrow & Title */}
-          <div className="border-b border-brand-sand/30 pb-4 text-center">
-            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block mb-1">
+          <div className="space-y-3 border-b border-brand-sand/30 pb-6 text-center">
+            <span className="text-xs font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
               SECTION 04 &bull; PURPOSE &amp; TRANSPARENCY
             </span>
-            <h2 className="font-serif text-3xl md:text-4xl font-light text-brand-dark uppercase tracking-wide">
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark tracking-tight leading-tight">
               GROWING WITH PURPOSE
             </h2>
           </div>
 
-          <div className="max-w-3xl mx-auto space-y-6 text-center">
+          <div className="max-w-3xl mx-auto space-y-8 text-center">
             <p className="text-base sm:text-lg md:text-xl text-brand-cocoa/90 font-sans font-light leading-relaxed">
               As an authorised reseller, we continue to grow through customer
               feedback, thoughtful product selection, and a commitment to
               presenting trusted skincare and haircare with transparency.
             </p>
 
-            {/* Distinctive Philosophy Callout Banner */}
-            <div className="bg-gradient-to-br from-brand-dark via-brand-cocoa to-brand-dark text-brand-cream p-8 sm:p-10 md:p-12 text-center rounded-sm shadow-xl space-y-4">
-              <p className="font-serif text-2xl sm:text-3xl md:text-4xl font-normal leading-relaxed text-brand-cream">
+            {/* Closing Brand Statement — Prominent, Refined & Clean without excessive decoration */}
+            <div className="pt-8 pb-4 border-t border-b border-brand-sand/40">
+              <p className="font-serif text-2xl sm:text-3xl md:text-4xl text-brand-dark font-normal leading-relaxed italic">
                 Beauty isn&apos;t about changing who you are. It&apos;s about caring
                 for who you are.
-              </p>
-              <div className="w-16 h-[1px] bg-brand-accent/60 mx-auto"></div>
-              <p className="text-xs font-sans tracking-[0.25em] text-brand-accent uppercase font-semibold">
-                Qura Herbs &bull; Coimbatore - 2025
               </p>
             </div>
           </div>
