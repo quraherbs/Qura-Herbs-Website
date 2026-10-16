@@ -589,7 +589,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const [isAdded, setIsAdded] = useState(false);
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const [activeTab, setActiveTab] = useState<"overview" | "benefits" | "ingredients" | "how">("overview");
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -938,36 +937,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
     });
   };
 
-  const renderFormattedText = (text?: string) => {
-    if (!text) return <p className="text-brand-cocoa/50 italic">No detailed description specified.</p>;
-    const lines = text.split("\n");
-    return lines.map((line, idx) => {
-      const trimmed = line.trim();
-      if (!trimmed) return <div key={idx} className="h-2" />;
-      if (trimmed.startsWith("### ") || trimmed.startsWith("## ")) {
-        const headingText = trimmed.replace(/^#+\s*/, "");
-        return (
-          <h4 key={idx} className="font-serif text-lg font-medium text-brand-dark pt-3 pb-1">
-            {headingText}
-          </h4>
-        );
-      }
-      if (trimmed.startsWith("•") || trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
-        const bulletText = trimmed.replace(/^[\•\-\*]\s*/, "");
-        return (
-          <div key={idx} className="flex items-start space-x-2 my-1 pl-2">
-            <span className="text-brand-accent text-sm leading-none pt-1">•</span>
-            <span className="text-brand-cocoa">{formatBold(bulletText)}</span>
-          </div>
-        );
-      }
-      return (
-        <p key={idx} className="text-brand-cocoa/90 leading-relaxed font-sans font-light my-1.5">
-          {formatBold(trimmed)}
-        </p>
-      );
-    });
-  };
 
   const parsedContent = parseProductContent(
     product.full_description,
@@ -1272,27 +1241,27 @@ export default function ProductDetails({ slug }: { slug: string }) {
           <div className="space-y-3 pt-3">
             <div className="flex flex-col sm:flex-row gap-3">
               {/* Quantity Selector */}
-              <div className="flex items-center justify-between border-2 border-brand-sand/80 bg-white px-2 h-[50px] w-full sm:w-28 lg:w-32 shrink-0 shadow-xs">
+              <div className="flex items-center justify-between border-2 border-brand-sand/80 bg-white px-1.5 h-[48px] w-full sm:w-28 shrink-0 shadow-2xs">
                 <span className="text-[11px] uppercase tracking-wider text-brand-dark/60 font-sans font-semibold pl-2 sm:hidden">
                   Quantity
                 </span>
-                <div className="flex items-center justify-between w-32 sm:w-full h-full">
+                <div className="flex items-center justify-between w-28 sm:w-full h-full">
                   <button
                     type="button"
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
                     disabled={quantity <= 1}
-                    className="w-9 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-base font-bold disabled:opacity-25 disabled:cursor-not-allowed transition-colors select-none"
+                    className="w-8 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-lg font-bold disabled:opacity-25 disabled:cursor-not-allowed transition-colors select-none"
                     aria-label="Decrease quantity"
                   >
                     -
                   </button>
-                  <span className="text-sm font-sans font-bold text-brand-dark min-w-[24px] text-center select-none">
+                  <span className="text-sm font-sans font-bold text-brand-dark min-w-[20px] text-center select-none">
                     {quantity}
                   </span>
                   <button
                     type="button"
                     onClick={() => setQuantity(quantity + 1)}
-                    className="w-9 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-base font-bold transition-colors select-none"
+                    className="w-8 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-lg font-bold transition-colors select-none"
                     aria-label="Increase quantity"
                   >
                     +
@@ -1300,45 +1269,48 @@ export default function ProductDetails({ slug }: { slug: string }) {
                 </div>
               </div>
 
-              {/* ADD TO CART Button */}
-              <button
-                type="button"
-                onClick={handleAddToCart}
-                className={`w-full sm:flex-1 h-[50px] px-2.5 sm:px-3 text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all duration-300 shadow-sm flex items-center justify-center gap-1.5 sm:gap-2 rounded-none cursor-pointer active:scale-[0.99] min-w-0 ${
-                  isAdded
-                    ? "bg-brand-dark text-brand-cream border-2 border-brand-dark"
-                    : "bg-white/80 hover:bg-brand-dark hover:text-brand-cream border-2 border-brand-dark text-brand-dark"
-                }`}
-              >
-                {isAdded ? (
-                  <>
-                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0 animate-in zoom-in-75 duration-200" />
-                    <span className="truncate">Added to Cart!</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag size={16} className="shrink-0" />
-                    <span className="truncate">Add to Cart</span>
-                  </>
-                )}
-              </button>
+              {/* Action Buttons: Add to Cart & Buy Now */}
+              <div className="flex flex-col sm:flex-row flex-1 gap-3">
+                {/* ADD TO CART Button */}
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  className={`w-full sm:flex-1 h-[48px] px-3 text-xs sm:text-[13px] uppercase tracking-wider font-bold transition-all duration-300 shadow-2xs flex items-center justify-center gap-2 rounded-none cursor-pointer active:scale-[0.99] whitespace-nowrap ${
+                    isAdded
+                      ? "bg-brand-dark text-brand-cream border-2 border-brand-dark"
+                      : "bg-white hover:bg-brand-dark hover:text-brand-cream border-2 border-brand-dark text-brand-dark"
+                  }`}
+                >
+                  {isAdded ? (
+                    <>
+                      <CheckCircle2 size={16} className="text-emerald-400 shrink-0 animate-in zoom-in-75 duration-200" />
+                      <span>Added to Cart!</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag size={16} className="shrink-0" />
+                      <span>Add to Cart</span>
+                    </>
+                  )}
+                </button>
 
-              {/* BUY NOW Button */}
-              <button
-                type="button"
-                onClick={handleBuyNow}
-                disabled={isBuyingNow}
-                className="w-full sm:flex-1 h-[50px] px-2.5 sm:px-3 bg-brand-dark hover:bg-brand-cocoa text-brand-cream border-2 border-brand-dark text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 rounded-none cursor-pointer group active:scale-[0.99] min-w-0"
-              >
-                {isBuyingNow ? (
-                  <span className="animate-pulse">Proceeding...</span>
-                ) : (
-                  <>
-                    <span className="truncate">Buy Now</span>
-                    <ArrowRight size={15} className="shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-brand-cream/90" />
-                  </>
-                )}
-              </button>
+                {/* BUY NOW Button */}
+                <button
+                  type="button"
+                  onClick={handleBuyNow}
+                  disabled={isBuyingNow}
+                  className="w-full sm:flex-1 h-[48px] px-3 bg-brand-dark hover:bg-brand-cocoa text-brand-cream border-2 border-brand-dark text-xs sm:text-[13px] uppercase tracking-wider font-bold transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center gap-2 rounded-none cursor-pointer group active:scale-[0.99] whitespace-nowrap"
+                >
+                  {isBuyingNow ? (
+                    <span className="animate-pulse">Proceeding...</span>
+                  ) : (
+                    <>
+                      <span>Buy Now</span>
+                      <ArrowRight size={15} className="shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 text-brand-cream/90" />
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
 
             {/* Trust notes */}
@@ -1347,187 +1319,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
               <span>Secure payment via UPI Transfer. Clean clinical purity guarantee.</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* Tabs description block (Full Description / Overview, Benefits, Ingredients, How to use) */}
-      <div className="border border-brand-sand/20 bg-brand-light p-6 sm:p-8 md:p-12 space-y-8">
-        <div className="flex border-b border-brand-sand/30 overflow-x-auto scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0 gap-2 sm:gap-6">
-          {(["overview", "benefits", "ingredients", "how"] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-3.5 px-3 sm:px-5 font-serif text-xs sm:text-sm uppercase tracking-wider transition-colors duration-300 border-b-2 font-medium -mb-[2px] whitespace-nowrap cursor-pointer ${
-                activeTab === tab
-                  ? "border-brand-dark text-brand-dark font-semibold"
-                  : "border-transparent text-brand-dark/40 hover:text-brand-dark"
-              }`}
-            >
-              {tab === "overview"
-                ? "Full Description"
-                : tab === "benefits"
-                ? "Product Benefits"
-                : tab === "ingredients"
-                ? "Pure Ingredients"
-                : "How to Ritual"}
-            </button>
-          ))}
-        </div>
-
-        <div className="font-sans font-light text-sm md:text-base text-brand-cocoa/90 leading-relaxed max-w-4xl">
-          {activeTab === "overview" && (
-            <div className="space-y-6">
-              {parsedContent.tagline && (
-                <div className="border-l-2 border-brand-accent pl-4 py-1">
-                  <p className="font-serif italic text-base sm:text-lg text-brand-accent">
-                    "{parsedContent.tagline}"
-                  </p>
-                </div>
-              )}
-              
-              <div className="space-y-3">
-                <p className="leading-relaxed text-brand-cocoa/90 font-light">
-                  {parsedContent.intro}
-                </p>
-              </div>
-
-              {parsedContent.suitableFor && (
-                <div className="bg-brand-sand/15 p-4 rounded-xs border border-brand-sand/30">
-                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-1">
-                    Recommended Skin Type & Suitability
-                  </span>
-                  <p className="text-xs sm:text-sm text-brand-cocoa/85">
-                    {parsedContent.suitableFor}
-                  </p>
-                </div>
-              )}
-
-              {parsedContent.highlights.length > 0 && (
-                <div className="pt-2">
-                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-3">
-                    Formulation Standards
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {parsedContent.highlights.map((h, i) => (
-                      <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-brand-cocoa/90 bg-white/70 p-2.5 border border-brand-sand/25">
-                        <CheckCircle2 size={15} className="text-brand-accent shrink-0" />
-                        <span>{h}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === "benefits" && (
-            <div className="space-y-5">
-              <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
-                Targeted Clinical Benefits
-              </span>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {parsedContent.benefits.map((benefit, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-white/80 border border-brand-sand/30 rounded-xs shadow-2xs space-y-1.5"
-                  >
-                    <div className="flex items-start gap-2.5">
-                      <span className="w-2 h-2 rounded-full bg-brand-accent shrink-0 mt-1.5" />
-                      <div className="text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
-                        {formatBold(benefit)}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "ingredients" && (
-            <div className="space-y-6">
-              <div className="space-y-1">
-                <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
-                  Botanical Actives & Pure Ingredients
-                </span>
-                <p className="text-xs sm:text-sm text-brand-cocoa/70">
-                  Ethically sourced natural extracts chosen for efficacy, safety, and skin-barrier harmony.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                {parsedContent.ingredients.map((ing, idx) => (
-                  <div
-                    key={idx}
-                    className="p-4 bg-white/80 border border-brand-sand/30 rounded-xs space-y-1"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />
-                      <h4 className="font-serif text-sm font-semibold text-brand-dark">
-                        {ing.name}
-                      </h4>
-                    </div>
-                    {ing.description && (
-                      <p className="text-xs sm:text-sm text-brand-cocoa/80 pl-3.5 leading-relaxed">
-                        {ing.description}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {parsedContent.highlights.length > 0 && (
-                <div className="pt-4 border-t border-brand-sand/20">
-                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-2">
-                    Formulation Purity Guarantee
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {parsedContent.highlights.map((h, i) => (
-                      <span
-                        key={i}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-sand/40 text-xs text-brand-dark/80 rounded-xs"
-                      >
-                        <Check size={13} className="text-brand-accent" />
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-
-          {activeTab === "how" && (
-            <div className="space-y-6 max-w-2xl">
-              <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
-                Daily Ritual & Application
-              </span>
-              
-              <div className="space-y-4">
-                <div className="p-5 bg-white/80 border border-brand-sand/30 rounded-xs space-y-3">
-                  <h4 className="font-serif text-base font-medium text-brand-dark">
-                    Step-by-Step Directions
-                  </h4>
-                  <div className="text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed whitespace-pre-line space-y-2">
-                    {parsedContent.howToUse}
-                  </div>
-                </div>
-
-                {parsedContent.suitableFor && (
-                  <div className="p-4 bg-brand-sand/15 border border-brand-sand/30 rounded-xs flex items-start gap-3">
-                    <ShieldCheck size={18} className="text-brand-accent shrink-0 mt-0.5" />
-                    <div>
-                      <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block">
-                        Skin Compatibility
-                      </span>
-                      <p className="text-xs text-brand-cocoa/80 mt-0.5">
-                        {parsedContent.suitableFor}
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
         </div>
       </div>
 
