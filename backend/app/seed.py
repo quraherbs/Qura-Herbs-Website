@@ -78,10 +78,10 @@ def seed_db():
         # 2. Create Products
         products_data = [
             {
-                "name": "Glow Radiant Plus",
+                "name": "Glow Radiant Plus Night Cream",
                 "slug": "glow-radiant-plus",
                 "short_description": "Let your skin do its best work while you rest. A botanically nourishing night cream that deeply hydrates, visibly brightens, and repairs the skin barrier.",
-                "full_description": """Glow Radiant Plus Skin Whitening Cream — 35g
+                "full_description": """Glow Radiant Plus Night Cream — 30g
 
 Let your skin do its best work while you rest. Reveal your natural brightness.
 
@@ -114,7 +114,7 @@ Formulation Highlights
 • Suitable for nightly ritual""",
                 "price": 799.0,
                 "sale_price": 799.0,
-                "SKU": "QH-GLOW-RADPLUS-35",
+                "SKU": "QH-GLOW-RADPLUS-30",
                 "stock": 45,
                 "category_id": cat_map.get("dry-skin", 2),
                 "ingredients": "Aloe Vera, Licorice Extract, Sweet Almond Oil, Lavender Oil, Mango Seed Butter, Carrot Seed Oil, Botanical Actives.",
@@ -134,27 +134,27 @@ Formulation Highlights
             {
                 "name": "Avocado Pro Nourish Night Cream",
                 "slug": "avocado-night-cream",
-                "short_description": "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-                "full_description": """Avocado Pro Nourish Night Cream — 35g
+                "short_description": "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening night cream that deeply nourishes, softens, and helps restore radiance while you sleep.",
+                "full_description": """Avocado Pro Nourish Night Cream — 30g
 
 Feed your skin. Reveal its natural brightness.
 
-A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.
+A botanically rich skin brightening night cream that deeply nourishes, softens, and helps restore radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.
 
 Key Benefits
-• Deep, sustained nourishment throughout the day
+• Deep, sustained nourishment throughout the night
 • Visibly softer and smoother skin with regular use
 • Restores a natural, healthy radiance to dull skin
 • Strengthens the skin barrier over time
 • Supports a more even, luminous complexion
 
 Key Ingredients
-• Avocado - rich in fatty acids that repair the skin barrier and restore suppleness
-• Sweet Almond Oil - lightweight and emollient, softens without congesting pores
-• Honey - a natural humectant that draws and locks moisture into the skin
-• Wheatgerm Extract - packed with Vitamin E to support renewal and reduce dullness
-• Milk Protein - smooths skin tone and refines the complexion
-• Seaweed - marine-derived minerals that firm, hydrate, and restore luminosity
+• Avocado — rich in fatty acids that repair the skin barrier and restore suppleness
+• Sweet Almond Oil — lightweight and emollient, softens without congesting pores
+• Honey — a natural humectant that draws and locks moisture into the skin
+• Wheatgerm Extract — packed with Vitamin E to support renewal and reduce dullness
+• Milk Protein — smooths skin tone and refines the complexion
+• Seaweed — marine-derived minerals that firm, hydrate, and restore luminosity
 
 Suitable For
 Oily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.
@@ -163,17 +163,17 @@ How To Use
 Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.
 
 Formulation Highlights
-• Paraben-free
+• Paraben-free & Sulphate-free
 • No harsh bleaching agents
-• Botanically sourced actives
-• Suitable for daily use""",
+• 100% Botanically sourced actives
+• Suitable for nightly ritual""",
                 "price": 799.0,
                 "sale_price": 799.0,
-                "SKU": "QH-HYD-AVONIGHT-35",
+                "SKU": "QH-HYD-AVONIGHT-30",
                 "stock": 30,
                 "category_id": cat_map.get("dry-skin", 2),
                 "ingredients": "Avocado (rich in fatty acids), Sweet Almond Oil, Honey, Wheatgerm Extract, Milk Protein, Seaweed minerals, Botanically Sourced Actives.",
-                "benefits": "Deep, sustained nourishment throughout the day • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
+                "benefits": "Deep, sustained nourishment throughout the night • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
                 "how_to_use": "Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.",
                 "skin_type": "Oily, combination, aging, dull, and normal skin types",
                 "product_images": [
@@ -295,12 +295,12 @@ Formulation Highlights
                 "active": True
             },
             {
-                "name": "SPF 50 Sunscreen",
+                "name": "Moisturizing Sunscreen SPF 50+",
                 "slug": "spf-50-sunscreen",
                 "short_description": "Moisturizing SPF 50+ sunscreen with Coconut & Sesame Oil, Shea Butter, and Aloe Vera for broad-spectrum protection and hydration.",
-                "full_description": """SPF 50 Sunscreen — 100ml
+                "full_description": """Moisturizing Sunscreen SPF 50+ — 100ml
 
-Moisturizing Sun Screen • Hydrates & Protects SPF 50+
+Moisturizing Sunscreen • Hydrates & Protects SPF 50+
 
 A botanical broad-spectrum sunscreen that provides high-level daily defense against UVA and UVB rays while keeping the skin barrier hydrated and calm. Enriched with natural oils and soothing plant extracts, it protects against sunburn, reduces photo-damage, and blends smoothly without greasy residue or white cast.
 
@@ -308,7 +308,7 @@ Key Benefits
 • Broad-Spectrum SPF 50+ Defense: Shields skin from damaging UV rays and photo-aging
 • Reduce Irritation: Calms inflammation and sunburn redness with soothing pure Aloe Vera
 • Antioxidant Properties: Rich botanical oils protect against environmental free-radical damage
-• Maintain Even Skin Tone: Prevents sunspots, tan buildup, and hyperpigmentation
+• Maintain Even Skin Tone: Helps prevent sunspots, tan buildup, and hyperpigmentation
 • Deeply Moisturizing: Shea Butter and Sesame Oil maintain all-day moisture without heaviness
 
 Key Ingredients
@@ -347,20 +347,20 @@ Formulation Highlights
                 "active": True
             },
             {
-                "name": "Vitamin C Serum",
+                "name": "Advanced Face Serum Vitamin C+ E+",
                 "slug": "vitamin-c-serum",
                 "short_description": "Advanced Face Serum with Vitamin C+, E+, Niacinamide, and Hyaluronic Acid for radiant brightness and antioxidant defense.",
-                "full_description": """Advanced Face Serum (Vitamin C+, E+) — 30ml
+                "full_description": """Advanced Face Serum Vitamin C+ E+ — 30ml
 
 Brightens Skin Tone • Overnight Radiance • Antioxidant Protection
 
 An advanced botanical face elixir crafted with potent Vitamin C, Vitamin E, Niacinamide, and Hyaluronic Acid. Designed to defend against environmental stressors, fade stubborn dark spots and acne marks, boost cellular collagen synthesis, and unveil a revitalized, luminous complexion.
 
 Key Benefits
-• Brightens Skin Tone: Clinically inspired botanical actives fade post-acne blemishes, hyperpigmentation, and sun damage
+• Brightens Skin Tone: Clinically inspired botanical actives help fade post-acne blemishes, hyperpigmentation, and sun damage
 • Overnight Radiance: Illuminates fatigued, dull skin for an effortlessly refreshed, lit-from-within morning glow
 • Antioxidant Protection: Synergistic Vitamin C + Vitamin E shield dermal layers from photo-aging and oxidative stress
-• Deep Hydration & Plumping: Hyaluronic Acid and Glycerin deeply infuse moisture, smoothing fine lines and texture
+• Deep Hydration & Plumping: Hyaluronic Acid and Glycerin deeply infuse moisture, smoothing the appearance of fine lines and texture
 • Calming & Barrier Support: Niacinamide and pure Aloe Vera extract calm redness, balance sebum, and minimize pore congestion
 
 Key Ingredients
@@ -401,10 +401,10 @@ Formulation Highlights
                 "active": True
             },
             {
-                "name": "Hair Shine Serum",
+                "name": "Instant Anti-Frizz Hair Serum",
                 "slug": "hair-shine-serum",
-                "short_description": "Anti-Frizz Hair Serum for Instant Frizz Control, Smoothness & Glass-Like Shine with Argan, Jojoba & Silk Protein.",
-                "full_description": """Anti-Frizz Hair Serum — 50ml
+                "short_description": "Instant Anti-Frizz Hair Serum for Frizz Control, Smoothness & Glass-Like Shine with Argan, Jojoba & Silk Protein.",
+                "full_description": """Instant Anti-Frizz Hair Serum — 50ml
 
 Instant Frizz Control • Adds Smoothness & Shine • Protects Against Humidity
 
@@ -458,12 +458,12 @@ Formulation Highlights
         ]
 
         volume_mapping = {
-            "avocado-night-cream": "35g",
+            "avocado-night-cream": "30g",
             "tea-tree-pureveil-cleanser": "100ml",
             "red-wine-glow-cleanser": "100ml",
             "spf-50-sunscreen": "100ml",
             "vitamin-c-serum": "30ml",
-            "glow-radiant-plus": "35g",
+            "glow-radiant-plus": "30g",
             "hair-shine-serum": "50ml",
         }
 
@@ -483,6 +483,14 @@ Formulation Highlights
                     setattr(existing_prod, k, v)
                 db.commit()
                 db.refresh(existing_prod)
+
+                vol_name = volume_mapping.get(existing_prod.slug)
+                if vol_name:
+                    var = db.query(models.ProductVariant).filter(models.ProductVariant.product_id == existing_prod.id).first()
+                    if var and var.name != vol_name:
+                        var.name = vol_name
+                        var.sku_suffix = f"V{vol_name.upper().replace(' ', '')}"
+                        db.commit()
             else:
                 db_prod = models.Product(**p_data)
                 db.add(db_prod)

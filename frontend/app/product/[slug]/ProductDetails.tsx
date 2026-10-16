@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
-import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2 } from "lucide-react";
+import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2, ChevronDown, ChevronUp, Check } from "lucide-react";
 import Link from "next/link";
 
 interface ProductVariant {
@@ -442,6 +442,143 @@ const FALLBACK_REVIEWS: Record<string, Review[]> = {
   ]
 };
 
+interface ParsedProductContent {
+  tagline: string;
+  intro: string;
+  benefits: string[];
+  ingredients: { name: string; description: string }[];
+  suitableFor: string;
+  howToUse: string;
+  highlights: string[];
+}
+
+function parseProductContent(
+  fullDesc?: string,
+  shortDesc?: string,
+  fallbackBenefits?: string,
+  fallbackIngredients?: string,
+  fallbackHow?: string,
+  fallbackSkin?: string
+): ParsedProductContent {
+  if (!fullDesc) {
+    const rawBenefits = fallbackBenefits ? fallbackBenefits.split(/[•\n]/).map((b) => b.trim()).filter(Boolean) : [];
+    const rawIngs = fallbackIngredients ? fallbackIngredients.split(/[,•\n]/).map((i) => i.trim()).filter(Boolean) : [];
+    return {
+      tagline: "",
+      intro: shortDesc || "",
+      benefits: rawBenefits,
+      ingredients: rawIngs.map((item) => {
+        const parts = item.split(/\s*[\u2014\u2013\-:]\s*(.+)/);
+        return parts.length >= 2 ? { name: parts[0].trim(), description: parts[1].trim() } : { name: item, description: "" };
+      }),
+      suitableFor: fallbackSkin || "",
+      howToUse: fallbackHow || "",
+      highlights: [],
+    };
+  }
+
+  const sectionHeaders = [
+    "Key Benefits",
+    "Key Ingredients",
+    "Suitable For",
+    "How To Use",
+    "Formulation Highlights",
+  ];
+
+  let currentHeader = "INTRO";
+  const headerContent: Record<string, string[]> = { INTRO: [] };
+
+  const lines = fullDesc.split("\n");
+  for (const line of lines) {
+    const trimmed = line.trim();
+    const matchedHeader = sectionHeaders.find(
+      (h) =>
+        trimmed.toLowerCase() === h.toLowerCase() ||
+        trimmed.toLowerCase().startsWith(h.toLowerCase() + ":") ||
+        trimmed.toLowerCase() === "### " + h.toLowerCase() ||
+        trimmed.toLowerCase() === "## " + h.toLowerCase()
+    );
+
+    if (matchedHeader) {
+      currentHeader = matchedHeader;
+      headerContent[currentHeader] = [];
+    } else {
+      headerContent[currentHeader].push(line);
+    }
+  }
+
+  const introLines = (headerContent["INTRO"] || []).map((l) => l.trim()).filter(Boolean);
+  let tagline = "";
+  let intro = "";
+
+  if (introLines.length >= 3) {
+    tagline = introLines[1];
+    intro = introLines.slice(2).join("\n\n");
+  } else if (introLines.length === 2) {
+    tagline = introLines[0];
+    intro = introLines[1];
+  } else if (introLines.length === 1) {
+    intro = introLines[0];
+  }
+
+  if (!intro && shortDesc) {
+    intro = shortDesc;
+  }
+
+  const benefits = (headerContent["Key Benefits"] || [])
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => l.replace(/^[\•\-\*]\s*/, ""));
+
+  const rawIngredients = (headerContent["Key Ingredients"] || [])
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => l.replace(/^[\•\-\*]\s*/, ""));
+
+  const ingredients = rawIngredients.map((item) => {
+    const match = item.split(/\s*[\u2014\u2013\-:]\s*(.+)/);
+    if (match.length >= 2) {
+      return { name: match[0].trim(), description: match[1].trim() };
+    }
+    return { name: item, description: "" };
+  });
+
+  const suitableFor = (headerContent["Suitable For"] || [])
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .join(" ");
+
+  const howToUse = (headerContent["How To Use"] || [])
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .join("\n\n");
+
+  const highlights = (headerContent["Formulation Highlights"] || [])
+    .map((l) => l.trim())
+    .filter(Boolean)
+    .map((l) => l.replace(/^[\•\-\*]\s*/, ""));
+
+  return {
+    tagline: tagline || "",
+    intro: intro || shortDesc || "",
+    benefits:
+      benefits.length > 0
+        ? benefits
+        : fallbackBenefits
+        ? fallbackBenefits.split(/[•\n]/).map((b) => b.trim()).filter(Boolean)
+        : [],
+    ingredients:
+      ingredients.length > 0
+        ? ingredients
+        : fallbackIngredients
+        ? fallbackIngredients.split(/[,•\n]/).map((i) => ({ name: i.trim(), description: "" })).filter((i) => i.name)
+        : [],
+    suitableFor: suitableFor || fallbackSkin || "",
+    howToUse: howToUse || fallbackHow || "",
+    highlights,
+  };
+}
+
 export default function ProductDetails({ slug }: { slug: string }) {
   const router = useRouter();
   const { addToCart, setIsCartOpen } = useCart();
@@ -453,6 +590,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
   const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "benefits" | "ingredients" | "how">("overview");
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -537,13 +675,13 @@ export default function ProductDetails({ slug }: { slug: string }) {
         if (slug === "glow-radiant-plus") {
           const fallbackGlow: Product = {
             id: 1,
-            name: "Glow Radiant Plus",
+            name: "Glow Radiant Plus Night Cream",
             slug: "glow-radiant-plus",
             short_description: "Let your skin do its best work while you rest. A botanically nourishing night cream that deeply hydrates, visibly brightens, and repairs the skin barrier.",
-            full_description: `Glow Radiant Plus Skin Whitening Cream — 35g\n\nLet your skin do its best work while you rest. Reveal your natural brightness.\n\nA botanically nourishing skin brightening cream that works in harmony with your skin's natural renewal cycle. Powered by pure botanical extracts, it deeply hydrates, visibly brightens, and steadily repairs a compromised skin barrier, so you wake up to skin that looks and feels genuinely restored.\n\nKey Benefits\n• Deep Hydration: Sustained overnight hydration that locks in moisture without heaviness\n• Brightens Skin: Visibly brightens uneven, dull, or tired-looking skin and fades dark spots\n• Repairs Barrier: Strengthens and repairs the natural skin barrier with consistent use\n• Evens Skin Tone: Targets hyperpigmentation revealing an editorial-level luminous complexion\n\nKey Ingredients\n• Aloe Vera — deeply hydrating and calming, reduces redness and soothes irritated skin\n• Licorice — a well-regarded botanical that gently brightens and evens skin tone over time\n• Sweet Almond Oil — nourishes and softens skin texture without congesting pores\n• Lavender — calms the skin and supports overnight recovery from environmental stress\n• Mango Seed Butter — rich and emollient, restores suppleness and seals in moisture\n• Carrot Seed Oil — high in antioxidants and vitamins, supports skin renewal and a healthy natural glow\n\nSuitable For\nDull, dry, combination, and normal skin types. Particularly beneficial for skin that looks fatigued or uneven. Ideal for daily nighttime rituals.\n\nHow To Use\nCleanse thoroughly and pat your face dry. Take a small amount and warm between your fingertips. Apply evenly across face and neck using gentle upward strokes. Allow the formula to absorb fully overnight. Rinse gently in the morning.\n\nFormulation Highlights\n• Paraben-free & Sulphate-free\n• No harsh bleaching or peeling agents\n• 100% Botanically sourced actives\n• Suitable for nightly ritual`,
+            full_description: `Glow Radiant Plus Night Cream — 30g\n\nLet your skin do its best work while you rest. Reveal your natural brightness.\n\nA botanically nourishing skin brightening cream that works in harmony with your skin's natural renewal cycle. Powered by pure botanical extracts, it deeply hydrates, visibly brightens, and steadily repairs a compromised skin barrier, so you wake up to skin that looks and feels genuinely restored.\n\nKey Benefits\n• Deep Hydration: Sustained overnight hydration that locks in moisture without heaviness\n• Brightens Skin: Visibly brightens uneven, dull, or tired-looking skin and fades dark spots\n• Repairs Barrier: Strengthens and repairs the natural skin barrier with consistent use\n• Evens Skin Tone: Targets hyperpigmentation revealing an editorial-level luminous complexion\n\nKey Ingredients\n• Aloe Vera — deeply hydrating and calming, reduces redness and soothes irritated skin\n• Licorice — a well-regarded botanical that gently brightens and evens skin tone over time\n• Sweet Almond Oil — nourishes and softens skin texture without congesting pores\n• Lavender — calms the skin and supports overnight recovery from environmental stress\n• Mango Seed Butter — rich and emollient, restores suppleness and seals in moisture\n• Carrot Seed Oil — high in antioxidants and vitamins, supports skin renewal and a healthy natural glow\n\nSuitable For\nDull, dry, combination, and normal skin types. Particularly beneficial for skin that looks fatigued or uneven. Ideal for daily nighttime rituals.\n\nHow To Use\nCleanse thoroughly and pat your face dry. Take a small amount and warm between your fingertips. Apply evenly across face and neck using gentle upward strokes. Allow the formula to absorb fully overnight. Rinse gently in the morning.\n\nFormulation Highlights\n• Paraben-free & Sulphate-free\n• No harsh bleaching or peeling agents\n• 100% Botanically sourced actives\n• Suitable for nightly ritual`,
             price: 799.0,
             sale_price: 799.0,
-            SKU: "QH-GLOW-RADPLUS-35",
+            SKU: "QH-GLOW-RADPLUS-30",
             stock: 45,
             ingredients: "Aloe Vera, Licorice Extract, Sweet Almond Oil, Lavender Oil, Mango Seed Butter, Carrot Seed Oil, Botanical Actives.",
             benefits: "Deep Hydration • Brightens Skin • Repairs Barrier • Fades Dark Spots • Even Skin Tone.",
@@ -557,7 +695,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
             ],
             thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/glow_radiant_plus_main.jpg",
             variants: [
-              { id: 28, product_id: 1, name: "35g", sku_suffix: "V35G", price_override: null, stock: 45 }
+              { id: 28, product_id: 1, name: "30g", sku_suffix: "V30G", price_override: null, stock: 45 }
             ]
           };
           setProduct(fallbackGlow);
@@ -572,14 +710,14 @@ export default function ProductDetails({ slug }: { slug: string }) {
             id: 2,
             name: "Avocado Pro Nourish Night Cream",
             slug: "avocado-night-cream",
-            short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep.",
-            full_description: `Avocado Pro Nourish Night Cream — 35g\n\nFeed your skin. Reveal its natural brightness.\n\nA botanically rich skin brightening and whitening night cream that deeply nourishes, softens, and restores radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.\n\nKey Benefits\n• Deep, sustained nourishment throughout the day\n• Visibly softer and smoother skin with regular use\n• Restores a natural, healthy radiance to dull skin\n• Strengthens the skin barrier over time\n• Supports a more even, luminous complexion\n\nKey Ingredients\n• Avocado - rich in fatty acids that repair the skin barrier and restore suppleness\n• Sweet Almond Oil - lightweight and emollient, softens without congesting pores\n• Honey - a natural humectant that draws and locks moisture into the skin\n• Wheatgerm Extract - packed with Vitamin E to support renewal and reduce dullness\n• Milk Protein - smooths skin tone and refines the complexion\n• Seaweed - marine-derived minerals that firm, hydrate, and restore luminosity\n\nSuitable For\nOily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.\n\nHow To Use\nCleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.\n\nFormulation Highlights\n• Paraben-free\n• No harsh bleaching agents\n• Botanically sourced actives\n• Suitable for daily use`,
+            short_description: "Feed your skin. Reveal its natural brightness. A botanically rich skin brightening night cream that deeply nourishes, softens, and helps restore radiance while you sleep.",
+            full_description: `Avocado Pro Nourish Night Cream — 30g\n\nFeed your skin. Reveal its natural brightness.\n\nA botanically rich skin brightening night cream that deeply nourishes, softens, and helps restore radiance while you sleep. Powered by avocado, sweet almond oil, honey, wheatgerm, milk protein, and seaweed, it supports healthier-looking, smoother, more luminous skin without harsh bleaching agents.\n\nKey Benefits\n• Deep, sustained nourishment throughout the night\n• Visibly softer and smoother skin with regular use\n• Restores a natural, healthy radiance to dull skin\n• Strengthens the skin barrier over time\n• Supports a more even, luminous complexion\n\nKey Ingredients\n• Avocado — rich in fatty acids that repair the skin barrier and restore suppleness\n• Sweet Almond Oil — lightweight and emollient, softens without congesting pores\n• Honey — a natural humectant that draws and locks moisture into the skin\n• Wheatgerm Extract — packed with Vitamin E to support renewal and reduce dullness\n• Milk Protein — smooths skin tone and refines the complexion\n• Seaweed — marine-derived minerals that firm, hydrate, and restore luminosity\n\nSuitable For\nOily, combination, aging, dull, and normal skin types. Ideal for daily use, overnight.\n\nHow To Use\nCleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Sulphate-free\n• No harsh bleaching agents\n• Suitable for daily nighttime ritual`,
             price: 799.0,
             sale_price: 799.0,
-            SKU: "QH-HYD-AVONIGHT-35",
+            SKU: "QH-HYD-AVONIGHT-30",
             stock: 30,
             ingredients: "Avocado (rich in fatty acids), Sweet Almond Oil, Honey, Wheatgerm Extract, Milk Protein, Seaweed minerals, Botanically Sourced Actives.",
-            benefits: "Deep, sustained nourishment throughout the day • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
+            benefits: "Deep, sustained nourishment throughout the night • Visibly softer and smoother skin with regular use • Restores natural, healthy radiance to dull skin • Strengthens the skin barrier over time • Supports a more even, luminous complexion.",
             how_to_use: "Cleanse and pat your face dry. Take a small amount and warm between fingertips. Apply evenly across face using upward strokes.",
             skin_type: "Oily, combination, aging, dull, and normal skin types",
             product_images: [
@@ -589,7 +727,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
             ],
             thumbnail: "https://slyiyvegvcefhzaeymoo.supabase.co/storage/v1/object/public/Product%20Images/avocado_pro_nourish_main.jpg",
             variants: [
-              { id: 29, product_id: 2, name: "35g", sku_suffix: "V35G", price_override: null, stock: 30 }
+              { id: 29, product_id: 2, name: "30g", sku_suffix: "V30G", price_override: null, stock: 30 }
             ]
           };
           setProduct(fallbackProduct);
@@ -669,7 +807,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
         if (slug === "spf-50-sunscreen") {
           const fallbackSPF: Product = {
             id: 5,
-            name: "SPF 50 Sunscreen",
+            name: "Moisturizing Sunscreen SPF 50+",
             slug: "spf-50-sunscreen",
             short_description: "Moisturizing SPF 50+ sunscreen with Coconut & Sesame Oil, Shea Butter, and Aloe Vera for broad-spectrum protection and hydration.",
             full_description: `SPF 50 Sunscreen — 100ml\n\nMoisturizing Sun Screen • Hydrates & Protects SPF 50+\n\nA botanical broad-spectrum sunscreen that provides high-level daily defense against UVA and UVB rays while keeping the skin barrier hydrated and calm. Enriched with natural oils and soothing plant extracts, it protects against sunburn, reduces photo-damage, and blends smoothly without greasy residue or white cast.\n\nKey Benefits\n• Broad-Spectrum SPF 50+ Defense: Shields skin from damaging UV rays and photo-aging\n• Reduce Irritation: Calms inflammation and sunburn redness with soothing pure Aloe Vera\n• Antioxidant Properties: Rich botanical oils protect against environmental free-radical damage\n• Maintain Even Skin Tone: Prevents sunspots, tan buildup, and hyperpigmentation\n• Deeply Moisturizing: Shea Butter and Sesame Oil maintain all-day moisture without heaviness\n\nKey Ingredients\n• Coconut & Sesame Oil — rich in natural sun-protective lipids, essential fatty acids, and antioxidants to nourish and guard skin\n• Shea Butter — rich emollient that seals in hydration and strengthens the epidermal barrier\n• Aloe Vera — instantly cools, calms irritation, and hydrates sun-exposed skin\n\nSuitable For\nAll skin types, including sensitive, combination, dry, and normal skin. Ideal for daily morning wear.\n\nHow To Use\nApply generously to clean face and neck every morning. Allow 10 minutes before direct sun exposure. Reapply every 2-3 hours during prolonged sun exposure.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Non-greasy\n• Suitable for daily morning ritual\n• Broad spectrum SPF 50+ protection`,
@@ -702,7 +840,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
         if (slug === "vitamin-c-serum") {
           const fallbackVitC: Product = {
             id: 6,
-            name: "Vitamin C Serum",
+            name: "Advanced Face Serum Vitamin C+ E+",
             slug: "vitamin-c-serum",
             short_description: "Advanced Face Serum with Vitamin C+, E+, Niacinamide, and Hyaluronic Acid for radiant brightness and antioxidant defense.",
             full_description: `Advanced Face Serum (Vitamin C+, E+) — 30ml\n\nBrightens Skin Tone • Overnight Radiance • Antioxidant Protection\n\nAn advanced botanical face elixir crafted with potent Vitamin C, Vitamin E, Niacinamide, and Hyaluronic Acid. Designed to defend against environmental stressors, fade stubborn dark spots and acne marks, boost cellular collagen synthesis, and unveil a revitalized, luminous complexion.\n\nKey Benefits\n• Brightens Skin Tone: Clinically inspired botanical actives fade post-acne blemishes, hyperpigmentation, and sun damage\n• Overnight Radiance: Illuminates fatigued, dull skin for an effortlessly refreshed, lit-from-within morning glow\n• Antioxidant Protection: Synergistic Vitamin C + Vitamin E shield dermal layers from photo-aging and oxidative stress\n• Deep Hydration & Plumping: Hyaluronic Acid and Glycerin deeply infuse moisture, smoothing fine lines and texture\n• Calming & Barrier Support: Niacinamide and pure Aloe Vera extract calm redness, balance sebum, and minimize pore congestion\n\nKey Ingredients\n• Vitamin C — potent antioxidant that illuminates skin tone and promotes firm elasticity\n• Vitamin E — defends against free radicals and reinforces lipid barrier recovery\n• Niacinamide (Vitamin B3) — refines pores, fades dark marks, and evens out tone\n• Hyaluronic Acid — deep-hydration magnet that plumps skin and maintains moisture elasticity\n• Aloe Vera Extract — soothes irritation and cools reactive skin\n• Glycerin — locks in weightless hydration throughout the day and night\n\nSuitable For\nAll skin types including dull, sensitive, combination, and acne-prone skin.\n\nHow To Use\nDispense 3-4 drops onto clean fingertips. Gently press and smooth across cleansed face and neck until absorbed. Follow with moisturizer and always apply SPF during daytime.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Paraben-free & Non-sticky formulation\n• Fast-absorbing lightweight serum\n• Suitable for day and night rituals`,
@@ -734,7 +872,7 @@ export default function ProductDetails({ slug }: { slug: string }) {
         if (slug === "hair-shine-serum") {
           const fallbackHair: Product = {
             id: 7,
-            name: "Hair Shine Serum",
+            name: "Instant Anti-Frizz Hair Serum",
             slug: "hair-shine-serum",
             short_description: "Anti-Frizz Hair Serum for Instant Frizz Control, Smoothness & Glass-Like Shine with Argan, Jojoba & Silk Protein.",
             full_description: `Anti-Frizz Hair Serum — 50ml\n\nInstant Frizz Control • Adds Smoothness & Shine • Protects Against Humidity\n\nA weightless, multi-benefit botanical hair serum expertly crafted to transform dull, coarse, and unruly strands into a silky, light-reflective cascade. Enriched with cold-pressed Argan Oil, Jojoba Oil, Almond Oil, Vitamin E, and hydrolysed Silk Protein, it tames stubborn flyaways, locks out environmental humidity, and restores lustrous shine without greasiness or buildup.\n\nKey Benefits\n• Instant Frizz & Flyaway Control: Calms rebellious texture and seals cuticles for all-day sleekness\n• Glass-Like Smoothness & Shine: Infuses strands with light-catching botanical oils for radiant, healthy gloss\n• Humidity Defense: Forms a weightless protective shield that blocks humidity-induced puffiness and frizz\n• Heat & Environmental Protection: Vitamin E and Silk Protein guard hair fibers against thermal styling stress and pollution\n• Non-Greasy & Ultra-Lightweight: Absorbs effortlessly into hair shafts without weighing down roots or strands\n\nKey Ingredients\n• Argan Oil — liquid gold rich in fatty acids and antioxidants to restore elasticity and natural shine\n• Jojoba Oil — mimics natural scalp sebum to balance moisture and nourish hair ends\n• Sweet Almond Oil — softens rough cuticles and enhances hair strength and silkiness\n• Vitamin E — defends against environmental damage and oxidative stress\n• Aloe Vera Extract — hydrates strands and calms static flyaways\n• Hydrolysed Silk Protein — locks in moisture, smooths cuticles, and provides a salon-smooth finish\n\nSuitable For\nAll hair types including straight, wavy, curly, coily, colored, and chemically treated hair.\n\nHow To Use\nDispense 2-3 pumps onto palms and rub together. Work evenly through towel-dried or dry hair from mid-lengths to ends. Style as usual. Can be used before heat styling or as a finishing touch for mirror-like shine.\n\nFormulation Highlights\n• 100% Herbal & Botanical actives\n• Mineral Oil-free & Paraben-free\n• Non-sticky & Weightless formula\n• Suitable for everyday styling`,
@@ -830,6 +968,15 @@ export default function ProductDetails({ slug }: { slug: string }) {
       );
     });
   };
+
+  const parsedContent = parseProductContent(
+    product.full_description,
+    product.short_description,
+    product.benefits,
+    product.ingredients,
+    product.how_to_use,
+    product.skin_type
+  );
 
   const hasDiscount = product.sale_price !== null;
   
@@ -953,9 +1100,144 @@ export default function ProductDetails({ slug }: { slug: string }) {
             )}
           </div>
 
-          <p className="text-brand-cocoa/80 text-sm leading-relaxed font-sans font-light">
-            {product.short_description}
-          </p>
+          {/* Product Information Area (Collapsed / Expanded See More Experience) */}
+          <div className="space-y-4 border-b border-brand-sand/20 pb-4">
+            {/* Product Tagline */}
+            {parsedContent.tagline && (
+              <p className="font-serif italic text-sm sm:text-base text-brand-accent tracking-wide leading-snug">
+                "{parsedContent.tagline}"
+              </p>
+            )}
+
+            {/* Introductory Description */}
+            <p className="text-brand-cocoa/85 text-sm sm:text-base leading-relaxed font-sans font-light">
+              {parsedContent.intro}
+            </p>
+
+            {/* Collapsed view: Important Benefits highlights */}
+            {!isDescriptionExpanded && parsedContent.benefits.length > 0 && (
+              <div className="space-y-2 pt-1">
+                <span className="text-[11px] uppercase tracking-wider font-semibold font-sans text-brand-dark/60 block">
+                  Key Highlights
+                </span>
+                <ul className="space-y-1.5">
+                  {parsedContent.benefits.slice(0, 2).map((benefit, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-xs sm:text-sm text-brand-cocoa/90 leading-normal">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-accent shrink-0 mt-1.5" />
+                      <span>{formatBold(benefit)}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Expanded view: Full Description with all sections */}
+            {isDescriptionExpanded && (
+              <div
+                id="product-full-description"
+                className="space-y-5 pt-3 border-t border-brand-sand/20 transition-all duration-300"
+              >
+                {/* Key Benefits */}
+                {parsedContent.benefits.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-dark">
+                      Key Benefits
+                    </h3>
+                    <ul className="space-y-2 pl-0.5">
+                      {parsedContent.benefits.map((benefit, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-accent shrink-0 mt-1.5" />
+                          <span>{formatBold(benefit)}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Key Ingredients */}
+                {parsedContent.ingredients.length > 0 && (
+                  <div className="space-y-2">
+                    <h3 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-dark">
+                      Key Ingredients
+                    </h3>
+                    <ul className="space-y-2 pl-0.5">
+                      {parsedContent.ingredients.map((ing, idx) => (
+                        <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-brand-accent shrink-0 mt-1.5" />
+                          <span>
+                            <strong className="font-semibold text-brand-dark">{ing.name}</strong>
+                            {ing.description ? ` — ${ing.description}` : ""}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Suitable For */}
+                {parsedContent.suitableFor && (
+                  <div className="space-y-1.5">
+                    <h3 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-dark">
+                      Suitable For
+                    </h3>
+                    <p className="text-xs sm:text-sm text-brand-cocoa/85 leading-relaxed font-sans font-light bg-brand-sand/15 p-3 rounded-xs border border-brand-sand/20">
+                      {parsedContent.suitableFor}
+                    </p>
+                  </div>
+                )}
+
+                {/* How To Use */}
+                {parsedContent.howToUse && (
+                  <div className="space-y-1.5">
+                    <h3 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-dark">
+                      How To Use
+                    </h3>
+                    <p className="text-xs sm:text-sm text-brand-cocoa/85 leading-relaxed font-sans font-light">
+                      {parsedContent.howToUse}
+                    </p>
+                  </div>
+                )}
+
+                {/* Formulation Highlights */}
+                {parsedContent.highlights.length > 0 && (
+                  <div className="space-y-2 pt-1">
+                    <h3 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-dark">
+                      Formulation Highlights
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {parsedContent.highlights.map((highlight, idx) => (
+                        <span
+                          key={idx}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brand-cream/80 border border-brand-sand/50 text-[11px] sm:text-xs text-brand-dark/80 font-sans rounded-xs"
+                        >
+                          <Check size={12} className="text-brand-accent shrink-0" />
+                          {highlight}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* See More / See Less Control */}
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-brand-dark hover:text-brand-accent transition-colors py-1.5 border-b border-brand-dark/40 hover:border-brand-accent focus:outline-none focus-visible:ring-1 focus-visible:ring-brand-accent cursor-pointer group"
+                aria-expanded={isDescriptionExpanded}
+                aria-controls="product-full-description"
+              >
+                <span>{isDescriptionExpanded ? "See Less" : "See More"}</span>
+                {isDescriptionExpanded ? (
+                  <ChevronUp size={14} className="transition-transform duration-200 group-hover:-translate-y-0.5 text-brand-accent" />
+                ) : (
+                  <ChevronDown size={14} className="transition-transform duration-200 group-hover:translate-y-0.5 text-brand-accent" />
+                )}
+              </button>
+            </div>
+          </div>
 
           {/* Product SKU */}
           <div className="text-xs font-sans text-brand-dark/40">
@@ -1069,13 +1351,13 @@ export default function ProductDetails({ slug }: { slug: string }) {
       </div>
 
       {/* Tabs description block (Full Description / Overview, Benefits, Ingredients, How to use) */}
-      <div className="border border-brand-sand/20 bg-brand-light p-8 md:p-12 space-y-8">
-        <div className="flex border-b border-brand-sand/20 overflow-x-auto">
+      <div className="border border-brand-sand/20 bg-brand-light p-6 sm:p-8 md:p-12 space-y-8">
+        <div className="flex border-b border-brand-sand/30 overflow-x-auto scrollbar-none -mx-2 px-2 sm:mx-0 sm:px-0 gap-2 sm:gap-6">
           {(["overview", "benefits", "ingredients", "how"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-6 font-serif text-sm uppercase tracking-wider transition-colors duration-300 border-b-2 font-medium -mb-[2px] whitespace-nowrap ${
+              className={`pb-3.5 px-3 sm:px-5 font-serif text-xs sm:text-sm uppercase tracking-wider transition-colors duration-300 border-b-2 font-medium -mb-[2px] whitespace-nowrap cursor-pointer ${
                 activeTab === tab
                   ? "border-brand-dark text-brand-dark font-semibold"
                   : "border-transparent text-brand-dark/40 hover:text-brand-dark"
@@ -1094,23 +1376,156 @@ export default function ProductDetails({ slug }: { slug: string }) {
 
         <div className="font-sans font-light text-sm md:text-base text-brand-cocoa/90 leading-relaxed max-w-4xl">
           {activeTab === "overview" && (
-            <div className="space-y-3">
-              {renderFormattedText(product.full_description || product.short_description)}
+            <div className="space-y-6">
+              {parsedContent.tagline && (
+                <div className="border-l-2 border-brand-accent pl-4 py-1">
+                  <p className="font-serif italic text-base sm:text-lg text-brand-accent">
+                    "{parsedContent.tagline}"
+                  </p>
+                </div>
+              )}
+              
+              <div className="space-y-3">
+                <p className="leading-relaxed text-brand-cocoa/90 font-light">
+                  {parsedContent.intro}
+                </p>
+              </div>
+
+              {parsedContent.suitableFor && (
+                <div className="bg-brand-sand/15 p-4 rounded-xs border border-brand-sand/30">
+                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-1">
+                    Recommended Skin Type & Suitability
+                  </span>
+                  <p className="text-xs sm:text-sm text-brand-cocoa/85">
+                    {parsedContent.suitableFor}
+                  </p>
+                </div>
+              )}
+
+              {parsedContent.highlights.length > 0 && (
+                <div className="pt-2">
+                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-3">
+                    Formulation Standards
+                  </span>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {parsedContent.highlights.map((h, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs sm:text-sm text-brand-cocoa/90 bg-white/70 p-2.5 border border-brand-sand/25">
+                        <CheckCircle2 size={15} className="text-brand-accent shrink-0" />
+                        <span>{h}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
+
           {activeTab === "benefits" && (
-            <div className="space-y-3">
-              {renderFormattedText(product.benefits || "No specific benefits listed.")}
+            <div className="space-y-5">
+              <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
+                Targeted Clinical Benefits
+              </span>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {parsedContent.benefits.map((benefit, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-white/80 border border-brand-sand/30 rounded-xs shadow-2xs space-y-1.5"
+                  >
+                    <div className="flex items-start gap-2.5">
+                      <span className="w-2 h-2 rounded-full bg-brand-accent shrink-0 mt-1.5" />
+                      <div className="text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                        {formatBold(benefit)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
+
           {activeTab === "ingredients" && (
-            <div className="space-y-3">
-              {renderFormattedText(product.ingredients || "No ingredients specified.")}
+            <div className="space-y-6">
+              <div className="space-y-1">
+                <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
+                  Botanical Actives & Pure Ingredients
+                </span>
+                <p className="text-xs sm:text-sm text-brand-cocoa/70">
+                  Ethically sourced natural extracts chosen for efficacy, safety, and skin-barrier harmony.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {parsedContent.ingredients.map((ing, idx) => (
+                  <div
+                    key={idx}
+                    className="p-4 bg-white/80 border border-brand-sand/30 rounded-xs space-y-1"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-accent" />
+                      <h4 className="font-serif text-sm font-semibold text-brand-dark">
+                        {ing.name}
+                      </h4>
+                    </div>
+                    {ing.description && (
+                      <p className="text-xs sm:text-sm text-brand-cocoa/80 pl-3.5 leading-relaxed">
+                        {ing.description}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {parsedContent.highlights.length > 0 && (
+                <div className="pt-4 border-t border-brand-sand/20">
+                  <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block mb-2">
+                    Formulation Purity Guarantee
+                  </span>
+                  <div className="flex flex-wrap gap-2">
+                    {parsedContent.highlights.map((h, i) => (
+                      <span
+                        key={i}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 bg-white border border-brand-sand/40 text-xs text-brand-dark/80 rounded-xs"
+                      >
+                        <Check size={13} className="text-brand-accent" />
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
+
           {activeTab === "how" && (
-            <div className="space-y-3">
-              {renderFormattedText(product.how_to_use || "No usage instructions specified.")}
+            <div className="space-y-6 max-w-2xl">
+              <span className="text-xs uppercase tracking-widest text-[#8B6B38] font-semibold block">
+                Daily Ritual & Application
+              </span>
+              
+              <div className="space-y-4">
+                <div className="p-5 bg-white/80 border border-brand-sand/30 rounded-xs space-y-3">
+                  <h4 className="font-serif text-base font-medium text-brand-dark">
+                    Step-by-Step Directions
+                  </h4>
+                  <div className="text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed whitespace-pre-line space-y-2">
+                    {parsedContent.howToUse}
+                  </div>
+                </div>
+
+                {parsedContent.suitableFor && (
+                  <div className="p-4 bg-brand-sand/15 border border-brand-sand/30 rounded-xs flex items-start gap-3">
+                    <ShieldCheck size={18} className="text-brand-accent shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-xs uppercase tracking-wider font-semibold text-brand-dark block">
+                        Skin Compatibility
+                      </span>
+                      <p className="text-xs text-brand-cocoa/80 mt-0.5">
+                        {parsedContent.suitableFor}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
