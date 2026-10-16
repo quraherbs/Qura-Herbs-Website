@@ -121,6 +121,21 @@ export default function Home() {
         {/* 1. 1st Banner */}
         <HeroSection />
 
+        {/* Brand Mission & Botanical Skincare Intro */}
+        <section className="py-12 sm:py-16 px-4 md:px-8 bg-brand-cream border-t border-brand-sand/20">
+          <div className="max-w-4xl mx-auto text-center space-y-4">
+            <span className="text-[11px] font-sans font-semibold tracking-[0.3em] text-brand-accent uppercase block">
+              COIMBATORE &bull; BOTANICAL SKINCARE &amp; HAIRCARE
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-light text-brand-dark tracking-tight leading-snug">
+              Thoughtful care for your skin and hair.
+            </h2>
+            <p className="font-sans font-light text-brand-cocoa/85 text-sm sm:text-base md:text-lg leading-relaxed max-w-2xl mx-auto">
+              Discover Qura Herbs, a Coimbatore-based skincare and haircare brand offering botanical night creams, cleansers, Vitamin C serum, sunscreen, and hair serums. Rooted in herbal ingredients and transparent care, we create simple daily rituals that help you feel comfortable and confident in your own skin.
+            </p>
+          </div>
+        </section>
+
         {/* 2. 2nd Our Bestsellers */}
         <section id="bestsellers" className="py-24 px-4 md:px-8 bg-brand-cream border-t border-brand-sand/20">
           <div className="max-w-7xl mx-auto space-y-16">
