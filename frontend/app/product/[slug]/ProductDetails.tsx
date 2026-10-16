@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
 import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2 } from "lucide-react";
@@ -442,11 +443,14 @@ const FALLBACK_REVIEWS: Record<string, Review[]> = {
 };
 
 export default function ProductDetails({ slug }: { slug: string }) {
-  const { addToCart } = useCart();
+  const router = useRouter();
+  const { addToCart, setIsCartOpen } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Review[]>(() => FALLBACK_REVIEWS[slug] || []);
   const [selectedImage, setSelectedImage] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [isAdded, setIsAdded] = useState(false);
+  const [isBuyingNow, setIsBuyingNow] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [activeTab, setActiveTab] = useState<"overview" | "benefits" | "ingredients" | "how">("overview");
   const [loading, setLoading] = useState(true);
@@ -835,6 +839,47 @@ export default function ProductDetails({ slug }: { slug: string }) {
     ? product.sale_price!
     : basePrice;
 
+  const handleAddToCart = () => {
+    if (!product) return;
+    addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: basePrice,
+        sale_price: hasDiscount && !selectedVariant?.price_override ? product.sale_price : null,
+        thumbnail: product.thumbnail,
+        variant: selectedVariant?.name,
+      },
+      quantity,
+      true
+    );
+    setIsAdded(true);
+    setTimeout(() => {
+      setIsAdded(false);
+    }, 2200);
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+    setIsBuyingNow(true);
+    addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        slug: product.slug,
+        price: basePrice,
+        sale_price: hasDiscount && !selectedVariant?.price_override ? product.sale_price : null,
+        thumbnail: product.thumbnail,
+        variant: selectedVariant?.name,
+      },
+      quantity,
+      false
+    );
+    setIsCartOpen(false);
+    router.push("/checkout");
+  };
+
   const rawImages = [product.thumbnail, ...(product.product_images || [])].filter(Boolean);
   const allImages = Array.from(new Set(rawImages.map((img) => getImageUrl(img))));
 
@@ -941,36 +986,84 @@ export default function ProductDetails({ slug }: { slug: string }) {
             </div>
           )}
 
-          {/* Add to Cart Controls */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            {/* Quantity Selector */}
-            <div className="flex items-center border border-brand-sand/60 bg-white justify-between px-4 py-3 sm:w-32">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-brand-dark/60">-</button>
-              <span className="text-xs font-sans font-medium">{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)} className="text-brand-dark/60">+</button>
-            </div>
-            
-            {/* Add Button */}
-            <button
-              onClick={() => addToCart({
-                id: product.id,
-                name: product.name,
-                slug: product.slug,
-                price: activePrice,
-                thumbnail: product.thumbnail,
-                variant: selectedVariant?.name
-              }, quantity)}
-              className="flex-1 bg-brand-dark hover:bg-brand-accent text-brand-cream text-xs uppercase tracking-widest py-4 font-bold transition-all duration-300 shadow-md flex items-center justify-center gap-2 rounded-none"
-            >
-              <ShoppingBag size={15} />
-              ADD TO RITUAL
-            </button>
-          </div>
+          {/* Add to Cart & Buy Now Controls */}
+          <div className="space-y-3 pt-3">
+            <div className="flex flex-col sm:flex-row gap-3">
+              {/* Quantity Selector */}
+              <div className="flex items-center justify-between border-2 border-brand-sand/80 bg-white px-2 h-[50px] w-full sm:w-28 lg:w-32 shrink-0 shadow-xs">
+                <span className="text-[11px] uppercase tracking-wider text-brand-dark/60 font-sans font-semibold pl-2 sm:hidden">
+                  Quantity
+                </span>
+                <div className="flex items-center justify-between w-32 sm:w-full h-full">
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    disabled={quantity <= 1}
+                    className="w-9 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-base font-bold disabled:opacity-25 disabled:cursor-not-allowed transition-colors select-none"
+                    aria-label="Decrease quantity"
+                  >
+                    -
+                  </button>
+                  <span className="text-sm font-sans font-bold text-brand-dark min-w-[24px] text-center select-none">
+                    {quantity}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="w-9 h-full flex items-center justify-center text-brand-dark/70 hover:text-brand-dark hover:bg-brand-sand/20 text-base font-bold transition-colors select-none"
+                    aria-label="Increase quantity"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
 
-          {/* Trust notes */}
-          <div className="flex items-center gap-2.5 text-xs text-brand-dark/50 pt-2 border-t border-brand-sand/10 font-sans font-light">
-            <ShieldCheck size={16} className="text-brand-accent" />
-            <span>Secure payment via UPI Transfer. Clean clinical purity guarantee.</span>
+              {/* ADD TO CART Button */}
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                className={`w-full sm:flex-1 h-[50px] px-2.5 sm:px-3 text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all duration-300 shadow-sm flex items-center justify-center gap-1.5 sm:gap-2 rounded-none cursor-pointer active:scale-[0.99] min-w-0 ${
+                  isAdded
+                    ? "bg-brand-dark text-brand-cream border-2 border-brand-dark"
+                    : "bg-white/80 hover:bg-brand-dark hover:text-brand-cream border-2 border-brand-dark text-brand-dark"
+                }`}
+              >
+                {isAdded ? (
+                  <>
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0 animate-in zoom-in-75 duration-200" />
+                    <span className="truncate">Added to Cart!</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag size={16} className="shrink-0" />
+                    <span className="truncate">Add to Cart</span>
+                  </>
+                )}
+              </button>
+
+              {/* BUY NOW Button */}
+              <button
+                type="button"
+                onClick={handleBuyNow}
+                disabled={isBuyingNow}
+                className="w-full sm:flex-1 h-[50px] px-2.5 sm:px-3 bg-brand-dark hover:bg-brand-cocoa text-brand-cream border-2 border-brand-dark text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all duration-300 shadow-md hover:shadow-lg flex items-center justify-center gap-1.5 sm:gap-2 rounded-none cursor-pointer group active:scale-[0.99] min-w-0"
+              >
+                {isBuyingNow ? (
+                  <span className="animate-pulse">Proceeding...</span>
+                ) : (
+                  <>
+                    <span className="truncate">Buy Now</span>
+                    <ArrowRight size={15} className="shrink-0 transition-transform duration-300 group-hover:translate-x-1 text-brand-cream/90" />
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Trust notes */}
+            <div className="flex items-center gap-2.5 text-xs text-brand-dark/60 pt-2 border-t border-brand-sand/20 font-sans font-light leading-relaxed">
+              <ShieldCheck size={16} className="text-brand-accent shrink-0" />
+              <span>Secure payment via UPI Transfer. Clean clinical purity guarantee.</span>
+            </div>
           </div>
         </div>
       </div>

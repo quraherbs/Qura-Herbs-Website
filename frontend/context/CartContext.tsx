@@ -19,7 +19,7 @@ interface CartContextType {
   cartTotal: number;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  addToCart: (item: Omit<CartItem, "quantity">, quantity: number) => void;
+  addToCart: (item: Omit<CartItem, "quantity">, quantity: number, openDrawer?: boolean) => void;
   removeFromCart: (id: number, variant?: string | null) => void;
   updateQuantity: (id: number, quantity: number, variant?: string | null) => void;
   clearCart: () => void;
@@ -49,7 +49,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem("qura_cart", JSON.stringify(newCart));
   };
 
-  const addToCart = (item: Omit<CartItem, "quantity">, quantity: number) => {
+  const addToCart = (item: Omit<CartItem, "quantity">, quantity: number, openDrawer = true) => {
     const existingIndex = cart.findIndex(
       (i) => i.id === item.id && i.variant === item.variant
     );
@@ -61,8 +61,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } else {
       saveCart([...cart, { ...item, quantity }]);
     }
-    // Automatically open cart drawer to verify addition
-    setIsCartOpen(true);
+    // Automatically open cart drawer to verify addition if openDrawer is true
+    if (openDrawer) {
+      setIsCartOpen(true);
+    }
   };
 
   const removeFromCart = (id: number, variant?: string | null) => {
