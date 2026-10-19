@@ -4,6 +4,7 @@ import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getArticleBySlug, JournalArticle } from "@/lib/journal";
+import { Sparkles, Droplets, CheckCircle, Heart, ArrowLeft } from "lucide-react";
 
 interface Blog {
   id: number;
@@ -33,13 +34,11 @@ function renderInlineMarkdown(text: string) {
 function renderFormattedContent(content: string) {
   if (!content) return null;
 
-  // Split into paragraph/section blocks
   const blocks = content.split(/\n\n+/);
 
   return blocks.map((block, idx) => {
     let trimmed = block.trim();
 
-    // Skip duplicating header elements if passed in content body
     if (
       trimmed === "# How to Use Our Avocado Night Cream for Maximum Hydration" ||
       trimmed === "BY QURA HERBS | SKINCARE JOURNAL" ||
@@ -48,7 +47,6 @@ function renderFormattedContent(content: string) {
       return null;
     }
 
-    // Check for H2 Heading
     if (trimmed.startsWith("## ")) {
       const headingText = trimmed.replace(/^##\s+/, "");
       const isStep = /^Step\s+\d+/i.test(headingText);
@@ -67,7 +65,6 @@ function renderFormattedContent(content: string) {
       );
     }
 
-    // Check for H1 Heading (if any)
     if (trimmed.startsWith("# ")) {
       const headingText = trimmed.replace(/^#\s+/, "");
       return (
@@ -77,7 +74,6 @@ function renderFormattedContent(content: string) {
       );
     }
 
-    // Check for Bullet List or Tips list
     if (trimmed.startsWith("- ") || trimmed.includes("\n- ")) {
       const lines = trimmed.split("\n").filter((l) => l.trim().length > 0);
       const isAllBullets = lines.every((l) => l.trim().startsWith("- "));
@@ -99,7 +95,6 @@ function renderFormattedContent(content: string) {
       }
     }
 
-    // Check for individual Skincare Tips (rendered as bullet item)
     const isSkincareTip = [
       "Cleanse your face before applying",
       "Use an appropriate amount and spread",
@@ -117,7 +112,6 @@ function renderFormattedContent(content: string) {
       );
     }
 
-    // Brand Tagline or Final Manifesto Callout
     if (trimmed.includes("Qura Herbs — Beauty Rooted in Care, Confidence, and Authenticity")) {
       return (
         <div key={idx} className="bg-brand-light border border-brand-sand/40 p-6 md:p-8 rounded-sm text-center my-8 shadow-xs space-y-2">
@@ -129,7 +123,6 @@ function renderFormattedContent(content: string) {
       );
     }
 
-    // Ingredient descriptions formatting
     if (trimmed.startsWith("Avocado helps")) {
       trimmed = trimmed.replace(/^Avocado/, "**Avocado**");
     } else if (trimmed.startsWith("Sweet Almond Oil helps")) {
@@ -140,7 +133,6 @@ function renderFormattedContent(content: string) {
       trimmed = trimmed.replace(/^Seaweed, Milk Protein, and Wheat Germ Extract/, "**Seaweed, Milk Protein, and Wheat Germ Extract**");
     }
 
-    // Normal paragraph
     return (
       <p key={idx} className="font-sans font-light text-sm sm:text-base text-brand-cocoa/90 leading-relaxed">
         {renderInlineMarkdown(trimmed)}
@@ -149,74 +141,10 @@ function renderFormattedContent(content: string) {
   });
 }
 
-const CANONICAL_AVOCADO_CONTENT = `## Your Nighttime Ritual for Naturally Nourished Skin
-
-Your skin deserves gentle care at the end of the day. A consistent nighttime skincare routine helps maintain hydration and leaves your skin feeling soft, smooth, and refreshed.
-
-Qura Herbs Avocado Pro Nourish Night Cream combines avocado, sweet almond oil, honey, seaweed, milk protein, and wheat germ extract in a nourishing skincare formula designed to complement your nighttime routine.
-
-Follow these four simple steps to make the most of your skincare ritual.
-
-## Step 01 — Cleanse Your Skin
-
-Begin by cleansing your face with a gentle cleanser to remove makeup, sunscreen, excess oil, and everyday impurities. Rinse thoroughly with lukewarm water and pat your skin dry with a clean towel.
-
-Clean skin provides the ideal starting point for your nighttime skincare routine.
-
-## Step 02 — Apply the Night Cream
-
-Take a small amount of Qura Herbs Avocado Pro Nourish Night Cream onto your fingertips. Gently distribute it across your forehead, cheeks, chin, and neck, avoiding direct contact with your eyes.
-
-Apply an even layer without using excessive product.
-
-## Step 03 — Massage Gently
-
-Using your fingertips, massage the cream into your skin with gentle, circular movements until it is evenly distributed. Pay attention to areas that tend to feel dry or tight.
-
-Keep the application gentle to maintain a comfortable and relaxing skincare experience.
-
-## Step 04 — Let Your Skin Rest Overnight
-
-Allow the cream to settle into your skin before going to bed. Overnight, your regular skincare routine can support your skin's moisture needs while you rest.
-
-For best results, follow the product directions consistently and maintain a routine suited to your skin type.
-
-## The Nourishing Ingredients Behind Your Routine
-
-**Avocado** helps condition the skin and maintain a soft, moisturised feel.
-
-**Sweet Almond Oil** helps nourish the skin and reduce the feeling of dryness.
-
-**Honey** supports moisture retention and helps leave the skin feeling soft.
-
-**Seaweed, Milk Protein, and Wheat Germ Extract** complement the formula with a blend of skin-conditioning ingredients.
-
-## Tips for a Better Nighttime Skincare Routine
-
-- Cleanse your face before applying the cream to remove daily impurities.
-- Use an appropriate amount and spread it evenly across your skin.
-- Follow your routine consistently rather than applying excessive product.
-- Apply broad-spectrum sunscreen during the day to help protect your skin from UV exposure.
-- Patch-test new skincare products before regular use. Discontinue use if irritation occurs.
-
-## Wake Up to a Nourished-Looking Glow
-
-Beautiful skin begins with consistent care. A gentle nighttime routine, adequate rest, and suitable skincare products can help maintain soft, comfortable, and healthy-looking skin over time.
-
-Make Qura Herbs Avocado Pro Nourish Night Cream part of your evening ritual and give your skin the care it deserves.
-
-Qura Herbs — Beauty Rooted in Care, Confidence, and Authenticity.`;
-
-function isContentComplete(content?: string | null): boolean {
-  if (!content) return false;
-  return content.includes("Step 01") && content.includes("Step 04");
-}
-
 export default function ArticleContent({ slug }: { slug: string }) {
   const localArticle = getArticleBySlug(slug);
   const [blog, setBlog] = useState<Blog | null>(localArticle || null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
   useEffect(() => {
     fetch(getApiUrl(`/api/v1/blogs/slug/${slug}`))
@@ -229,32 +157,19 @@ export default function ArticleContent({ slug }: { slug: string }) {
       })
       .then((data: Blog | null) => {
         if (data) {
-          if (isContentComplete(data.content)) {
-            setBlog(data);
-          } else {
-            // Retain the rich, full article content if remote database only has old dummy snippet
-            setBlog({
-              ...data,
-              content: CANONICAL_AVOCADO_CONTENT,
-              title: "How to Use Our Avocado Night Cream for Maximum Hydration",
-              excerpt: "Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin.",
-              featured_image: "/uploads/the_glow_guide_journal.jpg",
-              author: "BY QURA HERBS | SKINCARE JOURNAL",
-            });
-          }
+          setBlog(data);
         }
         setLoading(false);
       })
       .catch((err) => {
-        console.error("Failed to load article from API:", err);
-        if (!localArticle) {
-          setError(true);
-        }
+        console.error("Failed to load article from API, falling back to local registry:", err);
         setLoading(false);
       });
   }, [slug, localArticle]);
 
-  if (loading && !blog && !localArticle) {
+  const currentArticle = blog || localArticle;
+
+  if (loading && !currentArticle) {
     return (
       <div className="py-20 text-center text-sm font-sans text-brand-dark/50 animate-pulse">
         Formatting article layout...
@@ -262,19 +177,252 @@ export default function ArticleContent({ slug }: { slug: string }) {
     );
   }
 
-  // Always resolve complete article content
-  const contentToRender = isContentComplete(blog?.content)
-    ? blog!.content
-    : isContentComplete(localArticle?.content)
-      ? localArticle!.content
-      : CANONICAL_AVOCADO_CONTENT;
+  if (!currentArticle) {
+    return (
+      <div className="py-20 text-center space-y-4">
+        <h1 className="font-serif text-2xl text-brand-dark">Article Not Found</h1>
+        <p className="text-sm font-sans text-brand-cocoa/70">The requested journal entry could not be located.</p>
+        <Link
+          href="/journal"
+          className="inline-block text-xs uppercase tracking-widest text-brand-accent hover:underline font-semibold font-sans pt-2"
+        >
+          ← Return to Skincare Journal
+        </Link>
+      </div>
+    );
+  }
 
-  const displayTitle = "How to Use Our Avocado Night Cream for Maximum Hydration";
-  const displayExcerpt = "Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin.";
-  const displayImage = "/uploads/the_glow_guide_journal.jpg";
-  const authorLine = "BY QURA HERBS | SKINCARE JOURNAL";
-  const publishDate = blog?.published_at || localArticle?.published_at || "2026-10-10T00:00:00.000Z";
+  const isNightCreamArticle =
+    slug === "how-to-use-your-night-cream" ||
+    currentArticle.slug === "how-to-use-your-night-cream" ||
+    currentArticle.title.toLowerCase().includes("how to use your night cream");
 
+  const displayTitle = currentArticle.title;
+  const displayExcerpt = currentArticle.excerpt;
+  const displayImage = currentArticle.featured_image || "/uploads/how_to_use_your_night_cream_ritual.jpg";
+  const authorLine = currentArticle.author || "BY QURA HERBS | SKINCARE JOURNAL";
+  const publishDate = currentArticle.published_at || "2026-10-19T00:00:00.000Z";
+
+  // Dedicated High-End Skincare Ritual Editorial Layout for "How to Use Your Night Cream"
+  if (isNightCreamArticle) {
+    return (
+      <article className="space-y-10 sm:space-y-12 max-w-3xl mx-auto">
+        {/* Back Link */}
+        <div>
+          <Link
+            href="/journal"
+            className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-brand-accent hover:text-brand-dark font-sans font-semibold transition-colors group"
+          >
+            <ArrowLeft size={13} className="transition-transform group-hover:-translate-x-1" />
+            <span>Back to Journal</span>
+          </Link>
+        </div>
+
+        {/* Refined Editorial Header */}
+        <header className="space-y-4 border-b border-[#EFE8D8] pb-8">
+          <div className="flex flex-wrap items-center gap-2.5 text-[11px] sm:text-xs uppercase tracking-[0.25em] text-brand-accent font-semibold font-sans">
+            <span>{authorLine}</span>
+            <span className="text-[#3D261D]/30">•</span>
+            <span className="text-[#3D261D]/65 font-medium tracking-widest">
+              OCT 19, 2026
+            </span>
+          </div>
+
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark leading-[1.18] tracking-tight">
+            How to Use Your Night Cream
+          </h1>
+
+          <p className="text-brand-cocoa/90 italic text-base sm:text-lg font-serif leading-relaxed pl-4 border-l-2 border-brand-accent py-1">
+            {displayExcerpt || "A simple nighttime ritual for fresh, radiant-looking skin."}
+          </p>
+        </header>
+
+        {/* Skincare Ritual Numbered Sequence */}
+        <section className="space-y-6 pt-2">
+          <div className="space-y-1 mb-8">
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-brand-accent uppercase block">
+              THE NIGHTTIME RITUAL
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+              Four Steps to Soft, Nourished Skin
+            </h2>
+          </div>
+
+          {/* Steps List */}
+          <div className="space-y-5">
+            {/* Step 01 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  01
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    CLEANSE
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Start with a clean face. Wash away dirt, oil and impurities with a gentle face wash.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 02 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  02
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    APPLY
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Take a small amount of <strong className="font-semibold text-brand-dark">Night Cream</strong> and apply an even, thin layer over your <strong className="font-semibold text-brand-dark">face and neck</strong>. Massage gently until absorbed.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 03 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  03
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    LEAVE OVERNIGHT
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Let the cream work while you sleep. Leave it on overnight for intensive nighttime care.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 04 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  04
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    RINSE IN THE MORNING
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Wash your face with clean water in the morning and enjoy skin that feels <strong className="font-semibold text-brand-dark">fresh, soft and nourished</strong>.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4-Week Ritual Callout Block */}
+        <section className="bg-brand-light border border-[#EFE8D8] p-6 sm:p-8 rounded-xs space-y-3 relative overflow-hidden">
+          <div className="flex items-center gap-2 text-brand-accent">
+            <Sparkles size={16} />
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] uppercase">
+              EDITORIAL RECOMMENDATION
+            </span>
+          </div>
+          <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+            YOUR 4-WEEK RITUAL
+          </h2>
+          <p className="font-serif italic text-base sm:text-lg text-brand-accent font-medium">
+            Consistency makes the difference.
+          </p>
+          <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed pt-1">
+            With regular use, the Night Cream helps improve the appearance of dullness, uneven-looking tone and dark spots, leaving skin looking brighter and more radiant over time.
+          </p>
+        </section>
+
+        {/* Supporting Image (User Uploaded) */}
+        <section className="my-8 sm:my-10 space-y-2">
+          <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-white shadow-xs">
+            <img
+              src={getImageUrl(displayImage)}
+              alt="Qura Herbs Glow Radiant Plus Night Cream ritual demonstration and before and after results"
+              className="w-full h-full object-contain sm:object-cover"
+              loading="eager"
+            />
+          </div>
+          <p className="text-[11px] font-sans text-brand-cocoa/60 text-center tracking-wide italic">
+            Qura Herbs Night Cream Botanical Ritual &bull; Day to Night Skin Care
+          </p>
+        </section>
+
+        {/* Better-Results Section (3 Editorial Columns / Cards) */}
+        <section className="space-y-6 pt-2">
+          <div className="text-center sm:text-left space-y-1">
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-brand-accent uppercase block">
+              COMPLEMENTARY HABITS
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+              FOR BETTER RESULTS
+            </h2>
+            <div className="w-10 h-[1px] bg-brand-accent sm:ml-0 mx-auto"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6 pt-2">
+            {/* Card 1 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-3 hover:border-brand-accent/40 transition-colors">
+              <div className="space-y-2">
+                <span className="text-[10px] sm:text-[11px] font-sans font-semibold tracking-[0.2em] text-brand-accent uppercase block">
+                  CLEANSE DAILY
+                </span>
+                <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                  Use a gentle face wash every day. You can choose a suitable cleanser from <strong className="font-semibold text-brand-dark">Qura Herbs</strong>.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 2 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-3 hover:border-brand-accent/40 transition-colors">
+              <div className="space-y-2">
+                <span className="text-[10px] sm:text-[11px] font-sans font-semibold tracking-[0.2em] text-brand-accent uppercase block">
+                  STAY HYDRATED
+                </span>
+                <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                  Aim for around <strong className="font-semibold text-brand-dark">3 litres of water daily</strong>, depending on your individual needs.
+                </p>
+              </div>
+            </div>
+
+            {/* Card 3 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-3 hover:border-brand-accent/40 transition-colors">
+              <div className="space-y-2">
+                <span className="text-[10px] sm:text-[11px] font-sans font-semibold tracking-[0.2em] text-brand-accent uppercase block">
+                  NOURISH YOUR SKIN FROM WITHIN
+                </span>
+                <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                  Choose balanced, nutritious meals and make healthy food choices part of your everyday routine.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Closing Editorial Statement */}
+        <section className="bg-brand-light border border-brand-sand/40 p-6 sm:p-8 rounded-xs text-center my-8 shadow-xs space-y-3">
+          <h3 className="font-serif text-xl sm:text-2xl font-light text-brand-dark tracking-wide">
+            YOUR SKINCARE IS MORE THAN A CREAM.
+          </h3>
+          <p className="font-sans text-xs sm:text-sm font-semibold tracking-widest text-brand-accent uppercase">
+            Consistency &bull; Hydration &bull; Cleansing &bull; Healthy Choices
+          </p>
+          <div className="w-12 h-0.5 bg-brand-accent mx-auto my-2"></div>
+          <p className="font-serif italic text-sm sm:text-base text-brand-cocoa/85">
+            Together, they create your best-looking skin.
+          </p>
+        </section>
+      </article>
+    );
+  }
+
+  // Generic / Default Editorial Layout for other articles (e.g. Avocado Night Cream)
   return (
     <article className="space-y-8 max-w-3xl mx-auto">
       {/* Back button */}
@@ -307,9 +455,11 @@ export default function ArticleContent({ slug }: { slug: string }) {
         </h1>
 
         {/* Subtitle / Introductory Description */}
-        <p className="text-brand-cocoa/85 italic text-base sm:text-lg font-serif leading-relaxed pl-4 border-l-2 border-brand-accent py-1">
-          {displayExcerpt}
-        </p>
+        {displayExcerpt && (
+          <p className="text-brand-cocoa/85 italic text-base sm:text-lg font-serif leading-relaxed pl-4 border-l-2 border-brand-accent py-1">
+            {displayExcerpt}
+          </p>
+        )}
       </div>
 
       {/* Featured Cover Image */}
@@ -323,7 +473,7 @@ export default function ArticleContent({ slug }: { slug: string }) {
 
       {/* Main Body Content with Professional Styling */}
       <div className="space-y-5 pt-4 border-t border-brand-sand/15">
-        {renderFormattedContent(contentToRender)}
+        {renderFormattedContent(currentArticle.content)}
       </div>
     </article>
   );

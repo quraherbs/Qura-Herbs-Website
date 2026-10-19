@@ -4,7 +4,7 @@ import Navbar from "../../../components/Navbar";
 import CartDrawer from "../../../components/CartDrawer";
 import ArticleContent from "./ArticleContent";
 
-import { CANONICAL_JOURNAL_ARTICLES } from "@/lib/journal";
+import { CANONICAL_JOURNAL_ARTICLES, getArticleBySlug } from "@/lib/journal";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -18,7 +18,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = CANONICAL_JOURNAL_ARTICLES.find((a) => a.slug === slug);
+  const article = getArticleBySlug(slug);
 
   if (!article) {
     return {
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function JournalDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const article = CANONICAL_JOURNAL_ARTICLES.find((a) => a.slug === slug);
+  const article = getArticleBySlug(slug);
 
   const articleJsonLd = article
     ? {

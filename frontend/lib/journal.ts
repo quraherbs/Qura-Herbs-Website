@@ -12,6 +12,54 @@ export interface JournalArticle {
 
 export const CANONICAL_JOURNAL_ARTICLES: JournalArticle[] = [
   {
+    id: 3,
+    title: "How to Use Your Night Cream",
+    slug: "how-to-use-your-night-cream",
+    excerpt: "A simple nighttime ritual for fresh, radiant-looking skin.",
+    featured_image: "/uploads/how_to_use_your_night_cream_ritual.jpg",
+    author: "BY QURA HERBS | SKINCARE JOURNAL",
+    published: true,
+    published_at: "2026-10-19T00:00:00.000Z",
+    content: `## 01 — CLEANSE
+
+Start with a clean face. Wash away dirt, oil and impurities with a gentle face wash.
+
+## 02 — APPLY
+
+Take a small amount of **Night Cream** and apply an even, thin layer over your **face and neck**. Massage gently until absorbed.
+
+## 03 — LEAVE OVERNIGHT
+
+Let the cream work while you sleep. Leave it on overnight for intensive nighttime care.
+
+## 04 — RINSE IN THE MORNING
+
+Wash your face with clean water in the morning and enjoy skin that feels **fresh, soft and nourished**.
+
+## YOUR 4-WEEK RITUAL
+
+**Consistency makes the difference.**
+
+With regular use, the Night Cream helps improve the appearance of dullness, uneven-looking tone and dark spots, leaving skin looking brighter and more radiant over time.
+
+## FOR BETTER RESULTS
+
+### CLEANSE DAILY
+Use a gentle face wash every day. You can choose a suitable cleanser from **Qura Herbs**.
+
+### STAY HYDRATED
+Aim for around **3 litres of water daily**, depending on your individual needs.
+
+### NOURISH YOUR SKIN FROM WITHIN
+Choose balanced, nutritious meals and make healthy food choices part of your everyday routine.
+
+## YOUR SKINCARE IS MORE THAN A CREAM.
+
+**Consistency • Hydration • Cleansing • Healthy Choices**
+
+Together, they create your best-looking skin.`
+  },
+  {
     id: 2,
     title: "How to Use Our Avocado Night Cream for Maximum Hydration",
     slug: "how-to-use-our-avocado-night-cream-for-maximum-hydration",
@@ -88,5 +136,5 @@ export function getArticleBySlug(slug: string): JournalArticle | undefined {
     (a) => a.slug.toLowerCase().trim() === normalized || a.slug.toLowerCase().trim() === decoded
   );
   if (found) return found;
-  return CANONICAL_JOURNAL_ARTICLES[0];
+  return undefined;
 }

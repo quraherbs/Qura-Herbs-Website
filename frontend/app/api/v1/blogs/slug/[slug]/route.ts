@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const article = getArticleBySlug(slug) || CANONICAL_JOURNAL_ARTICLES[0];
+  const article = getArticleBySlug(slug);
   if (!article) {
     return NextResponse.json({ detail: "Blog not found" }, { status: 404 });
   }

@@ -71,6 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   const journalSlugs = [
+    "how-to-use-your-night-cream",
     "how-to-use-our-avocado-night-cream-for-maximum-hydration",
   ];
 

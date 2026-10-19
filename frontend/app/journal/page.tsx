@@ -37,7 +37,9 @@ export default function JournalPage() {
           );
           const apiSlugs = new Set(filtered.map((d: any) => d.slug));
           const missing = CANONICAL_JOURNAL_ARTICLES.filter((c) => !apiSlugs.has(c.slug));
-          setBlogs([...filtered, ...missing] as Blog[]);
+          const combined = [...filtered, ...missing] as Blog[];
+          combined.sort((a, b) => new Date(b.published_at).getTime() - new Date(a.published_at).getTime());
+          setBlogs(combined);
         } else {
           setBlogs(CANONICAL_JOURNAL_ARTICLES as Blog[]);
         }
