@@ -249,7 +249,7 @@ export default function ResultsGallery() {
             </div>
           )}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 items-stretch">
             {items.map((item, idx) => {
               // Subtle vertical stagger for floating card composition
               const isStaggered = idx % 2 === 1;
@@ -262,7 +262,7 @@ export default function ResultsGallery() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, delay: idx * 0.15 }}
                   onClick={() => setSelectedItem(item)}
-                  className={`group cursor-pointer bg-white border border-[#EFE8D8] rounded-xl p-5 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between ${
+                  className={`group cursor-pointer bg-white border border-[#EFE8D8] rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col justify-between ${
                     isStaggered ? "lg:translate-y-4" : ""
                   }`}
                 >

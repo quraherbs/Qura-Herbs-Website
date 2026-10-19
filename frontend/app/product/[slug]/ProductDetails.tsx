@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getApiUrl, getImageUrl } from "@/lib/api";
 import { useCart } from "../../../context/CartContext";
-import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2, ChevronDown, ChevronUp, Check } from "lucide-react";
+import { ShoppingBag, Star, ShieldCheck, Heart, ArrowRight, CheckCircle2, ChevronDown, ChevronUp, Check, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 interface ProductVariant {
@@ -1006,18 +1006,65 @@ export default function ProductDetails({ slug }: { slug: string }) {
   return (
     <div className="space-y-16">
       {/* Editorial detail block */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
         {/* Gallery Column (Left) */}
-        <div className="lg:col-span-7 grid grid-cols-12 gap-4">
-          {/* Thumbnails list */}
-          <div className="col-span-2 space-y-3">
+        <div className="lg:col-span-7 flex flex-col lg:grid lg:grid-cols-12 gap-3 sm:gap-4">
+          
+          {/* Featured Large Viewer */}
+          <div className="order-1 lg:order-2 lg:col-span-10 aspect-square w-full bg-brand-light border border-brand-sand/20 overflow-hidden relative rounded-xs sm:rounded-sm group">
+            <img 
+              src={getImageUrl(selectedImage || product.thumbnail)} 
+              alt={product.name} 
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+            />
+            
+            {/* Prev/Next Navigation Arrows for Mobile & Touch */}
+            {allImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const prevIdx = (currentImgIndex - 2 + allImages.length) % allImages.length;
+                    setSelectedImage(allImages[prevIdx]);
+                  }}
+                  className="lg:hidden absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 backdrop-blur-md border border-brand-sand/40 text-brand-dark flex items-center justify-center shadow-md cursor-pointer active:scale-95 transition-all z-10"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const nextIdx = currentImgIndex % allImages.length;
+                    setSelectedImage(allImages[nextIdx]);
+                  }}
+                  className="lg:hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 backdrop-blur-md border border-brand-sand/40 text-brand-dark flex items-center justify-center shadow-md cursor-pointer active:scale-95 transition-all z-10"
+                  aria-label="Next image"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </>
+            )}
+
+            {/* Image Counter Badge */}
+            <div className="absolute bottom-3 right-3 bg-brand-dark/80 text-brand-cream text-[10px] font-sans font-bold px-2.5 py-1 uppercase tracking-widest rounded-full backdrop-blur-sm z-10">
+              {currentImgIndex} / {allImages.length}
+            </div>
+          </div>
+
+          {/* Thumbnails list: on mobile horizontal scrollable row beneath viewer; on desktop vertical 2-col stack */}
+          <div className="order-2 lg:order-1 lg:col-span-2 flex flex-row lg:flex-col gap-2.5 lg:space-y-3 lg:gap-0 overflow-x-auto pb-1 lg:pb-0 scrollbar-none">
             {allImages.map((img, idx) => (
               <button
                 key={idx}
+                type="button"
                 onClick={() => setSelectedImage(img)}
-                className={`w-full aspect-square border overflow-hidden bg-brand-light flex items-center justify-center p-1 transition-all rounded-sm ${
-                  selectedImage === img ? "border-brand-accent scale-95 shadow-sm" : "border-brand-sand/30"
+                aria-label={`View product image ${idx + 1}`}
+                className={`w-14 h-14 sm:w-16 sm:h-16 lg:w-full lg:h-auto lg:aspect-square shrink-0 border overflow-hidden bg-brand-light flex items-center justify-center p-0.5 sm:p-1 transition-all rounded-xs sm:rounded-sm cursor-pointer ${
+                  selectedImage === img ? "border-brand-accent scale-95 shadow-sm ring-1 ring-brand-accent/50" : "border-brand-sand/40 hover:border-brand-sand"
                 }`}
               >
                 <img src={getImageUrl(img)} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
@@ -1025,15 +1072,6 @@ export default function ProductDetails({ slug }: { slug: string }) {
             ))}
           </div>
           
-          {/* Featured Large Viewer */}
-          <div className="col-span-10 aspect-square w-full bg-brand-light border border-brand-sand/20 overflow-hidden relative rounded-sm group">
-            <img src={getImageUrl(selectedImage || product.thumbnail)} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-            
-            {/* Image Counter Badge */}
-            <div className="absolute bottom-3 right-3 bg-brand-dark/80 text-brand-cream text-[10px] font-sans font-bold px-2.5 py-1 uppercase tracking-widest rounded-full backdrop-blur-sm">
-              {currentImgIndex} / {allImages.length}
-            </div>
-          </div>
         </div>
 
         {/* Purchase Options Column (Right) */}
@@ -1219,15 +1257,16 @@ export default function ProductDetails({ slug }: { slug: string }) {
               <span className="text-xs uppercase tracking-widest text-brand-accent font-semibold font-sans">
                 Select Volume
               </span>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-2.5 sm:gap-3">
                 {product.variants.map((v) => (
                   <button
                     key={v.id}
+                    type="button"
                     onClick={() => setSelectedVariant(v)}
-                    className={`px-4 py-2 border text-xs tracking-wider uppercase font-sans font-semibold transition-all ${
+                    className={`px-3.5 sm:px-4 py-2 min-h-[40px] border text-xs tracking-wider uppercase font-sans font-semibold transition-all cursor-pointer rounded-xs sm:rounded-none ${
                       selectedVariant?.id === v.id
-                        ? "bg-brand-dark border-brand-dark text-brand-cream"
-                        : "border-brand-sand hover:border-brand-dark text-brand-cocoa"
+                        ? "bg-brand-dark border-brand-dark text-brand-cream shadow-xs"
+                        : "border-brand-sand hover:border-brand-dark text-brand-cocoa bg-white/40"
                     }`}
                   >
                     {v.name}
@@ -1366,11 +1405,11 @@ export default function ProductDetails({ slug }: { slug: string }) {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {reviews.map((rev) => (
               <div
                 key={rev.id}
-                className="border border-[#E5DEC9] bg-[#FAF8F5] p-6 flex flex-col justify-between hover:border-[#C5A059]/60 hover:shadow-sm transition-all duration-300"
+                className="border border-[#E5DEC9] bg-[#FAF8F5] p-4 sm:p-6 flex flex-col justify-between hover:border-[#C5A059]/60 hover:shadow-sm transition-all duration-300 rounded-xs sm:rounded-none"
               >
                 <div className="space-y-4">
                   <div className="flex justify-between items-start gap-2">

@@ -212,11 +212,11 @@ export default function ResultsPage() {
         </div>
 
         {/* Masonry / Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
           {transformations.map((item) => (
-            <div key={item.id} className="border border-brand-sand/35 bg-brand-light p-6 space-y-6 flex flex-col rounded-xl shadow-sm">
+            <div key={item.id} className="border border-brand-sand/35 bg-brand-light p-4 sm:p-6 space-y-4 sm:space-y-6 flex flex-col rounded-xl shadow-sm">
               {/* Double Before/After Split */}
-              <div className="grid grid-cols-2 gap-2 h-52">
+              <div className="grid grid-cols-2 gap-2 h-44 sm:h-52">
                 <div className="relative border border-brand-sand/20 overflow-hidden bg-brand-sand/10 flex flex-col items-center justify-center rounded-lg">
                   <span className="absolute top-2 left-2 bg-brand-dark/65 text-brand-cream text-[9px] font-sans uppercase font-bold tracking-widest px-2 py-0.5 z-10 rounded">
                     Before

@@ -115,7 +115,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
     setActiveTab(sectionId);
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 120;
+      const offset = typeof window !== "undefined" && window.innerWidth < 768 ? 76 : 120;
       const elementPosition =
         element.getBoundingClientRect().top + window.pageYOffset;
       const offsetPosition = elementPosition - offset;
@@ -159,7 +159,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
       const timer = setTimeout(() => {
         const element = document.getElementById(tabParam);
         if (element) {
-          const offset = 120;
+          const offset = typeof window !== "undefined" && window.innerWidth < 768 ? 76 : 120;
           const elementPosition =
             element.getBoundingClientRect().top + window.pageYOffset;
           const offsetPosition = elementPosition - offset;
@@ -229,7 +229,7 @@ With a strong eye for aesthetics, creativity, and communication, Pranavi brings 
         </header>
 
         {/* 4 Story Navigation Tabs */}
-        <div className="sticky top-20 sm:top-24 z-30 w-full py-2 bg-brand-cream/90 backdrop-blur-md transition-all">
+        <div className="sticky top-16 sm:top-20 md:top-24 z-30 w-full py-2 bg-brand-cream/90 backdrop-blur-md transition-all">
           <div
             className="w-full max-w-5xl mx-auto overflow-x-auto scrollbar-none px-4 sm:px-6"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}

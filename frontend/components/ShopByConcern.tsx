@@ -145,14 +145,14 @@ export default function ShopByConcern() {
                 </div>
 
                 {/* Content Overlay */}
-                <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5 z-10 text-brand-cream">
-                  <span className="text-[9px] uppercase tracking-widest text-brand-accent font-semibold mb-1 opacity-90">
+                <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-5 z-10 text-brand-cream">
+                  <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-brand-accent font-semibold mb-1 opacity-90">
                     Target Concern
                   </span>
-                  <h3 className="font-serif text-base sm:text-lg font-medium tracking-wide">
+                  <h3 className="font-serif text-sm sm:text-base lg:text-lg font-medium tracking-wide">
                     {cat.name}
                   </h3>
-                  <span className="mt-2 text-[10px] uppercase tracking-wider text-brand-cream/80 inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <span className="mt-1.5 sm:mt-2 text-[9px] sm:text-[10px] uppercase tracking-wider text-brand-cream/90 inline-flex items-center gap-1 opacity-90 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
                     View Products →
                   </span>
                 </div>
@@ -218,12 +218,12 @@ export default function ShopByConcern() {
               </div>
 
               {/* Modal Body: Products List */}
-              <div className="p-5 sm:p-6 md:p-8 overflow-y-auto space-y-6">
+              <div className="p-3.5 sm:p-6 md:p-8 overflow-y-auto space-y-4 sm:space-y-6">
                 <div
-                  className={`grid gap-5 md:gap-6 ${
+                  className={`grid gap-2.5 sm:gap-5 md:gap-6 ${
                     modalProducts.length === 1
                       ? "grid-cols-1 max-w-md mx-auto"
-                      : "grid-cols-1 sm:grid-cols-2"
+                      : "grid-cols-2"
                   }`}
                 >
                   {modalProducts.map((prod) => {
@@ -240,12 +240,12 @@ export default function ShopByConcern() {
                     return (
                       <div
                         key={prod.slug}
-                        className="group flex flex-col bg-white border border-brand-sand/30 rounded-xl p-4 sm:p-5 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/40"
+                        className="group flex flex-col bg-white border border-brand-sand/30 rounded-lg sm:rounded-xl p-2.5 sm:p-5 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/40"
                       >
                         {/* Image Container with Badge */}
-                        <div className="relative aspect-square w-full overflow-hidden bg-brand-light rounded-lg border border-brand-sand/20 mb-4">
+                        <div className="relative aspect-square w-full overflow-hidden bg-brand-light rounded-md sm:rounded-lg border border-brand-sand/20 mb-2.5 sm:mb-4">
                           {hasDiscount && (
-                            <span className="absolute top-2.5 left-2.5 bg-brand-accent text-brand-cream text-[9px] uppercase tracking-wider font-sans font-bold px-2 py-0.5 z-10 rounded-xs shadow-xs">
+                            <span className="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 bg-brand-accent text-brand-cream text-[8px] sm:text-[9px] uppercase tracking-wider font-sans font-bold px-1.5 sm:px-2 py-0.5 z-10 rounded-xs shadow-xs">
                               SAVE {discountPercent}%
                             </span>
                           )}
@@ -258,67 +258,68 @@ export default function ShopByConcern() {
                         </div>
 
                         {/* Product Info */}
-                        <div className="flex-1 flex flex-col space-y-2">
-                          <span className="text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold">
+                        <div className="flex-1 flex flex-col space-y-1 sm:space-y-2">
+                          <span className="text-[9px] sm:text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold truncate">
                             {prod.skin_type || activeCategory.name}
                           </span>
 
-                          <h4 className="font-serif text-base sm:text-lg text-brand-dark font-medium leading-snug">
+                          <h4 className="font-serif text-xs sm:text-base md:text-lg text-brand-dark font-medium leading-tight sm:leading-snug line-clamp-2 min-h-[2rem] sm:min-h-0">
                             {prod.name}
                           </h4>
 
-                          <p className="text-xs text-brand-cocoa/70 font-sans line-clamp-2 leading-relaxed">
+                          <p className="hidden sm:block text-xs text-brand-cocoa/70 font-sans line-clamp-2 leading-relaxed">
                             {prod.short_description}
                           </p>
 
                           {/* Star rating */}
-                          <div className="flex items-center space-x-1 text-brand-accent pt-0.5">
+                          <div className="flex items-center space-x-0.5 sm:space-x-1 text-brand-accent pt-0.5">
                             {[1, 2, 3, 4, 5].map((s) => (
                               <Star
                                 key={s}
-                                size={11}
+                                size={10}
                                 fill="currentColor"
                                 stroke="none"
                               />
                             ))}
-                            <span className="text-[10px] text-brand-dark/40 font-sans ml-1">
+                            <span className="text-[8px] sm:text-[10px] text-brand-dark/40 font-sans ml-1">
                               (4.9)
                             </span>
                           </div>
 
                           {/* Price */}
-                          <div className="pt-2 flex items-baseline space-x-2">
-                            <span className="text-base sm:text-lg font-sans font-bold text-brand-dark">
+                          <div className="pt-1.5 sm:pt-2 flex items-baseline space-x-1.5 sm:space-x-2">
+                            <span className="text-xs sm:text-base md:text-lg font-sans font-bold text-brand-dark">
                               ₹{activePrice}
                             </span>
                             {hasDiscount && (
-                              <span className="text-xs text-brand-dark/40 line-through">
+                              <span className="text-[10px] sm:text-xs text-brand-dark/40 line-through">
                                 ₹{prod.price}
                               </span>
                             )}
                           </div>
 
                           {/* Action Buttons: Add to Cart & View Details */}
-                          <div className="pt-4 mt-auto grid grid-cols-2 gap-2.5 border-t border-brand-sand/20">
+                          <div className="pt-2.5 sm:pt-4 mt-auto grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2.5 border-t border-brand-sand/20">
                             <button
                               type="button"
                               onClick={() => handleAddToCart(prod)}
-                              className="bg-brand-dark hover:bg-brand-accent text-brand-cream px-3 py-2.5 text-[11px] uppercase tracking-wider transition-colors duration-200 font-semibold flex items-center justify-center gap-1.5 rounded-md cursor-pointer shadow-xs"
+                              className="bg-brand-dark hover:bg-brand-accent text-brand-cream px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-[11px] uppercase tracking-wider transition-colors duration-200 font-semibold flex items-center justify-center gap-1 sm:gap-1.5 rounded-md cursor-pointer shadow-xs min-h-[34px] sm:min-h-[40px]"
                               title="Add to Cart"
+                              aria-label={`Add ${prod.name} to cart`}
                             >
-                              <ShoppingBag size={13} />
+                              <ShoppingBag size={12} />
                               <span>
-                                {addedSlug === prod.slug ? "Added!" : "Add to Cart"}
+                                {addedSlug === prod.slug ? "Added!" : "Add"}
                               </span>
                             </button>
 
                             <Link
                               href={`/product/${prod.slug}`}
-                              className="border border-brand-dark/80 hover:bg-brand-dark hover:text-brand-cream text-brand-dark px-3 py-2.5 text-[11px] uppercase tracking-wider transition-colors duration-200 font-semibold flex items-center justify-center gap-1.5 rounded-md text-center"
+                              className="border border-brand-dark/80 hover:bg-brand-dark hover:text-brand-cream text-brand-dark px-2 sm:px-3 py-2 sm:py-2.5 text-[10px] sm:text-[11px] uppercase tracking-wider transition-colors duration-200 font-semibold flex items-center justify-center gap-1 sm:gap-1.5 rounded-md text-center min-h-[34px] sm:min-h-[40px]"
                               title="View Product Details"
                             >
-                              <Eye size={13} />
-                              <span>View Details</span>
+                              <Eye size={12} />
+                              <span>Details</span>
                             </Link>
                           </div>
                         </div>

@@ -73,9 +73,9 @@ export default function JournalSection() {
 
         {/* Dynamic Journal Content Grid */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 py-4">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse space-y-4 border border-brand-sand/10 p-5 bg-brand-cream/30">
+              <div key={i} className="animate-pulse space-y-3 border border-brand-sand/10 p-3.5 sm:p-5 bg-brand-cream/30">
                 <div className="bg-brand-sand/20 aspect-[16/10] w-full rounded-none"></div>
                 <div className="h-4 bg-brand-sand/20 w-3/4"></div>
                 <div className="h-3 bg-brand-sand/20 w-1/2"></div>
@@ -88,11 +88,11 @@ export default function JournalSection() {
             <p>Our editorial team is crafting new botanical journal entries. Visit again soon.</p>
           </div>
         ) : (
-          <div className={`grid grid-cols-1 ${displayedBlogs.length === 1 ? 'max-w-3xl mx-auto' : displayedBlogs.length === 2 ? 'md:grid-cols-2 max-w-5xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-3'} gap-8`}>
+          <div className={`grid grid-cols-1 ${displayedBlogs.length === 1 ? 'max-w-3xl mx-auto' : displayedBlogs.length === 2 ? 'md:grid-cols-2 max-w-5xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-3'} gap-5 sm:gap-8`}>
             {displayedBlogs.map((blog) => (
               <div
                 key={blog.id}
-                className="group border border-brand-sand/20 bg-brand-cream/40 p-5 space-y-4 flex flex-col hover:border-brand-accent/40 hover:bg-brand-cream/70 transition-all duration-300"
+                className="group border border-brand-sand/20 bg-brand-cream/40 p-3.5 sm:p-5 space-y-4 flex flex-col hover:border-brand-accent/40 hover:bg-brand-cream/70 transition-all duration-300 rounded-xs sm:rounded-none"
               >
                 {/* Journal Cover Image */}
                 <Link

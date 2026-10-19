@@ -137,12 +137,12 @@ export default function Home() {
             </div>
 
             {loading ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
                 {[1, 2, 3].map((i) => (
-                  <div key={i} className="animate-pulse space-y-4">
+                  <div key={i} className="animate-pulse space-y-3 p-3 bg-brand-sand/10 border border-brand-sand/20">
                     <div className="bg-brand-sand/20 aspect-square w-full"></div>
-                    <div className="h-4 bg-brand-sand/20 w-3/4"></div>
-                    <div className="h-4 bg-brand-sand/20 w-1/2"></div>
+                    <div className="h-3 bg-brand-sand/20 w-3/4"></div>
+                    <div className="h-3 bg-brand-sand/20 w-1/2"></div>
                   </div>
                 ))}
               </div>
@@ -151,7 +151,7 @@ export default function Home() {
                 No featured products found. Please seed the database.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
                 {bestsellers.map((prod) => {
                   const hasDiscount = prod.sale_price !== null;
                   const activePrice = hasDiscount ? prod.sale_price : prod.price;
@@ -165,11 +165,11 @@ export default function Home() {
                       initial={{ opacity: 0, scale: 0.98 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
-                      className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30"
+                      className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-2.5 sm:p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30 rounded-xs sm:rounded-none"
                     >
                       {/* Badge Overlay */}
                       {hasDiscount && (
-                        <span className="absolute top-6 left-6 bg-brand-accent text-brand-cream text-[9px] uppercase tracking-wider font-sans font-bold px-2 py-1 z-10">
+                        <span className="absolute top-2.5 left-2.5 sm:top-6 sm:left-6 bg-brand-accent text-brand-cream text-[8px] sm:text-[9px] uppercase tracking-wider font-sans font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 z-10 shadow-2xs">
                           SAVE {discountPercent}%
                         </span>
                       )}
@@ -184,8 +184,8 @@ export default function Home() {
                           alt={prod.name}
                           className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                         />
-                        {/* Hover Overlay triggers */}
-                        <div className="absolute inset-0 bg-brand-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex justify-center items-center gap-4">
+                        {/* Hover Overlay triggers - desktop only */}
+                        <div className="hidden md:flex absolute inset-0 bg-brand-dark/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 justify-center items-center gap-4">
                           <span 
                             className="bg-brand-cream text-brand-dark hover:bg-brand-dark hover:text-brand-cream p-2.5 shadow-md transition-colors"
                             title="Quick View"
@@ -202,38 +202,38 @@ export default function Home() {
                       </Link>
 
                       {/* Product Content Details */}
-                      <div className="flex-1 flex flex-col pt-6 space-y-2">
-                        <span className="text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold">
+                      <div className="flex-1 flex flex-col pt-3 sm:pt-6 space-y-1 sm:space-y-2">
+                        <span className="text-[9px] sm:text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold truncate">
                           {prod.skin_type || "All Skin Types"}
                         </span>
                         
                         <Link 
                           href={`/product/${prod.slug}`}
-                          className="font-serif text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-1 transition-colors"
+                          className="font-serif text-xs sm:text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-2 transition-colors min-h-[2rem] sm:min-h-0"
                         >
                           {prod.name}
                         </Link>
                         
-                        <p className="text-xs text-brand-cocoa/70 font-sans line-clamp-1">
+                        <p className="hidden sm:block text-xs text-brand-cocoa/70 font-sans line-clamp-1">
                           {prod.short_description}
                         </p>
 
                         {/* Stars Review Indicator */}
-                        <div className="flex items-center space-x-1 text-brand-accent pt-1">
+                        <div className="flex items-center space-x-0.5 sm:space-x-1 text-brand-accent pt-0.5 sm:pt-1">
                           {[1, 2, 3, 4, 5].map((s) => (
-                            <Star key={s} size={12} fill="currentColor" stroke="none" />
+                            <Star key={s} size={11} fill="currentColor" stroke="none" className="shrink-0" />
                           ))}
-                          <span className="text-[9px] text-brand-dark/40 font-sans ml-1">(4.9)</span>
+                          <span className="text-[8px] sm:text-[9px] text-brand-dark/40 font-sans ml-1">(4.9)</span>
                         </div>
 
                         {/* Price Details & CTA */}
-                        <div className="flex justify-between items-center pt-3 border-t border-brand-sand/15 mt-auto">
-                          <div className="flex items-baseline space-x-2">
-                            <span className="text-sm font-sans font-bold text-brand-dark">
+                        <div className="flex justify-between items-center pt-2 sm:pt-3 border-t border-brand-sand/15 mt-auto gap-1">
+                          <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2">
+                            <span className="text-xs sm:text-sm font-sans font-bold text-brand-dark">
                               ₹{activePrice}
                             </span>
                             {hasDiscount && (
-                              <span className="text-xs text-brand-dark/40 line-through">
+                              <span className="text-[10px] sm:text-xs text-brand-dark/40 line-through">
                                 ₹{prod.price}
                               </span>
                             )}
@@ -248,10 +248,11 @@ export default function Home() {
                               sale_price: prod.sale_price,
                               thumbnail: prod.thumbnail
                             }, 1)}
-                            className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center gap-1.5 focus:outline-none cursor-pointer"
+                            className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-1.5 sm:p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center justify-center gap-1.5 focus:outline-none cursor-pointer shrink-0 min-h-[32px] min-w-[32px] sm:min-h-[36px]"
                             title="Add to Cart"
+                            aria-label={`Add ${prod.name} to cart`}
                           >
-                            <ShoppingBag size={14} />
+                            <ShoppingBag size={13} />
                             <span className="hidden xl:inline text-[9px] tracking-widest">ADD</span>
                           </button>
                         </div>

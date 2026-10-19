@@ -94,20 +94,20 @@ export default function CategoryProductList({ slug }: { slug: string }) {
   return (
     <div className="space-y-12">
       {/* Category banner/editorial header */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-brand-light border border-brand-sand/20 p-8 md:p-12">
-        <div className="lg:col-span-8 space-y-4">
-          <span className="text-xs tracking-[0.3em] font-sans font-semibold text-brand-accent uppercase">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center bg-brand-light border border-brand-sand/20 p-5 sm:p-8 md:p-12">
+        <div className="lg:col-span-8 space-y-3 sm:space-y-4">
+          <span className="text-[10px] sm:text-xs tracking-[0.3em] font-sans font-semibold text-brand-accent uppercase">
             TARGET CONCERN
           </span>
-          <h1 className="font-serif text-4xl md:text-5xl font-light text-brand-dark">
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark">
             {category.name}
           </h1>
-          <p className="text-brand-cocoa/80 text-sm md:text-base font-light font-sans max-w-2xl leading-relaxed">
+          <p className="text-brand-cocoa/80 text-xs sm:text-sm md:text-base font-light font-sans max-w-2xl leading-relaxed">
             {category.description}
           </p>
         </div>
         {category.image && (
-          <div className="lg:col-span-4 h-48 relative overflow-hidden bg-brand-sand/10 border border-brand-sand/20">
+          <div className="lg:col-span-4 h-40 sm:h-48 relative overflow-hidden bg-brand-sand/10 border border-brand-sand/20 rounded-xs sm:rounded-none">
             <img 
               src={getImageUrl(category.image)} 
               alt={category.name} 
@@ -123,7 +123,7 @@ export default function CategoryProductList({ slug }: { slug: string }) {
           No products currently available for this concern ritual. Check back soon.
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
           {products.map((prod) => {
             const hasDiscount = prod.sale_price !== null;
             const activePrice = hasDiscount ? prod.sale_price : prod.price;
@@ -134,10 +134,10 @@ export default function CategoryProductList({ slug }: { slug: string }) {
             return (
               <div
                 key={prod.id}
-                className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30"
+                className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-2.5 sm:p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30 rounded-xs sm:rounded-none"
               >
                 {hasDiscount && (
-                  <span className="absolute top-6 left-6 bg-brand-accent text-brand-cream text-[9px] uppercase tracking-wider font-sans font-bold px-2 py-1 z-10">
+                  <span className="absolute top-2.5 left-2.5 sm:top-6 sm:left-6 bg-brand-accent text-brand-cream text-[8px] sm:text-[9px] uppercase tracking-wider font-sans font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 z-10 shadow-2xs">
                     SAVE {discountPercent}%
                   </span>
                 )}
@@ -153,36 +153,36 @@ export default function CategoryProductList({ slug }: { slug: string }) {
                   />
                 </Link>
 
-                <div className="flex-1 flex flex-col pt-6 space-y-2">
-                  <span className="text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold">
+                <div className="flex-1 flex flex-col pt-3 sm:pt-6 space-y-1 sm:space-y-2">
+                  <span className="text-[9px] sm:text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold truncate">
                     {prod.skin_type || "All Skin Types"}
                   </span>
 
                   <Link
                     href={`/product/${prod.slug}`}
-                    className="font-serif text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-1 transition-colors"
+                    className="font-serif text-xs sm:text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-2 transition-colors min-h-[2rem] sm:min-h-0"
                   >
                     {prod.name}
                   </Link>
 
-                  <p className="text-xs text-brand-cocoa/70 font-sans line-clamp-1">
+                  <p className="hidden sm:block text-xs text-brand-cocoa/70 font-sans line-clamp-1">
                     {prod.short_description}
                   </p>
 
-                  <div className="flex items-center space-x-1 text-brand-accent pt-1">
+                  <div className="flex items-center space-x-0.5 sm:space-x-1 text-brand-accent pt-0.5 sm:pt-1">
                     {[1, 2, 3, 4, 5].map((s) => (
-                      <Star key={s} size={12} fill="currentColor" stroke="none" />
+                      <Star key={s} size={11} fill="currentColor" stroke="none" className="shrink-0" />
                     ))}
-                    <span className="text-[9px] text-brand-dark/40 font-sans ml-1">(4.9)</span>
+                    <span className="text-[8px] sm:text-[9px] text-brand-dark/40 font-sans ml-1">(4.9)</span>
                   </div>
 
-                  <div className="flex justify-between items-center pt-3 border-t border-brand-sand/15 mt-auto">
-                    <div className="flex items-baseline space-x-2">
-                      <span className="text-sm font-sans font-bold text-brand-dark">
+                  <div className="flex justify-between items-center pt-2 sm:pt-3 border-t border-brand-sand/15 mt-auto gap-1">
+                    <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2">
+                      <span className="text-xs sm:text-sm font-sans font-bold text-brand-dark">
                         ₹{activePrice}
                       </span>
                       {hasDiscount && (
-                        <span className="text-xs text-brand-dark/40 line-through">
+                        <span className="text-[10px] sm:text-xs text-brand-dark/40 line-through">
                           ₹{prod.price}
                         </span>
                       )}
@@ -202,9 +202,11 @@ export default function CategoryProductList({ slug }: { slug: string }) {
                           1
                         )
                       }
-                      className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center gap-1.5 focus:outline-none"
+                      className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-1.5 sm:p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center justify-center gap-1.5 focus:outline-none cursor-pointer shrink-0 min-h-[32px] min-w-[32px] sm:min-h-[36px]"
+                      aria-label={`Add ${prod.name} to cart`}
+                      title="Add to Cart"
                     >
-                      <ShoppingBag size={14} />
+                      <ShoppingBag size={13} />
                     </button>
                   </div>
                 </div>

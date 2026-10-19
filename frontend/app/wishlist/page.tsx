@@ -17,6 +17,7 @@ interface Product {
   sale_price: number | null;
   thumbnail: string;
   short_description: string;
+  skin_type?: string;
 }
 
 export default function WishlistPage() {
@@ -75,7 +76,7 @@ export default function WishlistPage() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 lg:gap-8">
             {wishlist.map((prod) => {
               const hasDiscount = prod.sale_price !== null;
               const activePrice = hasDiscount ? prod.sale_price : prod.price;
@@ -83,14 +84,15 @@ export default function WishlistPage() {
               return (
                 <div
                   key={prod.id}
-                  className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30"
+                  className="group relative flex flex-col bg-brand-cream border border-brand-sand/25 p-2.5 sm:p-4 transition-all duration-300 hover:shadow-lg hover:border-brand-accent/30 rounded-xs sm:rounded-none"
                 >
                   <button
                     onClick={() => removeFromWishlist(prod.id)}
-                    className="absolute top-6 right-6 bg-white hover:bg-red-50 text-brand-dark/50 hover:text-red-600 p-2 shadow-md transition-colors z-10 border border-brand-sand/20"
+                    className="absolute top-2.5 right-2.5 sm:top-6 sm:right-6 bg-white hover:bg-red-50 text-brand-dark/50 hover:text-red-600 p-1.5 sm:p-2 shadow-md transition-colors z-10 border border-brand-sand/20 cursor-pointer rounded-xs sm:rounded-none"
                     title="Remove from Wishlist"
+                    aria-label="Remove from Wishlist"
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={13} />
                   </button>
 
                   <Link
@@ -104,21 +106,30 @@ export default function WishlistPage() {
                     />
                   </Link>
 
-                  <div className="flex-1 flex flex-col pt-6 space-y-2">
+                  <div className="flex-1 flex flex-col pt-3 sm:pt-6 space-y-1 sm:space-y-2">
+                    <span className="text-[9px] sm:text-[10px] uppercase font-sans tracking-widest text-brand-accent font-semibold truncate">
+                      {prod.skin_type || "All Skin Types"}
+                    </span>
+
                     <Link
                       href={`/product/${prod.slug}`}
-                      className="font-serif text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-1 transition-colors"
+                      className="font-serif text-xs sm:text-base text-brand-dark hover:text-brand-accent font-medium leading-snug line-clamp-2 transition-colors min-h-[2rem] sm:min-h-0"
                     >
                       {prod.name}
                     </Link>
 
-                    <p className="text-xs text-brand-cocoa/70 font-sans line-clamp-1">
+                    <p className="hidden sm:block text-xs text-brand-cocoa/70 font-sans line-clamp-1">
                       {prod.short_description}
                     </p>
 
-                    <div className="flex justify-between items-center pt-3 border-t border-brand-sand/15 mt-auto">
-                      <div className="flex items-baseline space-x-2 font-sans font-semibold">
-                        <span>₹{activePrice}</span>
+                    <div className="flex justify-between items-center pt-2 sm:pt-3 border-t border-brand-sand/15 mt-auto gap-1">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline sm:space-x-2 font-sans font-semibold">
+                        <span className="text-xs sm:text-sm font-bold text-brand-dark">₹{activePrice}</span>
+                        {hasDiscount && (
+                          <span className="text-[10px] sm:text-xs text-brand-dark/40 line-through">
+                            ₹{prod.price}
+                          </span>
+                        )}
                       </div>
 
                       <button
@@ -135,9 +146,11 @@ export default function WishlistPage() {
                             1
                           );
                         }}
-                        className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center gap-1.5 focus:outline-none"
+                        className="bg-brand-dark hover:bg-brand-accent text-brand-cream p-1.5 sm:p-2 text-xs uppercase tracking-widest transition-colors duration-300 font-semibold flex items-center justify-center gap-1.5 focus:outline-none cursor-pointer shrink-0 min-h-[32px] min-w-[32px] sm:min-h-[36px]"
+                        aria-label={`Add ${prod.name} to cart`}
+                        title="Add to Cart"
                       >
-                        <ShoppingBag size={14} />
+                        <ShoppingBag size={13} />
                       </button>
                     </div>
                   </div>

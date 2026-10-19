@@ -52,10 +52,10 @@ const WhatsAppIcon = ({ size = 15, className = "" }: { size?: number; className?
 
 export default function Footer() {
   return (
-    <footer className="bg-brand-dark text-brand-cream border-t border-brand-sand/10 pt-16 pb-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <footer className="bg-brand-dark text-brand-cream border-t border-brand-sand/10 pt-12 sm:pt-16 pb-10 sm:pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10 sm:space-y-12">
         {/* Main Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
           {/* Column 1: Brand Info */}
           <div className="space-y-4 md:col-span-1">
             <Link href="/" className="inline-flex items-center gap-2">
@@ -77,11 +77,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-accent">Menu</h4>
             <ul className="space-y-2.5 text-xs text-brand-cream/60 font-sans font-light">
-              <li><Link href="/shop" className="hover:text-brand-accent transition-colors">Shop All Products</Link></li>
-              <li><Link href="/#concerns" className="hover:text-brand-accent transition-colors">Shop by Concern</Link></li>
-              <li><Link href="/results" className="hover:text-brand-accent transition-colors">Real Results Gallery</Link></li>
-              <li><Link href="/about" className="hover:text-brand-accent transition-colors">About Qura Herbs</Link></li>
-              <li><Link href="/journal" className="hover:text-brand-accent transition-colors">Skincare Journal</Link></li>
+              <li><Link href="/shop" className="hover:text-brand-accent transition-colors block py-0.5">Shop All Products</Link></li>
+              <li><Link href="/#bestsellers" className="hover:text-brand-accent transition-colors block py-0.5">Our Bestsellers</Link></li>
+              <li><Link href="/results" className="hover:text-brand-accent transition-colors block py-0.5">Real Results Gallery</Link></li>
+              <li><Link href="/about" className="hover:text-brand-accent transition-colors block py-0.5">About Qura Herbs</Link></li>
+              <li><Link href="/journal" className="hover:text-brand-accent transition-colors block py-0.5">Skincare Journal</Link></li>
             </ul>
           </div>
 
@@ -89,16 +89,16 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-accent">Support</h4>
             <ul className="space-y-2.5 text-xs text-brand-cream/60 font-sans font-light">
-              <li><Link href="/account" className="hover:text-brand-accent transition-colors">Track Order & Account</Link></li>
-              <li><Link href="/shipping" className="hover:text-brand-accent transition-colors">Shipping & Delivery</Link></li>
-              <li><Link href="/refund" className="hover:text-brand-accent transition-colors">Returns & Refunds</Link></li>
-              <li><Link href="/privacy" className="hover:text-brand-accent transition-colors">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-brand-accent transition-colors">Terms of Service</Link></li>
+              <li><Link href="/account" className="hover:text-brand-accent transition-colors block py-0.5">Track Order &amp; Account</Link></li>
+              <li><Link href="/shipping" className="hover:text-brand-accent transition-colors block py-0.5">Shipping &amp; Delivery</Link></li>
+              <li><Link href="/refund" className="hover:text-brand-accent transition-colors block py-0.5">Returns &amp; Refunds</Link></li>
+              <li><Link href="/privacy" className="hover:text-brand-accent transition-colors block py-0.5">Privacy Policy</Link></li>
+              <li><Link href="/terms" className="hover:text-brand-accent transition-colors block py-0.5">Terms of Service</Link></li>
             </ul>
           </div>
 
           {/* Column 4: Newsletter Form */}
-          <div className="space-y-4">
+          <div className="space-y-4 sm:col-span-2 md:col-span-1">
             <h4 className="font-serif text-sm uppercase tracking-wider font-semibold text-brand-accent">Newsletter</h4>
             <p className="text-xs text-brand-cream/60 font-sans font-light">
               Join in Community to claim 10% off your first skincare ritual purchase.
@@ -107,11 +107,11 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="YOUR EMAIL"
-                className="bg-brand-cream/10 border border-brand-cream/20 text-xs px-3 py-3 w-full text-brand-cream focus:outline-none focus:border-brand-accent rounded-none font-sans"
+                className="bg-brand-cream/10 border border-brand-cream/20 text-base sm:text-xs px-3 py-3 min-h-[44px] w-full text-brand-cream focus:outline-none focus:border-brand-accent rounded-none font-sans"
               />
               <button
                 type="submit"
-                className="bg-brand-accent text-brand-dark px-4 py-3 font-sans text-xs font-semibold uppercase hover:bg-brand-cream hover:text-brand-dark transition-all rounded-none"
+                className="bg-brand-accent text-brand-dark px-4 py-3 min-h-[44px] font-sans text-xs font-semibold uppercase hover:bg-brand-cream hover:text-brand-dark transition-all rounded-none cursor-pointer shrink-0"
               >
                 JOIN
               </button>

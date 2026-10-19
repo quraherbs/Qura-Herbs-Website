@@ -72,12 +72,12 @@ export default function JournalPage() {
 
         {/* Blog grid list */}
         {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 py-6 sm:py-10">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="animate-pulse space-y-4">
+              <div key={i} className="animate-pulse space-y-3 p-3 bg-brand-sand/10 border border-brand-sand/20">
                 <div className="bg-brand-sand/20 aspect-[16/10] w-full"></div>
-                <div className="h-4 bg-brand-sand/20 w-3/4"></div>
-                <div className="h-4 bg-brand-sand/20 w-1/2"></div>
+                <div className="h-3 bg-brand-sand/20 w-3/4"></div>
+                <div className="h-3 bg-brand-sand/20 w-1/2"></div>
               </div>
             ))}
           </div>
@@ -86,9 +86,9 @@ export default function JournalPage() {
             No journal entries currently published. Check back soon.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
             {blogs.map((blog) => (
-              <div key={blog.id} className="group border border-brand-sand/20 bg-brand-light p-4 space-y-4 flex flex-col">
+              <div key={blog.id} className="group border border-brand-sand/20 bg-brand-light p-3.5 sm:p-4 space-y-4 flex flex-col rounded-xs sm:rounded-none">
                 {/* Image */}
                 <Link
                   href={`/journal/${blog.slug}`}

@@ -158,8 +158,8 @@ export default function HeroSection() {
           {/* Outer Gold Accent Trim */}
           <div className="absolute inset-2 sm:inset-4 border border-[#C5A059]/25 rounded-xl md:rounded-2xl pointer-events-none z-20"></div>
 
-          {/* Banner Aspect Ratio Container - 2000:780 source ratio */}
-          <div className="w-full relative flex items-center justify-center overflow-hidden" style={{ aspectRatio: "2000 / 780" }}>
+          {/* Banner Aspect Ratio Container - Responsive on mobile (tall & prominent), 2000:780 on desktop */}
+          <div className="w-full relative flex items-center justify-center overflow-hidden aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2000/780] min-h-[290px] sm:min-h-[360px] lg:min-h-0">
             
             <AnimatePresence mode="wait">
               <motion.div
@@ -170,12 +170,15 @@ export default function HeroSection() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
                 className="w-full h-full absolute inset-0 flex items-center justify-center overflow-hidden"
               >
-                {/* Main High-Res Banner Graphic */}
-                <img
-                  src={getImageUrl(currentBanner.desktop_image)}
-                  alt={currentBanner.heading}
-                  className="w-full h-full object-fill object-center transition-transform duration-1000 ease-out group-hover:scale-105"
-                />
+                {/* Main High-Res Banner Graphic - picture with mobile and desktop assets */}
+                <picture className="w-full h-full">
+                  <source media="(min-width: 1024px)" srcSet={getImageUrl(currentBanner.desktop_image)} />
+                  <img
+                    src={getImageUrl(currentBanner.mobile_image || currentBanner.desktop_image)}
+                    alt={currentBanner.heading}
+                    className="w-full h-full object-cover lg:object-fill object-center transition-transform duration-1000 ease-out group-hover:scale-105"
+                  />
+                </picture>
 
                 {/* Gradient Vignette Overlays for Depth */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#2C1A14]/30 via-transparent to-transparent pointer-events-none z-10"></div>
@@ -184,7 +187,7 @@ export default function HeroSection() {
             </AnimatePresence>
 
             {/* OVERLAY ACTION BAR - FLOATING AT BOTTOM */}
-            <div className="absolute bottom-2 sm:bottom-6 md:bottom-8 left-2.5 sm:left-6 md:left-10 right-2.5 sm:right-6 md:right-10 z-30 flex items-center justify-between gap-2">
+            <div className="absolute bottom-2.5 sm:bottom-6 md:bottom-8 left-2 sm:left-6 md:left-10 right-2 sm:right-6 md:right-10 z-30 flex items-center justify-between gap-2">
               
               {/* Floating CTA Pill with WATER TRANSPARENT BUTTON */}
               <motion.div 
@@ -196,15 +199,15 @@ export default function HeroSection() {
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
                 style={{ opacity: buttonOpacity, y: dragY }}
-                className="flex items-center space-x-1.5 sm:space-x-3 bg-white/20 backdrop-blur-xl border border-white/50 p-1 sm:p-2 sm:pr-6 rounded-full shadow-2xl cursor-grab active:cursor-grabbing select-none hover:bg-white/30 transition-all duration-300"
+                className="flex items-center space-x-1.5 sm:space-x-3 bg-white/30 backdrop-blur-xl border border-white/60 p-1 sm:p-2 sm:pr-6 rounded-full shadow-2xl cursor-grab active:cursor-grabbing select-none hover:bg-white/40 transition-all duration-300"
               >
                 {/* TRANSPARENT WATER-BASED BUTTON */}
                 <button
                   onClick={triggerShopNavigation}
-                  className="bg-transparent hover:bg-white/40 text-[#2C1A14] backdrop-blur-md border border-[#2C1A14]/30 font-sans text-[9px] sm:text-xs uppercase tracking-wider sm:tracking-widest px-2.5 sm:px-6 py-1 sm:py-3 rounded-full font-bold transition-all duration-300 shadow-sm flex items-center space-x-1 sm:space-x-2 group/btn cursor-pointer whitespace-nowrap"
+                  className="bg-transparent hover:bg-white/40 text-[#2C1A14] backdrop-blur-md border border-[#2C1A14]/30 font-sans text-[10px] sm:text-xs uppercase tracking-wider sm:tracking-widest px-3 sm:px-6 py-1.5 sm:py-3 rounded-full font-bold transition-all duration-300 shadow-sm flex items-center space-x-1 sm:space-x-2 group/btn cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px]"
                 >
                   <span>{currentBanner.cta_text || "SHOP THE RITUAL"}</span>
-                  <ArrowRight size={12} className="transition-transform duration-300 group-hover/btn:translate-x-1 text-[#2C1A14] hidden xs:inline-block sm:inline-block" />
+                  <ArrowRight size={13} className="transition-transform duration-300 group-hover/btn:translate-x-1 text-[#2C1A14] inline-block" />
                 </button>
                 
                 <span className="hidden md:inline-block text-[11px] font-sans font-medium text-[#2C1A14] tracking-wide pr-2">
@@ -221,13 +224,14 @@ export default function HeroSection() {
 
               {/* Slider Arrows & Slide Indicators */}
               {banners.length > 1 && (
-                <div className="flex items-center space-x-1 sm:space-x-2 bg-white/20 backdrop-blur-md border border-white/30 px-1.5 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-white shadow-lg">
+                <div className="flex items-center space-x-1 sm:space-x-2 bg-white/30 backdrop-blur-md border border-white/40 px-2 sm:px-2.5 py-1 sm:py-1 rounded-full text-white shadow-lg">
                   <button
                     onClick={handlePrev}
-                    className="p-0.5 hover:text-[#C5A059] transition-all hover:scale-110"
+                    className="p-1 hover:text-[#C5A059] transition-all hover:scale-110 min-w-[24px] min-h-[24px] flex items-center justify-center"
                     title="Previous Slide"
+                    aria-label="Previous Slide"
                   >
-                    <ChevronLeft size={12} className="sm:w-3.5 sm:h-3.5" />
+                    <ChevronLeft size={14} className="sm:w-3.5 sm:h-3.5 text-[#2C1A14]" />
                   </button>
 
                   <div className="flex space-x-1 items-center px-0.5 sm:px-1">
@@ -235,8 +239,9 @@ export default function HeroSection() {
                       <button
                         key={idx}
                         onClick={() => setCurrentIndex(idx)}
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          idx === currentIndex ? "w-2.5 sm:w-4 bg-[#C5A059]" : "w-1 bg-white/50"
+                        aria-label={`Go to slide ${idx + 1}`}
+                        className={`h-1.5 rounded-full transition-all duration-300 ${
+                          idx === currentIndex ? "w-3 sm:w-4 bg-[#C5A059]" : "w-1.5 bg-[#2C1A14]/40"
                         }`}
                       />
                     ))}
@@ -244,10 +249,11 @@ export default function HeroSection() {
 
                   <button
                     onClick={handleNext}
-                    className="p-0.5 hover:text-[#C5A059] transition-all hover:scale-110"
+                    className="p-1 hover:text-[#C5A059] transition-all hover:scale-110 min-w-[24px] min-h-[24px] flex items-center justify-center"
                     title="Next Slide"
+                    aria-label="Next Slide"
                   >
-                    <ChevronRight size={12} className="sm:w-3.5 sm:h-3.5" />
+                    <ChevronRight size={14} className="sm:w-3.5 sm:h-3.5 text-[#2C1A14]" />
                   </button>
                 </div>
               )}
