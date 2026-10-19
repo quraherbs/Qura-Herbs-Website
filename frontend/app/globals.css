@@ -124,12 +124,12 @@ body {
 }
 
 .animate-marquee-left {
-  animation: marquee-left 40s linear infinite;
+  animation: marquee-left 50s linear infinite;
   will-change: transform;
 }
 
 .animate-marquee-right {
-  animation: marquee-right 45s linear infinite;
+  animation: marquee-right 55s linear infinite;
   will-change: transform;
 }
 
