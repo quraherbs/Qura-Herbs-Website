@@ -237,6 +237,16 @@ export default function ArticleContent({ slug }: { slug: string }) {
           </p>
         </header>
 
+        {/* First Image / Hero Cover Visual */}
+        <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-white shadow-xs">
+          <img
+            src={getImageUrl("/uploads/the_glow_guide_journal.jpg")}
+            alt="The Glow Guide - Qura Herbs Night Cream Skincare Ritual"
+            className="w-full h-full object-cover"
+            loading="eager"
+          />
+        </div>
+
         {/* Skincare Ritual Numbered Sequence */}
         <section className="space-y-6 pt-2">
           <div className="space-y-1 mb-8">
@@ -343,7 +353,7 @@ export default function ArticleContent({ slug }: { slug: string }) {
         <section className="my-8 sm:my-10 space-y-2">
           <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-white shadow-xs">
             <img
-              src={getImageUrl(displayImage)}
+              src={getImageUrl("/uploads/how_to_use_your_night_cream_ritual.jpg")}
               alt="Qura Herbs Glow Radiant Plus Night Cream ritual demonstration and before and after results"
               className="w-full h-full object-contain sm:object-cover"
               loading="eager"

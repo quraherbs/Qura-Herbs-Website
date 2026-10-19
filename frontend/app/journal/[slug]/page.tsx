@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound, redirect } from "next/navigation";
 import AnnouncementBar from "../../../components/AnnouncementBar";
 import Navbar from "../../../components/Navbar";
 import CartDrawer from "../../../components/CartDrawer";
@@ -67,6 +68,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function JournalDetailPage({ params }: PageProps) {
   const { slug } = await params;
+  if (slug === "how-to-use-our-avocado-night-cream-for-maximum-hydration") {
+    redirect("/journal/how-to-use-your-night-cream");
+  }
   const article = getArticleBySlug(slug);
 
   const articleJsonLd = article

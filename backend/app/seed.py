@@ -596,22 +596,11 @@ Choose balanced, nutritious meals and make healthy food choices part of your eve
 Consistency • Hydration • Cleansing • Healthy Choices
 
 Together, they create your best-looking skin.""",
-                featured_image="/uploads/how_to_use_your_night_cream_ritual.jpg",
+                featured_image="/uploads/the_glow_guide_journal.jpg",
                 author="BY QURA HERBS | SKINCARE JOURNAL",
                 published=True,
                 published_at=datetime(2026, 10, 19, 0, 0, 0),
                 meta_description="A simple nighttime ritual for fresh, radiant-looking skin with Qura Herbs Night Cream."
-            ),
-            models.Blog(
-                title="How to Use Our Avocado Night Cream for Maximum Hydration",
-                slug="how-to-use-our-avocado-night-cream-for-maximum-hydration",
-                excerpt="Discover a simple nighttime ritual to nourish your skin, maintain moisture, and wake up to soft, healthy-looking skin.",
-                content="Using a wonderful texture of cold-pressed Avocado Butter and Ashwagandha extract, our Avocado Night Cream restores your skin's elasticity while you sleep.",
-                featured_image="/uploads/the_glow_guide_journal.jpg",
-                author="BY QURA HERBS | SKINCARE JOURNAL",
-                published=True,
-                published_at=datetime(2026, 10, 10, 0, 0, 0),
-                meta_description="Learn how to incorporate Avocado Night Cream into your evening botanical ritual."
             )
         ]
         for blog in blogs_to_seed:

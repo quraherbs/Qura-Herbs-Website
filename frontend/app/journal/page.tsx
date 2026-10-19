@@ -32,6 +32,7 @@ export default function JournalPage() {
             (d: any) =>
               !d.author?.toLowerCase().includes("pranavi") &&
               d.slug !== "how-to-use-our-night-cream" &&
+              d.slug !== "how-to-use-our-avocado-night-cream-for-maximum-hydration" &&
               d.slug !== "Minimal Care Refine You" &&
               d.id !== 1
           );
@@ -88,7 +89,7 @@ export default function JournalPage() {
             No journal entries currently published. Check back soon.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
+          <div className={`grid grid-cols-1 ${blogs.length === 1 ? 'max-w-xl mx-auto w-full' : 'md:grid-cols-2 lg:grid-cols-3'} gap-5 sm:gap-8`}>
             {blogs.map((blog) => (
               <div key={blog.id} className="group border border-brand-sand/20 bg-brand-light p-3.5 sm:p-4 space-y-4 flex flex-col rounded-xs sm:rounded-none">
                 {/* Image */}

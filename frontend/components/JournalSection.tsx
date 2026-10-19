@@ -30,6 +30,7 @@ export default function JournalSection() {
             (d: any) =>
               !d.author?.toLowerCase().includes("pranavi") &&
               d.slug !== "how-to-use-our-night-cream" &&
+              d.slug !== "how-to-use-our-avocado-night-cream-for-maximum-hydration" &&
               d.slug !== "Minimal Care Refine You" &&
               d.id !== 1
           );
