@@ -72,6 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const journalSlugs = [
     "how-to-use-your-night-cream",
+    "the-hair-reset",
   ];
 
   const journalRoutes: MetadataRoute.Sitemap = journalSlugs.map((slug) => ({

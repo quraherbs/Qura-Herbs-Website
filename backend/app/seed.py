@@ -601,6 +601,64 @@ Together, they create your best-looking skin.""",
                 published=True,
                 published_at=datetime(2026, 10, 19, 0, 0, 0),
                 meta_description="A simple nighttime ritual for fresh, radiant-looking skin with Qura Herbs Night Cream."
+            ),
+            models.Blog(
+                title="THE HAIR RESET",
+                slug="the-hair-reset",
+                excerpt="How to Use Your Anti-Frizz Hair Serum — A quick, effortless ritual for smoother, healthier-looking hair.",
+                content="""## 01 — TAKE 2 PUMPS
+
+Dispense **2 pumps** of serum onto your palm. Adjust slightly depending on your hair length and volume.
+
+## 02 — APPLY TO THE HAIR
+
+Gently spread the serum through the **mid-lengths and ends** of your hair.
+
+**Avoid applying directly to the scalp.**
+
+## 03 — COMB THROUGH
+
+Comb your hair gently and evenly to distribute the serum.
+
+**Watch the frizz settle in just a few strokes.**
+
+## 04 — STYLE & GO
+
+Your hair is instantly more **smooth, manageable and polished**—without a complicated routine.
+
+## SUPPORTING BENEFITS
+
+Made with **natural hair-loving ingredients**, the serum helps nourish and condition the hair while keeping it smooth and manageable.
+
+**Quick relief from everyday frizz.**
+
+Use it whenever your hair needs a quick refresh.
+
+## PERFECT FOR YOUR EVERYDAY MOMENTS
+
+### Before an office meeting
+Tame flyaways and look polished.
+
+### Before a shoot or event
+Get smoother, camera-ready hair.
+
+### After a windy bike ride
+Bring messy, frizzy hair back under control.
+
+### After wearing a helmet
+Refresh and smooth flattened, unruly hair.
+
+### Anytime. Any day.
+Whenever frizz shows up, **2 pumps + a quick comb = smoother-looking hair.**
+
+## YOUR HAIR, JUST MORE MANAGEABLE.
+
+**Smooth • Nourish • Strengthen • Style**""",
+                featured_image="/uploads/the_hair_reset_before_after.jpg",
+                author="BY QURA HERBS | SKINCARE JOURNAL",
+                published=True,
+                published_at=datetime(2026, 10, 19, 1, 0, 0),
+                meta_description="How to Use Your Anti-Frizz Hair Serum — A quick, effortless ritual for smoother, healthier-looking hair."
             )
         ]
         for blog in blogs_to_seed:

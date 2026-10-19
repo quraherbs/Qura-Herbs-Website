@@ -192,6 +192,11 @@ export default function ArticleContent({ slug }: { slug: string }) {
     );
   }
 
+  const isHairResetArticle =
+    slug === "the-hair-reset" ||
+    currentArticle.slug === "the-hair-reset" ||
+    currentArticle.title.toLowerCase().includes("hair reset");
+
   const isNightCreamArticle =
     slug === "how-to-use-your-night-cream" ||
     currentArticle.slug === "how-to-use-your-night-cream" ||
@@ -202,6 +207,263 @@ export default function ArticleContent({ slug }: { slug: string }) {
   const displayImage = currentArticle.featured_image || "/uploads/how_to_use_your_night_cream_ritual.jpg";
   const authorLine = currentArticle.author || "BY QURA HERBS | SKINCARE JOURNAL";
   const publishDate = currentArticle.published_at || "2026-10-19T00:00:00.000Z";
+
+  // Dedicated High-End Haircare Editorial Layout for "THE HAIR RESET"
+  if (isHairResetArticle) {
+    return (
+      <article className="space-y-10 sm:space-y-12 max-w-3xl mx-auto">
+        {/* Back Link */}
+        <div>
+          <Link
+            href="/journal"
+            className="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-widest text-brand-accent hover:text-brand-dark font-sans font-semibold transition-colors group"
+          >
+            <ArrowLeft size={13} className="transition-transform group-hover:-translate-x-1" />
+            <span>Back to Journal</span>
+          </Link>
+        </div>
+
+        {/* 1. Article Heading */}
+        <header className="space-y-4 border-b border-[#EFE8D8] pb-8">
+          <div className="flex flex-wrap items-center gap-2.5 text-[11px] sm:text-xs uppercase tracking-[0.25em] text-brand-accent font-semibold font-sans">
+            <span>BY QURA HERBS | SKINCARE JOURNAL</span>
+            <span className="text-[#3D261D]/30">•</span>
+            <span className="text-[#3D261D]/65 font-medium tracking-widest">
+              OCT 19, 2026
+            </span>
+          </div>
+
+          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-brand-dark leading-[1.18] tracking-tight">
+            THE HAIR RESET
+          </h1>
+
+          <div className="space-y-1.5 pl-4 border-l-2 border-brand-accent py-1">
+            <h2 className="font-serif text-lg sm:text-xl font-normal text-brand-dark">
+              How to Use Your Anti-Frizz Hair Serum
+            </h2>
+            <p className="text-brand-cocoa/90 italic text-sm sm:text-base font-serif leading-relaxed">
+              A quick, effortless ritual for smoother, healthier-looking hair.
+            </p>
+          </div>
+        </header>
+
+        {/* 2. First Image / Hero Position (Serum Bottle & Before-After Results) */}
+        <section className="space-y-2">
+          <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-[#F7F4EE] shadow-xs">
+            <img
+              src={getImageUrl("/uploads/the_hair_reset_before_after.jpg")}
+              alt="Qura Herbs Anti-Frizz Hair Serum Before and After Hair Results - Effortlessly Smooth"
+              className="w-full h-full object-contain sm:object-cover"
+              loading="eager"
+            />
+          </div>
+          <p className="text-[11px] font-sans text-brand-cocoa/60 text-center tracking-wide italic">
+            Qura Herbs Anti-Frizz Hair Serum &bull; Instant Frizz Control &amp; Shine
+          </p>
+        </section>
+
+        {/* 3. Article Content: Four Numbered Steps */}
+        <section className="space-y-6 pt-2">
+          <div className="space-y-1 mb-8">
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-brand-accent uppercase block">
+              THE APPLICATION RITUAL
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+              Four Steps to Smooth, Manageable Hair
+            </h2>
+          </div>
+
+          <div className="space-y-5">
+            {/* Step 01 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  01
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    TAKE 2 PUMPS
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Dispense <strong className="font-semibold text-brand-dark">2 pumps</strong> of serum onto your palm. Adjust slightly depending on your hair length and volume.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 02 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  02
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    APPLY TO THE HAIR
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Gently spread the serum through the <strong className="font-semibold text-brand-dark">mid-lengths and ends</strong> of your hair.
+                  </p>
+                  <p className="font-sans text-xs sm:text-sm text-brand-accent font-medium pt-1">
+                    Avoid applying directly to the scalp.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 03 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  03
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    COMB THROUGH
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Comb your hair gently and evenly to distribute the serum.
+                  </p>
+                  <p className="font-sans text-xs sm:text-sm text-brand-accent font-medium pt-1">
+                    Watch the frizz settle in just a few strokes.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Step 04 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs hover:border-brand-accent/40 transition-colors">
+              <div className="flex items-start gap-4 sm:gap-5">
+                <span className="font-serif text-2xl sm:text-3xl font-light text-brand-accent shrink-0 pt-0.5 select-none">
+                  04
+                </span>
+                <div className="space-y-1.5 flex-1">
+                  <h3 className="font-serif text-lg sm:text-xl font-medium tracking-wide text-brand-dark">
+                    STYLE &amp; GO
+                  </h3>
+                  <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed">
+                    Your hair is instantly more <strong className="font-semibold text-brand-dark">smooth, manageable and polished</strong>—without a complicated routine.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 4. Second Image (Model with Smooth Hair) */}
+        <section className="my-8 sm:my-10 space-y-2">
+          <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-[#F7F4EE] shadow-xs">
+            <img
+              src={getImageUrl("/uploads/the_hair_reset_model.jpg")}
+              alt="Qura Herbs Haircare Instant Smooth - Model with smooth, manageable hair"
+              className="w-full h-full object-contain sm:object-cover"
+              loading="eager"
+            />
+          </div>
+          <p className="text-[11px] font-sans text-brand-cocoa/60 text-center tracking-wide italic">
+            Instant Smooth &bull; Effortless Everyday Hair Care Ritual
+          </p>
+        </section>
+
+        {/* 5. Supporting Benefits */}
+        <section className="bg-brand-light border border-[#EFE8D8] p-6 sm:p-8 rounded-xs space-y-3 relative overflow-hidden">
+          <div className="flex items-center gap-2 text-brand-accent">
+            <Sparkles size={16} />
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] uppercase">
+              NOURISHING BOTANICALS
+            </span>
+          </div>
+          <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+            Quick Relief from Everyday Frizz
+          </h2>
+          <p className="font-sans font-light text-sm sm:text-[15px] text-brand-cocoa/90 leading-relaxed pt-1">
+            Made with <strong className="font-semibold text-brand-dark">natural hair-loving ingredients</strong>, the serum helps nourish and condition the hair while keeping it smooth and manageable.
+          </p>
+          <p className="font-serif italic text-sm sm:text-base text-brand-accent font-medium">
+            Use it whenever your hair needs a quick refresh.
+          </p>
+        </section>
+
+        {/* 6. Everyday Styling Section */}
+        <section className="space-y-6 pt-2">
+          <div className="text-center sm:text-left space-y-1">
+            <span className="text-[10px] font-sans font-bold tracking-[0.25em] text-brand-accent uppercase block">
+              VERSATILE APPLICATION
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-light text-brand-dark">
+              PERFECT FOR YOUR EVERYDAY MOMENTS
+            </h2>
+            <div className="w-10 h-[1px] bg-brand-accent sm:ml-0 mx-auto"></div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5 pt-2">
+            {/* Moment 1 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-2 hover:border-brand-accent/40 transition-colors">
+              <span className="text-[11px] sm:text-xs font-sans font-semibold tracking-[0.18em] text-brand-accent uppercase block">
+                BEFORE AN OFFICE MEETING
+              </span>
+              <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                Tame flyaways and look polished.
+              </p>
+            </div>
+
+            {/* Moment 2 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-2 hover:border-brand-accent/40 transition-colors">
+              <span className="text-[11px] sm:text-xs font-sans font-semibold tracking-[0.18em] text-brand-accent uppercase block">
+                BEFORE A SHOOT OR EVENT
+              </span>
+              <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                Get smoother, camera-ready hair.
+              </p>
+            </div>
+
+            {/* Moment 3 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-2 hover:border-brand-accent/40 transition-colors">
+              <span className="text-[11px] sm:text-xs font-sans font-semibold tracking-[0.18em] text-brand-accent uppercase block">
+                AFTER A WINDY BIKE RIDE
+              </span>
+              <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                Bring messy, frizzy hair back under control.
+              </p>
+            </div>
+
+            {/* Moment 4 */}
+            <div className="bg-brand-light border border-[#EFE8D8] p-5 sm:p-6 rounded-xs flex flex-col justify-between space-y-2 hover:border-brand-accent/40 transition-colors">
+              <span className="text-[11px] sm:text-xs font-sans font-semibold tracking-[0.18em] text-brand-accent uppercase block">
+                AFTER WEARING A HELMET
+              </span>
+              <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90 leading-relaxed">
+                Refresh and smooth flattened, unruly hair.
+              </p>
+            </div>
+          </div>
+
+          {/* Anytime. Any day. */}
+          <div className="bg-brand-cream/60 border border-[#EFE8D8] p-4 sm:p-5 rounded-xs text-center sm:text-left flex flex-col sm:flex-row items-center justify-between gap-3">
+            <div className="space-y-0.5">
+              <span className="font-serif text-lg text-brand-dark font-medium block">
+                Anytime. Any day.
+              </span>
+              <p className="font-sans font-light text-xs sm:text-sm text-brand-cocoa/90">
+                Whenever frizz shows up, <strong className="font-semibold text-brand-dark">2 pumps + a quick comb = smoother-looking hair.</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Closing Statement */}
+        <section className="bg-brand-light border border-brand-sand/40 p-6 sm:p-8 rounded-xs text-center my-8 shadow-xs space-y-3">
+          <h3 className="font-serif text-xl sm:text-2xl font-light text-brand-dark tracking-wide">
+            YOUR HAIR, JUST MORE MANAGEABLE.
+          </h3>
+          <p className="font-sans text-xs sm:text-sm font-semibold tracking-widest text-brand-accent uppercase">
+            Smooth &bull; Nourish &bull; Strengthen &bull; Style
+          </p>
+          <div className="w-12 h-0.5 bg-brand-accent mx-auto my-2"></div>
+        </section>
+      </article>
+    );
+  }
 
   // Dedicated High-End Skincare Ritual Editorial Layout for "How to Use Your Night Cream"
   if (isNightCreamArticle) {
