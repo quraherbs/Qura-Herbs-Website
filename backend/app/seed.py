@@ -654,7 +654,7 @@ Whenever frizz shows up, **2 pumps + a quick comb = smoother-looking hair.**
 ## YOUR HAIR, JUST MORE MANAGEABLE.
 
 **Smooth • Nourish • Strengthen • Style**""",
-                featured_image="/uploads/the_hair_reset_before_after.jpg",
+                featured_image="/uploads/the_hair_reset_model.jpg",
                 author="BY QURA HERBS | SKINCARE JOURNAL",
                 published=True,
                 published_at=datetime(2026, 10, 19, 1, 0, 0),

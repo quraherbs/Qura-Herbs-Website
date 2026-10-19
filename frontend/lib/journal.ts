@@ -16,7 +16,7 @@ export const CANONICAL_JOURNAL_ARTICLES: JournalArticle[] = [
     title: "THE HAIR RESET",
     slug: "the-hair-reset",
     excerpt: "How to Use Your Anti-Frizz Hair Serum — A quick, effortless ritual for smoother, healthier-looking hair.",
-    featured_image: "/uploads/the_hair_reset_before_after.jpg",
+    featured_image: "/uploads/the_hair_reset_model.jpg",
     author: "BY QURA HERBS | SKINCARE JOURNAL",
     published: true,
     published_at: "2026-10-19T01:00:00.000Z",

@@ -247,18 +247,18 @@ export default function ArticleContent({ slug }: { slug: string }) {
           </div>
         </header>
 
-        {/* 2. First Image / Hero Position (Serum Bottle & Before-After Results) */}
+        {/* 2. First Image / Hero Position (Model with Smooth Hair) */}
         <section className="space-y-2">
           <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-[#F7F4EE] shadow-xs">
             <img
-              src={getImageUrl("/uploads/the_hair_reset_before_after.jpg")}
-              alt="Qura Herbs Anti-Frizz Hair Serum Before and After Hair Results - Effortlessly Smooth"
+              src={getImageUrl("/uploads/the_hair_reset_model.jpg")}
+              alt="Qura Herbs Haircare Instant Smooth - Model with smooth, manageable hair"
               className="w-full h-full object-contain sm:object-cover"
               loading="eager"
             />
           </div>
           <p className="text-[11px] font-sans text-brand-cocoa/60 text-center tracking-wide italic">
-            Qura Herbs Anti-Frizz Hair Serum &bull; Instant Frizz Control &amp; Shine
+            Instant Smooth &bull; Effortless Everyday Hair Care Ritual
           </p>
         </section>
 
@@ -350,18 +350,18 @@ export default function ArticleContent({ slug }: { slug: string }) {
           </div>
         </section>
 
-        {/* 4. Second Image (Model with Smooth Hair) */}
+        {/* 4. Second Image (Serum Bottle & Before-After Results) */}
         <section className="my-8 sm:my-10 space-y-2">
           <div className="w-full aspect-[16/9] overflow-hidden rounded-xs border border-[#EFE8D8] bg-[#F7F4EE] shadow-xs">
             <img
-              src={getImageUrl("/uploads/the_hair_reset_model.jpg")}
-              alt="Qura Herbs Haircare Instant Smooth - Model with smooth, manageable hair"
+              src={getImageUrl("/uploads/the_hair_reset_before_after.jpg")}
+              alt="Qura Herbs Anti-Frizz Hair Serum Before and After Hair Results - Effortlessly Smooth"
               className="w-full h-full object-contain sm:object-cover"
               loading="eager"
             />
           </div>
           <p className="text-[11px] font-sans text-brand-cocoa/60 text-center tracking-wide italic">
-            Instant Smooth &bull; Effortless Everyday Hair Care Ritual
+            Qura Herbs Anti-Frizz Hair Serum &bull; Instant Frizz Control &amp; Shine
           </p>
         </section>
 
